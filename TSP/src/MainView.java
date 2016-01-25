@@ -41,7 +41,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.jgap.util.CloneException;
 import org.omg.CORBA.portable.InputStream;
+
+import heuristicAlgorithms.ClosestNeighbour;
+import heuristicAlgorithms.GreedyHeuristic;
 
 public class MainView extends JPanel implements ActionListener, PropertyChangeListener, ChangeListener {
 
@@ -57,7 +62,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JComboBox<String> tradGAChooser;
 	//Traditional and Genetic Algorithms
 	private JPanel tradPanel, genPanel, optionPanel, destinationPanel, executionPanel;
-	private JCheckBox trad1CB,trad2CB,trad3CB,trad4CB, manualDrawCB, importPointsCB, numCasualPointsCB;
+	private JCheckBox trad1CB,trad2CB,trad3CB, manualDrawCB, importPointsCB, numCasualPointsCB;
 	private JLabel popSizeLabel, fromLabel, toLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel, casualPointsLabel, manualPointsLabel;
 	private JTextField popSizeTF, fromTF, toTF, maxGenTF, casualPointsTF;
 	private JComboBox<String> crossoverMethods, mutationMethods;
@@ -70,10 +75,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private ExitRequest exitReq;
 	private Vector<Point> points;
 	private Vector<Object> algQueueExecution;
+	private Vector<Point> results;
 	private JFileChooser jpgImport;
 	private FileNameExtensionFilter jpgFilter;
 	private String crossoverSelected, mutationSelected;
 	private float crossoverProb, mutationProb;
+	private ClosestNeighbour closestNeighbourAlg;
+	private GreedyHeuristic greedyHeuristicAlg;
+	private String listenToChanges;
 	
 	public MainView(JFrame frame){
 		this.mainFrame=frame;
@@ -133,7 +142,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
-		trad4CB=new JCheckBox("<empty>");
 		popSizeLabel=new JLabel("Population Size:");
 		fromLabel=new JLabel("From:");
 		toLabel=new JLabel("To:");
@@ -189,7 +197,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB.setBounds(6,20,180,20);
 		trad2CB.setBounds(6,45,180,20);
 		trad3CB.setBounds(6,70,180,20);
-		trad4CB.setBounds(6,95,120,20);
 		popSizeLabel.setBounds(8,20,100,20);
 		popSizeTF.setBounds(110,20,70,20);
 		fromLabel.setBounds(8,50,40,20);
@@ -229,7 +236,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB.addActionListener(this);
 		trad2CB.addActionListener(this);
 		trad3CB.addActionListener(this);
-		trad4CB.addActionListener(this);
 		crossoverMethods.addActionListener(this);
 		mutationMethods.addActionListener(this);
 		crossProbSlider.addChangeListener(this);
@@ -253,7 +259,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		tradPanel.add(trad1CB);
 		tradPanel.add(trad2CB);
 		tradPanel.add(trad3CB);
-		tradPanel.add(trad4CB);
 		genPanel.add(popSizeLabel);
 		genPanel.add(popSizeTF);
 		genPanel.add(fromLabel);
@@ -285,6 +290,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		executionPanel.add(viewResultsButton);
 		//Initialise global objects
 		points=new Vector<Point>();
+		results=new Vector<Point>();
 		algQueueExecution=new Vector<Object>();
 		crossoverSelected=crossoverMethods.getItemAt(0).toString();
 		mutationSelected=mutationMethods.getItemAt(0).toString();
@@ -292,8 +298,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		mutationProb=0.20f;
 		jpgImport=new JFileChooser();
 		jpgFilter=new FileNameExtensionFilter(".jpg", "jpg");
+		listenToChanges="";
 		//Add Drawing area
-		drawingArea=new DrawingPanel(points,numDrawnPoints);
+		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
 			drawingArea.setBounds(10, 50, 620, 590);
 			drawingArea.setBackground(new Color(200,200,200));
 		mainFrame.add(drawingArea);
@@ -366,25 +373,16 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			trad1CB.setSelected(true);
 			trad2CB.setSelected(false);
 			trad3CB.setSelected(false);
-			trad4CB.setSelected(false);
 		}
 		if(actionE.getSource().equals(trad2CB)){
 			trad1CB.setSelected(false);
 			trad2CB.setSelected(true);
 			trad3CB.setSelected(false);
-			trad4CB.setSelected(false);
 		}
 		if(actionE.getSource().equals(trad3CB)){
 			trad1CB.setSelected(false);
 			trad2CB.setSelected(false);
 			trad3CB.setSelected(true);
-			trad4CB.setSelected(false);
-		}
-		if(actionE.getSource().equals(trad4CB)){
-			trad1CB.setSelected(false);
-			trad2CB.setSelected(false);
-			trad3CB.setSelected(false);
-			trad4CB.setSelected(true);
 		}
 		if(actionE.getSource().equals(goDrawButton)){
 			//Start drawing n random points
@@ -461,11 +459,47 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					//Start performing the algorithm
 					if(startExecutionButton.getText().equals("Start")){
 						startExecutionButton.setText("Stop");
+						//Verify whether the algorithm to perform is Traditional or Genetic
+						Object obj=algQueueExecution.get(0);
+						if(obj instanceof TradResultData){
+							//Vector<Point> results=new Vector<Point>();
+							if(((TradResultData) obj).getAlgName().equals("Closest Neighbour")){
+								//Listen to changes for this specific class
+								listenToChanges="cn";
+								results.clear();
+								closestNeighbourAlg=new ClosestNeighbour((Vector<Point>) points.clone(), results);
+								closestNeighbourAlg.addPropertyChangeListener(this);
+								closestNeighbourAlg.execute();
+							}
+							if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
+								//Listen to changes for this specific class
+								listenToChanges="gh";
+								results.clear();
+								greedyHeuristicAlg=new GreedyHeuristic((Vector<Point>) points.clone(), results);
+								greedyHeuristicAlg.addPropertyChangeListener(this);
+								greedyHeuristicAlg.execute();
+								
+							}
+							if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
+								//TO IMPLEMENT
+							}
+						}
+						else if(obj instanceof GenResultData){
+							//TO IMPLEMENT
+						}
 					}
-					//Stop execution of the algorithm
+					//Stop algorithm execution
 					else{
+						if(listenToChanges.equals("cn")){
+							closestNeighbourAlg.cancel(true);
+						}
+						else if(listenToChanges.equals("gh")){
+							greedyHeuristicAlg.cancel(true);
+						}
+						//TO IMPLEMENT
 						startExecutionButton.setText("Start");
 					}
+					
 				}
 				//If many algorithms are ready to be executed, open a new window
 				else{
@@ -492,13 +526,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					else if (trad3CB.isSelected()){
 						tradAlgName=trad3CB.getText();	
 					}
-					else if (trad4CB.isSelected()){
-						tradAlgName=trad4CB.getText();
-					}
 					//Check that a value has been assigned to the variable
 					if(!tradAlgName.equals("")){
 						
-						TradResultData tempTra=new TradResultData(tradAlgName,numPoints);
+						TradResultData tempTra=new TradResultData(tradAlgName,numPoints, (Vector<Point>) points.clone());
 						//Do this if the vector is not empty
 						if(algQueueExecution.size()>0){
 							boolean isAlgInQueue=false;
@@ -645,7 +676,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			trad1CB.setSelected(false);
 			trad2CB.setSelected(false);
 			trad3CB.setSelected(false);
-			trad4CB.setSelected(false);
 		}
 		//Enable only the Genetic algorithms
 		else{
@@ -663,18 +693,42 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		
+	public void propertyChange(PropertyChangeEvent pcEvent) {
+		if(pcEvent.getPropertyName().equals("progress")){
+			if(listenToChanges.equals("cn")){
+				if(closestNeighbourAlg.getProgress()==100 || closestNeighbourAlg.isDone()){
+					//Refresh the drawing area one last time in case of last second changes
+					drawingArea.performLinks(true);
+					startExecutionButton.setText("Start");
+					//Get the only element in the vector and update it with the execution information
+					TradResultData transferData=(TradResultData) algQueueExecution.get(0);
+					transferData.setTourLength(closestNeighbourAlg.getTourLength());
+					transferData.setTimeExecution(closestNeighbourAlg.getExecutionTime());
+					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
+				}
+				else if(closestNeighbourAlg.getProgress()!=100){
+					drawingArea.performLinks(true);
+				}
+			}
+			else if(listenToChanges.equals("gh")){
+				if(greedyHeuristicAlg.getProgress()==100 || greedyHeuristicAlg.isDone()){
+					//Refresh the drawing area one last time in case of last second changes
+					drawingArea.performLinks(true);
+					startExecutionButton.setText("Start");
+					//Get the only element in the vector and update it with the execution information
+					TradResultData transferData=(TradResultData) algQueueExecution.get(0);
+					transferData.setTourLength(greedyHeuristicAlg.getTourLength());
+					transferData.setTimeExecution(greedyHeuristicAlg.getExecutionTime());
+					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
+				}
+				else if(greedyHeuristicAlg.getProgress()!=100){
+					drawingArea.performLinks(true);
+				}
+			}
+			//TO IMPLEMENT FOR EACH ALGORITHM (TRAD & GEN)
+		}
 	}
-	private void initExitRequest(){
-		exitReq=new ExitRequest();
-		exitReq.setTitle("Exit");
-		exitReq.setVisible(true);
-		exitReq.setResizable(false);
-		exitReq.setSize(280,150);
-		exitReq.setLocation(500,300);
-	}
-
+	
 	@Override
 	public void stateChanged(ChangeEvent cE) {
 		if(cE.getSource().equals(crossProbSlider)){
@@ -685,6 +739,15 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			mutationProb=(float)mutProbSlider.getValue()/100;
 			mutationProbLabel.setText("Probability: "+mutationProb);
 		}
-		
 	}
+	
+	private void initExitRequest(){
+		exitReq=new ExitRequest();
+		exitReq.setTitle("Exit");
+		exitReq.setVisible(true);
+		exitReq.setResizable(false);
+		exitReq.setSize(280,150);
+		exitReq.setLocation(500,300);
+	}
+
 }
