@@ -67,8 +67,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JTextField popSizeTF, fromTF, toTF, maxGenTF, casualPointsTF;
 	private JComboBox<String> crossoverMethods, mutationMethods;
 	private JSlider crossProbSlider, mutProbSlider;
-	private JButton goDrawButton, startExecutionButton, addToExecution, automaticExecution, viewResultsButton;
-	private boolean importXmlJson;
+	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton;
+	private boolean importXmlJson, execStopped;
 	//Drawing area which allows the user to draw points and perform the TSP on those points
 	private DrawingPanel drawingArea;
 	//Global Objects
@@ -83,7 +83,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private ClosestNeighbour closestNeighbourAlg;
 	private GreedyHeuristic greedyHeuristicAlg;
 	private String listenToChanges;
-	
+	private int index;
+
 	public MainView(JFrame frame){
 		this.mainFrame=frame;
 		//Add a window listener so the programmer can decide what operations execute when certain window action are about to occur
@@ -121,24 +122,24 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		resetAllPoints=new JButton("Clear Points");
 		numDrawnPoints=new JLabel("Points: "+0);
 		tradGAChooser=new JComboBox<String>();
-			//Add data to the ComboBox 
-			tradGAChooser.addItem("Traditional Algorithms");
-			tradGAChooser.addItem("Genetic Algorithms");
+		//Add data to the ComboBox 
+		tradGAChooser.addItem("Traditional Algorithms");
+		tradGAChooser.addItem("Genetic Algorithms");
 		tradPanel=new JPanel();
-			tradPanel.setBorder(new TitledBorder("Traditional"));
-			tradPanel.setLayout(null);
+		tradPanel.setBorder(new TitledBorder("Traditional"));
+		tradPanel.setLayout(null);
 		genPanel=new JPanel();
-			genPanel.setBorder(new TitledBorder("Genetic"));
-			genPanel.setLayout(null);
+		genPanel.setBorder(new TitledBorder("Genetic"));
+		genPanel.setLayout(null);
 		optionPanel=new JPanel();
-			optionPanel.setBorder(new TitledBorder("Options"));
-			optionPanel.setLayout(null);
+		optionPanel.setBorder(new TitledBorder("Options"));
+		optionPanel.setLayout(null);
 		destinationPanel=new JPanel();
-			destinationPanel.setBorder(new TitledBorder("Locations"));
-			destinationPanel.setLayout(null);
+		destinationPanel.setBorder(new TitledBorder("Locations"));
+		destinationPanel.setLayout(null);
 		executionPanel=new JPanel();
-			executionPanel.setBorder(new TitledBorder("Execution"));
-			executionPanel.setLayout(null);
+		executionPanel.setBorder(new TitledBorder("Execution"));
+		executionPanel.setLayout(null);
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
@@ -152,37 +153,36 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		maxGenTF=new JTextField();
 		crossoverLabel=new JLabel("Crossover Method:");
 		crossoverMethods=new JComboBox<String>();
-			crossoverMethods.addItem("Cycle Crossover");
-			crossoverMethods.addItem("One Point Crossover");
-			crossoverMethods.addItem("Ordered Crossover");
-			crossoverMethods.addItem("Partially Mapped Crossover");
-			crossoverMethods.addItem("Two Point Crossover");
+		crossoverMethods.addItem("Cycle Crossover");
+		crossoverMethods.addItem("One Point Crossover");
+		crossoverMethods.addItem("Ordered Crossover");
+		crossoverMethods.addItem("Partially Mapped Crossover");
+		crossoverMethods.addItem("Two Point Crossover");
 		mutationLabel=new JLabel("Mutation Method:");
 		mutationMethods=new JComboBox<String>();
-			mutationMethods.addItem("Insertion Mutation");
-			mutationMethods.addItem("Reciprocal Exchange Mutation");
+		mutationMethods.addItem("Insertion Mutation");
+		mutationMethods.addItem("Reciprocal Exchange Mutation");
 		crossoverProbLabel=new JLabel("Probability: 0.4");
 		crossProbSlider= new JSlider(JSlider.HORIZONTAL,0,100,40);
-			//crossProbSlider.setMinorTickSpacing(0);
-			//crossProbSlider.setMajorTickSpacing(50);
-			//crossProbSlider.setPaintTicks(true);
-			//crossProbSlider.setPaintLabels(true);
+		//crossProbSlider.setMinorTickSpacing(0);
+		//crossProbSlider.setMajorTickSpacing(50);
+		//crossProbSlider.setPaintTicks(true);
+		//crossProbSlider.setPaintLabels(true);
 		mutationProbLabel=new JLabel("Probability: 0.20");
 		mutProbSlider=new JSlider(JSlider.HORIZONTAL,0,100,20);
-		casualPointsLabel=new JLabel("Casual");
+		casualPointsLabel=new JLabel("Random");
 		casualPointsTF=new JTextField();
-			casualPointsTF.setEnabled(false);
+		casualPointsTF.setEnabled(false);
 		goDrawButton=new JButton("Go");
-			goDrawButton.setEnabled(false);
-		manualPointsLabel=new JLabel("Casual");
+		goDrawButton.setEnabled(false);
+		manualPointsLabel=new JLabel("Manual");
 		numCasualPointsCB=new JCheckBox("n. of Points:");
 		manualDrawCB=new JCheckBox("Draw Points");
-			manualDrawCB.setSelected(true);
+		manualDrawCB.setSelected(true);
 		importPointsCB=new JCheckBox("Import XML/JSON");
 		importXmlJson=false;
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
-		automaticExecution=new JButton("Automatic");
 		viewResultsButton=new JButton("View Results");
 		//Define position of the object on the jFrame
 		undoPoint.setBounds(560,15,70,20);
@@ -222,8 +222,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		importPointsCB.setBounds(20,100,150,20);
 		startExecutionButton.setBounds(10,25,80,20);
 		addToExecution.setBounds(100,25,80,20);
-		automaticExecution.setBounds(40,50,110,20);
-		viewResultsButton.setBounds(40,75,110,20);
+		viewResultsButton.setBounds(40,50,110,20);
 		//Add control action for each object, thus to provide interactivity
 		loadMap.addActionListener(this);
 		info.addActionListener(this);
@@ -246,7 +245,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		importPointsCB.addActionListener(this);
 		startExecutionButton.addActionListener(this);
 		addToExecution.addActionListener(this);
-		automaticExecution.addActionListener(this);
 		viewResultsButton.addActionListener(this);
 		//Add the object to the jFrame
 		this.add(undoPoint);
@@ -286,12 +284,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		destinationPanel.add(importPointsCB);
 		executionPanel.add(startExecutionButton);
 		executionPanel.add(addToExecution);
-		executionPanel.add(automaticExecution);
 		executionPanel.add(viewResultsButton);
 		//Initialise global objects
 		points=new Vector<Point>();
 		results=new Vector<Point>();
 		algQueueExecution=new Vector<Object>();
+		index=0;
+		execStopped=false;
 		crossoverSelected=crossoverMethods.getItemAt(0).toString();
 		mutationSelected=mutationMethods.getItemAt(0).toString();
 		crossoverProb=0.40f;
@@ -301,8 +300,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		listenToChanges="";
 		//Add Drawing area
 		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
-			drawingArea.setBounds(10, 50, 620, 590);
-			drawingArea.setBackground(new Color(200,200,200));
+		drawingArea.setBounds(10, 50, 620, 590);
+		drawingArea.setBackground(new Color(200,200,200));
 		mainFrame.add(drawingArea);
 		//Create a level difference between the main window and the drawing area
 		drawingArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
@@ -318,46 +317,25 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		//Enable the Traditional Algorithm view
 		this.tradGenView(tradGAChooser.getSelectedIndex());
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent actionE) {
 		//Load a background picture used as a map for the TSP
 		if(actionE.getSource().equals(loadMap)){
-			//It imports the pic, but it doesn't resize it properly and position it where i want it to go
-			/*BufferedImage mapJpg=null;
-			try{
-				jpgImport.setFileFilter(jpgFilter);
-				int resSel=jpgImport.showOpenDialog(this);
-				if(resSel==JFileChooser.APPROVE_OPTION){
-					File imageToImport=jpgImport.getSelectedFile();
-					mapJpg=ImageIO.read(imageToImport);
-					BufferedImage resizedMap=new BufferedImage(300,400,BufferedImage.TYPE_INT_RGB);
-					Graphics2D g2D=resizedMap.createGraphics();
-					//10, 50, 620, 590
-					g2D.drawImage(mapJpg,0,0,300,400,null);
-					g2D.dispose();
-					JLabel test=new JLabel();
-					test.setIcon(new ImageIcon(mapJpg));
-					test.setBounds(0,0,300,400);
-					drawingArea.add(test);
-				}
-			}
-			catch(Exception e){
-				JOptionPane.showMessageDialog(null, e.toString());
-			}*/
+
 		}
 		if(actionE.getSource().equals(info)){
-			
+
 		}
 		if(actionE.getSource().equals(close)){
 			//this.initExitRequest();
 			System.exit(0);
 		}
 		if(actionE.getSource().equals(saveRes)){
-					
+
 		}
 		if(actionE.getSource().equals(expPoints)){
-			
+
 		}
 		if(actionE.getSource().equals(resetAllPoints)){
 			drawingArea.clearAllPoints();
@@ -399,6 +377,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							int yP=(int)(Math.random()*540);
 							drawingArea.passPoint(new Point(xP, yP));
 						}
+						points=drawingArea.getAllPoints();
 					}
 					else{
 						casualPointsTF.setText("");
@@ -412,7 +391,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			}
 			//Import points from a XML/JSON file, chosen by the user
 			else{
-				
+				//TO IMPLEMENT
 			}
 		}
 		if(actionE.getSource().equals(crossoverMethods)){
@@ -453,40 +432,21 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			//drawingArea.removeMouseListener(this);
 		}
 		if(actionE.getSource().equals(startExecutionButton)){
+			index=0;
+			if(execStopped){
+				execStopped=false;
+			}
+			else{
+				execStopped=true;
+			}
 			if(algQueueExecution.size()>0){
-				//If only 1 algorithm is added to the queue, perform the execution on the mainView
-				if(algQueueExecution.size()==1){
-					//Start performing the algorithm
+				if(index<algQueueExecution.size()){
 					if(startExecutionButton.getText().equals("Start")){
+						execStopped=false;
+						addToExecution.setEnabled(false);
 						startExecutionButton.setText("Stop");
-						//Verify whether the algorithm to perform is Traditional or Genetic
-						Object obj=algQueueExecution.get(0);
-						if(obj instanceof TradResultData){
-							//Vector<Point> results=new Vector<Point>();
-							if(((TradResultData) obj).getAlgName().equals("Closest Neighbour")){
-								//Listen to changes for this specific class
-								listenToChanges="cn";
-								results.clear();
-								closestNeighbourAlg=new ClosestNeighbour((Vector<Point>) points.clone(), results);
-								closestNeighbourAlg.addPropertyChangeListener(this);
-								closestNeighbourAlg.execute();
-							}
-							if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
-								//Listen to changes for this specific class
-								listenToChanges="gh";
-								results.clear();
-								greedyHeuristicAlg=new GreedyHeuristic((Vector<Point>) points.clone(), results);
-								greedyHeuristicAlg.addPropertyChangeListener(this);
-								greedyHeuristicAlg.execute();
-								
-							}
-							if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
-								//TO IMPLEMENT
-							}
-						}
-						else if(obj instanceof GenResultData){
-							//TO IMPLEMENT
-						}
+						index=0;
+						this.beginQueueExecution();
 					}
 					//Stop algorithm execution
 					else{
@@ -498,37 +458,44 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						}
 						//TO IMPLEMENT
 						startExecutionButton.setText("Start");
+						addToExecution.setEnabled(false);
 					}
-					
 				}
-				//If many algorithms are ready to be executed, open a new window
 				else{
-					ExecutionView execView=new ExecutionView(algQueueExecution);
+					index=0;
 				}
 			}
 			else{
+				//index=0;
 				JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		if(actionE.getSource().equals(addToExecution)){			
 			int numPoints=points.size();
-			if(numPoints>0){
+			//Reset the index of execution
+			//index=0;
+			if(numPoints>2){
 				//Verify if the selected algorithm with that number of points has already in the execution queue
 				//Only Traditional algorithms are available to user selection
 				if(tradPanel.isEnabled() && !genPanel.isEnabled()){
 					String tradAlgName="";
 					if(trad1CB.isSelected()){
 						tradAlgName=trad1CB.getText();
+						//Unselect the element
+						trad1CB.setSelected(false);
 					}
 					else if (trad2CB.isSelected()){
 						tradAlgName=trad2CB.getText();
+						//Unselect the element
+						trad2CB.setSelected(false);
 					}
 					else if (trad3CB.isSelected()){
-						tradAlgName=trad3CB.getText();	
+						tradAlgName=trad3CB.getText();
+						//Unselect the element
+						trad3CB.setSelected(false);
 					}
 					//Check that a value has been assigned to the variable
 					if(!tradAlgName.equals("")){
-						
 						TradResultData tempTra=new TradResultData(tradAlgName,numPoints, (Vector<Point>) points.clone());
 						//Do this if the vector is not empty
 						if(algQueueExecution.size()>0){
@@ -537,15 +504,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								try{
 									TradResultData tempTr=(TradResultData)algQueueExecution.elementAt(i);
 									//If this traditional algorithm with this num of points is not already contained in the execution queue, add it to the queue
-									if(tempTra.equals(tempTr)){
-										isAlgInQueue=true;
-									}
+									isAlgInQueue=tempTra.equals(tempTr);
 								}
 								catch(Exception err){
 								}
 							}
 							if(!isAlgInQueue){
 								algQueueExecution.add(tempTra);
+								//points.clear();
 								JOptionPane.showMessageDialog(null, "Element Added!"
 										+ "\nAlgorithm Name: "+tempTra.getAlgName()
 										+"\nNum. Cities: "+tempTra.getNumCities(),
@@ -558,6 +524,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						//Do this if vector is empty
 						else{
 							algQueueExecution.add(tempTra);
+							//points.clear();
 							JOptionPane.showMessageDialog(null, "Element Added!"
 									+ "\nAlgorithm Name: "+tempTra.getAlgName()
 									+"\nNum. Cities: "+tempTra.getNumCities(),
@@ -634,29 +601,54 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				JOptionPane.showMessageDialog(null, "Add some points to the drawing area first","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		if(actionE.getSource().equals(automaticExecution)){
-			ExecutionView execView=new ExecutionView(algQueueExecution);
-		}
 		if(actionE.getSource().equals(viewResultsButton)){
 			if(algQueueExecution.size()>0){
-				//If only 1 algorithm is in the queue, view the results for only that performance
-				if(algQueueExecution.size()==1){
-					//Verify the type of object (Genetic or Traditional)
-					if(algQueueExecution.elementAt(0) instanceof TradResultData){
-						ResultsView resView=new ResultsView("Results - Traditional Algorithm","tra",algQueueExecution.elementAt(0));
-					}
-					else{
-						ResultsView resView=new ResultsView("Results - Genetic Algorithm","gen",algQueueExecution.elementAt(0));
-					}
-				}
-				//If many algorithms are in the queue, open a new window
-				else{
-					ExecutionView execView=new ExecutionView(algQueueExecution);
-				}
+				ExecutionView execView=new ExecutionView(algQueueExecution);
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "No Results to view","Warning", JOptionPane.WARNING_MESSAGE);
 			}
+		}
+	}
+
+	private void beginQueueExecution(){
+		//Start performing the algorithm
+		//Verify whether the algorithm to perform is Traditional or Genetic
+		Object obj=algQueueExecution.get(index);
+		if(obj instanceof TradResultData){
+			if(((TradResultData) obj).getAlgName().equals("Closest Neighbour")){
+				//Listen to changes for this specific class
+				listenToChanges="cn";
+				results.clear();
+				//points.clear();
+				results=((TradResultData) obj).getResultingPoints();
+				points=((TradResultData) obj).getCities();
+				//Clear the vector containing old execution results
+				((TradResultData) obj).resetResultData();
+				closestNeighbourAlg=new ClosestNeighbour(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
+				closestNeighbourAlg.addPropertyChangeListener(this);
+				closestNeighbourAlg.execute();
+			}
+			if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
+				//Listen to changes for this specific class
+				listenToChanges="gh";
+				results.clear();
+				//points.clear();
+				results=((TradResultData) obj).getResultingPoints();
+				points=((TradResultData) obj).getCities();
+				//Clear the vector containing old execution results
+				((TradResultData) obj).resetResultData();
+				greedyHeuristicAlg=new GreedyHeuristic(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
+				greedyHeuristicAlg.addPropertyChangeListener(this);
+				greedyHeuristicAlg.execute();
+
+			}
+			if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
+				//TO IMPLEMENT
+			}
+		}
+		else if(obj instanceof GenResultData){
+			//TO IMPLEMENT
 		}
 	}
 
@@ -698,37 +690,47 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			if(listenToChanges.equals("cn")){
 				if(closestNeighbourAlg.getProgress()==100 || closestNeighbourAlg.isDone()){
 					//Refresh the drawing area one last time in case of last second changes
-					drawingArea.performLinks(true);
+					drawingArea.performLinks(true, closestNeighbourAlg.getListOfCities(), closestNeighbourAlg.getTravellingOrder());
 					startExecutionButton.setText("Start");
 					//Get the only element in the vector and update it with the execution information
-					TradResultData transferData=(TradResultData) algQueueExecution.get(0);
+					TradResultData transferData=(TradResultData) algQueueExecution.get(index);
 					transferData.setTourLength(closestNeighbourAlg.getTourLength());
 					transferData.setTimeExecution(closestNeighbourAlg.getExecutionTime());
 					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
+					transferData.setCities(closestNeighbourAlg.getListOfCities());
+					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
+					//Increment the counter and verify if other algorithms are awaiting to be executed
+					index++;
+					this.beginQueueExecution();
 				}
 				else if(closestNeighbourAlg.getProgress()!=100){
-					drawingArea.performLinks(true);
+					drawingArea.performLinks(true, closestNeighbourAlg.getListOfCities(), closestNeighbourAlg.getTravellingOrder());
 				}
 			}
 			else if(listenToChanges.equals("gh")){
 				if(greedyHeuristicAlg.getProgress()==100 || greedyHeuristicAlg.isDone()){
 					//Refresh the drawing area one last time in case of last second changes
-					drawingArea.performLinks(true);
+					drawingArea.performLinks(true, greedyHeuristicAlg.getListOfCities(), greedyHeuristicAlg.getTravellingOrder());
 					startExecutionButton.setText("Start");
 					//Get the only element in the vector and update it with the execution information
-					TradResultData transferData=(TradResultData) algQueueExecution.get(0);
-					transferData.setTourLength(greedyHeuristicAlg.getTourLength());
+					TradResultData transferData=(TradResultData) algQueueExecution.get(index);
+					transferData.setTourLength(greedyHeuristicAlg.getTourDistance());
 					transferData.setTimeExecution(greedyHeuristicAlg.getExecutionTime());
 					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
+					transferData.setCities(greedyHeuristicAlg.getListOfCities());
+					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
+					//Increment the counter and verify if other algorithms are awaiting to be executed
+					index++;
+					this.beginQueueExecution();
 				}
 				else if(greedyHeuristicAlg.getProgress()!=100){
-					drawingArea.performLinks(true);
+					drawingArea.performLinks(true, greedyHeuristicAlg.getListOfCities(), greedyHeuristicAlg.getTravellingOrder());
 				}
 			}
 			//TO IMPLEMENT FOR EACH ALGORITHM (TRAD & GEN)
 		}
 	}
-	
+
 	@Override
 	public void stateChanged(ChangeEvent cE) {
 		if(cE.getSource().equals(crossProbSlider)){
@@ -740,7 +742,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			mutationProbLabel.setText("Probability: "+mutationProb);
 		}
 	}
-	
+
 	private void initExitRequest(){
 		exitReq=new ExitRequest();
 		exitReq.setTitle("Exit");

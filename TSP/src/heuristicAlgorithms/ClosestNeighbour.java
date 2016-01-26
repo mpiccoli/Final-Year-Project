@@ -12,12 +12,14 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	private Vector<Point> travellingOrder;
 	private long executionTime;
 	private int tourLength;
+	private double tourDistance;
 	private boolean processedCancelled;
 	
 	public ClosestNeighbour(Vector<Point> points, Vector<Point> solutions){
 		cities=points;
 		travellingOrder=solutions;
 		tourLength=1;
+		tourDistance=0;
 		processedCancelled=false;
 	}
 	public long getExecutionTime(){
@@ -25,6 +27,9 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	}
 	public int getTourLength(){
 		return tourLength;
+	}
+	public double getTourDistance(){
+		return tourDistance;
 	}
 	public Vector<Point> getListOfCities(){
 		return (Vector<Point>) cities.clone();
@@ -46,6 +51,7 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 				pos=i;
 			}
 		}
+		tourDistance+=minTemp;
 		return pos;
 	}
 	
@@ -63,25 +69,26 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	protected Boolean doInBackground() throws Exception {
 		//Start the time for this process
 		long startTime=System.nanoTime();
+		Vector<Point> citiesTemp=(Vector<Point>) cities.clone();
 		//The first place to visit is the first city in the list
-		travellingOrder.add(cities.get(0));
+		travellingOrder.add(citiesTemp.get(0));
 		//Once the city has been added to the path, remove it from the available cities
-		cities.remove(0);
+		citiesTemp.remove(0);
 		//Pause the Thread for a few millisecond, to give the opportunity the GUI to pick up the changes
 		Thread.sleep(2);
 		//Send an update to notify that the program is performing correctly
 		this.setProgress((int)(Math.random()*10));
-		while(cities.size()>0){
+		while(citiesTemp.size()>0){
 			Vector<Double> temp= new Vector<Double>();
-			for(int j=0; j<cities.size(); j++){
-				temp.add(calculateDistance(travellingOrder.lastElement(), cities.get(j)));
+			for(int j=0; j<citiesTemp.size(); j++){
+				temp.add(calculateDistance(travellingOrder.lastElement(), citiesTemp.get(j)));
 				this.setProgress((int)(Math.random()*10));
 				//Pause the Thread for a few millisecond, to give the opportunity the GUI to pick up the changes
 				Thread.sleep(1);
 			}
 			int pos=this.findPositionMinDistance(temp);
-			travellingOrder.add(cities.get(pos));
-			cities.remove(pos);
+			travellingOrder.add(citiesTemp.get(pos));
+			citiesTemp.remove(pos);
 			//Increment the counter that keeps track of the number of tours for this algorithm
 			tourLength++;
 			//Pause the Thread for a few millisecond, to give the opportunity the GUI to pick up the changes

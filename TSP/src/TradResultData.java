@@ -14,6 +14,7 @@ public class TradResultData {
 		timeExecution=0.0;
 		details="";
 		algName="";
+		results=new Vector<Point>();
 	}
 	//Constructor with parameters
 	public TradResultData(int nCities, double length, double time, String det, String name){
@@ -22,11 +23,13 @@ public class TradResultData {
 		timeExecution=time;
 		details=det;
 		algName=name;
+		results=new Vector<Point>();
 	}
 	public TradResultData(String name, int cities, Vector<Point> dataPoints){
 		algName=name;
 		numCities=cities;
 		listOfCities=dataPoints;
+		results=new Vector<Point>();
 	}
 	public void setNumCities(int num){
 		numCities=num;
@@ -61,8 +64,17 @@ public class TradResultData {
 	public void setResultingPoints(Vector<Point> data){
 		results=data; 
 	}
+	public Vector<Point> getResultingPoints(){
+		return results;
+	}
+	public void setCities(Vector<Point> data){
+		listOfCities=(Vector<Point>) data.clone();
+	}
 	public Vector<Point> getCities(){
 		return listOfCities;
+	}
+	public void resetResultData(){
+		results.clear();
 	}
 	@Override
 	public boolean equals(Object obj){

@@ -11,7 +11,7 @@ public class DrawingPanel extends JPanel{
 	private JLabel numPoints;
 	private boolean singleAlg;
 	private Vector<Point> links;
-	
+
 	public DrawingPanel(Vector<Point> vec, JLabel nPoints, Vector<Point> res){
 		vPoints=vec;
 		numPoints=nPoints;
@@ -35,11 +35,16 @@ public class DrawingPanel extends JPanel{
 		}
 
 	}
+	public Vector<Point> getAllPoints(){
+		return vPoints;
+	}
 	//Tell the program that only one algorithm is in the queue, therefore, show salesman path
-		public void performLinks(boolean performance){
-			singleAlg=performance;
-			this.repaint();
-		}
+	public void performLinks(boolean performance, Vector<Point> vec, Vector<Point> res){
+		singleAlg=performance;
+		vPoints=vec;
+		links=res;
+		this.repaint();
+	}
 	public void passPoint(Point p){
 		if(!vPoints.contains(p)){
 			vPoints.add(p);

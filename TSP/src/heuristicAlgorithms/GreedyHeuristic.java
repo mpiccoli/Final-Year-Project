@@ -11,16 +11,18 @@ public class GreedyHeuristic extends SwingWorker{
 	private Vector<Point> cities;
 	private Vector<Vector<Point>> travellingOrders;
 	private Vector<Double> travellingOrderDistances;
-	private Vector<Point> result;
+	private Vector<Point> resultData;
+	private double resultTourDistance;
 	private long executionTime;
-	private int tourLength;
+	private long tourLength;
 	private boolean processedCancelled;
 	
 	public GreedyHeuristic(Vector<Point> places, Vector<Point> results){
 		cities=places;
-		this.result=results;
+		this.resultData=results;
 		travellingOrders=new Vector<Vector<Point>>();
 		travellingOrderDistances=new Vector<Double>();
+		resultTourDistance=0;
 		executionTime=0;
 		tourLength=0;
 		processedCancelled=false;
@@ -28,14 +30,17 @@ public class GreedyHeuristic extends SwingWorker{
 	public long getExecutionTime(){
 		return executionTime;
 	}
-	public int getTourLength(){
+	public long getTourLength(){
 		return tourLength;
+	}
+	public double getTourDistance(){
+		return resultTourDistance;
 	}
 	public Vector<Point> getListOfCities(){
 		return (Vector<Point>) cities.clone();
 	}
 	public Vector<Point> getTravellingOrder(){
-		return (Vector<Point>)result.clone();
+		return (Vector<Point>)resultData.clone();
 	}
 	private double calculateDistance(Point a, Point b){
 		double xValue=(a.getX()-b.getX())*(a.getX()-b.getX());
@@ -62,17 +67,37 @@ public class GreedyHeuristic extends SwingWorker{
 		}
 		return temp;
 	}
+	private void findTourLength(int n){
+		//The formula used to find the number of cycles is: (n*n)(log2 of n)
+		tourLength=(long) ((n*n)*(Math.log(n)/Math.log(2)));
+	}
+	private Vector<Point> findBestResult(){
+		//Store the current min value found and its position in the Vector
+		double min=10000;
+		int pos=0;
+		for(int i=0; i<travellingOrderDistances.size(); i++){
+			if(travellingOrderDistances.get(i)<min){
+				//If a new min is found, store it
+				min=travellingOrderDistances.get(i);
+				pos=i;
+			}
+		}
+		//Search for the element with the minimum distance into the vector of vector containing the 
+		//list of points for the best tour. Accept only 4 decimal places
+		resultTourDistance=(double)Math.round(min * 10000d) / 10000d;
+		return travellingOrders.get(pos);
+	}
 	@SuppressWarnings("unchecked")
-	//CHANGE LENGTH FOR LOOP
-	//CFIND FINAL RESULT FOR ALGORITHM (BEST RESULT IN VECTOR OF DATA)
 	protected Boolean doInBackground() throws Exception{
 		//Start the time for this process
 		long startTime=System.nanoTime();
 		Point elePos1=null, elePos2=null, firstElement=null;
-		for(int j=0; j<cities.size(); j++){
+		//Find how many tours are possible given the number of cities
+		this.findTourLength(cities.size());
+		for(int j=0; j<tourLength; j++){
 			double lengthTemp=0;
 			Vector<Point> data_copy=(Vector<Point>) cities.clone();
-			result.clear();
+			resultData.clear();
 			int counter=0;
 			//Pick two random Points from the list of cities, remember the first one
 			//since it will be used at the end of the tour to close the cycle
@@ -86,8 +111,8 @@ public class GreedyHeuristic extends SwingWorker{
 					counter=1;
 				}
 				lengthTemp+=this.calculateDistance(elePos1, elePos2);
-				result.add(elePos1);
-				result.add(elePos2);
+				resultData.add(elePos1);
+				resultData.add(elePos2);
 				data_copy.remove(elePos1);
 				if(data_copy.size()>1){
 					elePos1=elePos2;
@@ -108,11 +133,14 @@ public class GreedyHeuristic extends SwingWorker{
 			Thread.sleep(3);
 			//Close the circle by calculating the distance between the first and last cities in the tour
 			lengthTemp+=this.calculateDistance(elePos2, firstElement);
-			result.add(firstElement);
-			//Add the tour to the list as well as the tourLength
-			travellingOrders.add(result);
+			resultData.add(firstElement);
+			//Add the tour to the list as well as the tour length
+			travellingOrders.add(resultData);
 			travellingOrderDistances.add(lengthTemp);
 		}
+		//Find the best result evaluated
+		resultData=this.findBestResult();
+		this.setProgress((int)(Math.random()*10));
 		//Calculate the execution time before the thread completes the last action
 		this.calculateExecutionTime(startTime, System.nanoTime());
 		this.setProgress(100);
