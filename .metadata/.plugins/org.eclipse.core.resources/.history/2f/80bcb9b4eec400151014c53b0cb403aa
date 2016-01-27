@@ -67,7 +67,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JTextField popSizeTF, fromTF, toTF, maxGenTF, casualPointsTF;
 	private JComboBox<String> crossoverMethods, mutationMethods;
 	private JSlider crossProbSlider, mutProbSlider;
-	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton;
+	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton;
 	private boolean importXmlJson, execStopped;
 	//Drawing area which allows the user to draw points and perform the TSP on those points
 	private DrawingPanel drawingArea;
@@ -184,7 +184,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
 		viewResultsButton=new JButton("View Results");
-		resetAllFieldsButton=new JButton("Reset All");
 		//Define position of the object on the jFrame
 		undoPoint.setBounds(560,15,70,20);
 		resetAllPoints.setBounds(430,15,120,20);
@@ -224,7 +223,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		startExecutionButton.setBounds(10,25,80,20);
 		addToExecution.setBounds(100,25,80,20);
 		viewResultsButton.setBounds(40,50,110,20);
-		resetAllFieldsButton.setBounds(40,75,110,20);
 		//Add control action for each object, thus to provide interactivity
 		loadMap.addActionListener(this);
 		info.addActionListener(this);
@@ -248,7 +246,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		startExecutionButton.addActionListener(this);
 		addToExecution.addActionListener(this);
 		viewResultsButton.addActionListener(this);
-		resetAllFieldsButton.addActionListener(this);
 		//Add the object to the jFrame
 		this.add(undoPoint);
 		this.add(resetAllPoints);
@@ -288,7 +285,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		executionPanel.add(startExecutionButton);
 		executionPanel.add(addToExecution);
 		executionPanel.add(viewResultsButton);
-		executionPanel.add(resetAllFieldsButton);
 		//Initialise global objects
 		points=new Vector<Point>();
 		results=new Vector<Point>();
@@ -436,32 +432,51 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			//drawingArea.removeMouseListener(this);
 		}
 		if(actionE.getSource().equals(startExecutionButton)){
-			if(startExecutionButton.getText().equals("Start")){
-				if(algQueueExecution.size()>0){
-					execStopped=false;
-					addToExecution.setEnabled(false);
-					index=0;
-					this.beginQueueExecution();
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);
-				}
+			index=0;
+			if(execStopped){
+				execStopped=false;
 			}
 			else{
 				execStopped=true;
-				startExecutionButton.setText("Start");
-				//addToExecution.setEnabled(true);
-				//points.clear();
-				if(listenToChanges.equals("cn")){
-					closestNeighbourAlg.cancel(true);
+			}
+			if(algQueueExecution.size()>0){
+				if(index<algQueueExecution.size()){
+					if(startExecutionButton.getText().equals("Start")){
+						execStopped=false;
+						addToExecution.setEnabled(false);
+						//startExecutionButton.setText("Stop");
+						index=0;
+						this.beginQueueExecution();
+					}
+					//Stop algorithm execution
+					else{
+						if(listenToChanges.equals("cn")){
+							closestNeighbourAlg.cancel(true);
+							execStopped=true;
+							addToExecution.setEnabled(true);
+							//return;
+						}
+						else if(listenToChanges.equals("gh")){
+							greedyHeuristicAlg.cancel(true);
+							execStopped=true;
+							addToExecution.setEnabled(true);
+							//return;
+						}
+						//TO IMPLEMENT
+						startExecutionButton.setText("Start");
+						addToExecution.setEnabled(false);
+					}
 				}
-				else if(listenToChanges.equals("gh")){
-					greedyHeuristicAlg.cancel(true);
+				else{
+					index=0;
 				}
-				//TO IMPLEMENT
+			}
+			else{
+				//index=0;
+				JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		if(actionE.getSource().equals(addToExecution)){		
+		if(actionE.getSource().equals(addToExecution)){			
 			int numPoints=points.size();
 			//Reset the index of execution
 			//index=0;
@@ -597,18 +612,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				ExecutionView execView=new ExecutionView(algQueueExecution);
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No Results to view","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		//Remove all points and empty the execution queue to start with new data
-		if(actionE.getSource().equals(resetAllFieldsButton)){	
-			drawingArea.clearAllPoints();
-			points.clear();
-			algQueueExecution.clear();
-			addToExecution.setEnabled(true);
-		}
 	}
-	
 
 	private void beginQueueExecution(){
 		//Start performing the algorithm
@@ -620,6 +627,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Listen to changes for this specific class
 				listenToChanges="cn";
 				results.clear();
+				//points.clear();
 				results=((TradResultData) obj).getResultingPoints();
 				points=((TradResultData) obj).getCities();
 				//Clear the vector containing old execution results
@@ -632,6 +640,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Listen to changes for this specific class
 				listenToChanges="gh";
 				results.clear();
+				//points.clear();
 				results=((TradResultData) obj).getResultingPoints();
 				points=((TradResultData) obj).getCities();
 				//Clear the vector containing old execution results
@@ -698,12 +707,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					transferData.setCities(closestNeighbourAlg.getListOfCities());
 					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
 					//Increment the counter and verify if other algorithms are awaiting to be executed
-					if(!execStopped && index<algQueueExecution.size()){
+					if(!execStopped){
 						index++;
 						this.beginQueueExecution();
-					}
-					else{
-						//index=0;
 					}
 				}
 				else if(closestNeighbourAlg.getProgress()!=100){
@@ -723,12 +729,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					transferData.setCities(greedyHeuristicAlg.getListOfCities());
 					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
 					//Increment the counter and verify if other algorithms are awaiting to be executed
-					if(!execStopped && index<algQueueExecution.size()){
+					if(!execStopped){
 						index++;
 						this.beginQueueExecution();
-					}
-					else{
-						//index=0;
 					}
 				}
 				else if(greedyHeuristicAlg.getProgress()!=100){

@@ -450,7 +450,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			else{
 				execStopped=true;
 				startExecutionButton.setText("Start");
-				//addToExecution.setEnabled(true);
+				addToExecution.setEnabled(true);
 				//points.clear();
 				if(listenToChanges.equals("cn")){
 					closestNeighbourAlg.cancel(true);
@@ -597,18 +597,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				ExecutionView execView=new ExecutionView(algQueueExecution);
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No Results to view","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		//Remove all points and empty the execution queue to start with new data
-		if(actionE.getSource().equals(resetAllFieldsButton)){	
-			drawingArea.clearAllPoints();
-			points.clear();
-			algQueueExecution.clear();
-			addToExecution.setEnabled(true);
-		}
 	}
-	
 
 	private void beginQueueExecution(){
 		//Start performing the algorithm

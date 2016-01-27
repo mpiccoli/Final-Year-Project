@@ -68,7 +68,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JComboBox<String> crossoverMethods, mutationMethods;
 	private JSlider crossProbSlider, mutProbSlider;
 	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton;
-	private boolean importXmlJson, execStopped;
+	private boolean importXmlJson, execStopped, renewPoints;
 	//Drawing area which allows the user to draw points and perform the TSP on those points
 	private DrawingPanel drawingArea;
 	//Global Objects
@@ -224,7 +224,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		startExecutionButton.setBounds(10,25,80,20);
 		addToExecution.setBounds(100,25,80,20);
 		viewResultsButton.setBounds(40,50,110,20);
-		resetAllFieldsButton.setBounds(40,75,110,20);
+		resetAllFieldsButton.setBounds(40,80,110,20);
 		//Add control action for each object, thus to provide interactivity
 		loadMap.addActionListener(this);
 		info.addActionListener(this);
@@ -295,6 +295,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		algQueueExecution=new Vector<Object>();
 		index=0;
 		execStopped=false;
+		renewPoints=false;
 		crossoverSelected=crossoverMethods.getItemAt(0).toString();
 		mutationSelected=mutationMethods.getItemAt(0).toString();
 		crossoverProb=0.40f;
@@ -374,6 +375,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					if(randPoints<1501){
 						//Remove all points previously added
 						drawingArea.clearAllPoints();
+						renewPoints=false;
 						//Create n new points, add them to the Vector and draw them in the drawing area
 						for(int i=0; i<randPoints; i++){
 							//Creare a random point within the drawing area
@@ -415,6 +417,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			goDrawButton.setEnabled(true);
 		}
 		if(actionE.getSource().equals(manualDrawCB)){
+			renewPoints=false;
 			numCasualPointsCB.setSelected(false);
 			casualPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(true);
@@ -425,6 +428,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			goDrawButton.setEnabled(false);
 		}
 		if(actionE.getSource().equals(importPointsCB)){
+			renewPoints=false;
 			numCasualPointsCB.setSelected(false);
 			casualPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(false);
@@ -439,6 +443,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			if(startExecutionButton.getText().equals("Start")){
 				if(algQueueExecution.size()>0){
 					execStopped=false;
+					renewPoints=true;
 					addToExecution.setEnabled(false);
 					index=0;
 					this.beginQueueExecution();
@@ -450,7 +455,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			else{
 				execStopped=true;
 				startExecutionButton.setText("Start");
-				//addToExecution.setEnabled(true);
+				addToExecution.setEnabled(true);
 				//points.clear();
 				if(listenToChanges.equals("cn")){
 					closestNeighbourAlg.cancel(true);
@@ -465,7 +470,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			int numPoints=points.size();
 			//Reset the index of execution
 			//index=0;
-			if(numPoints>2){
+			if(numPoints>2 && !renewPoints){
 				//Verify if the selected algorithm with that number of points has already in the execution queue
 				//Only Traditional algorithms are available to user selection
 				if(tradPanel.isEnabled() && !genPanel.isEnabled()){
@@ -597,18 +602,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				ExecutionView execView=new ExecutionView(algQueueExecution);
 			}
 			else{
-				JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No Results to view","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		//Remove all points and empty the execution queue to start with new data
-		if(actionE.getSource().equals(resetAllFieldsButton)){	
-			drawingArea.clearAllPoints();
-			points.clear();
-			algQueueExecution.clear();
-			addToExecution.setEnabled(true);
-		}
 	}
-	
 
 	private void beginQueueExecution(){
 		//Start performing the algorithm

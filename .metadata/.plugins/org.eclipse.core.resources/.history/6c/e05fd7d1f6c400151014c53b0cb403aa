@@ -600,11 +600,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		//Remove all points and empty the execution queue to start with new data
 		if(actionE.getSource().equals(resetAllFieldsButton)){	
-			drawingArea.clearAllPoints();
 			points.clear();
-			algQueueExecution.clear();
+			
 			addToExecution.setEnabled(true);
 		}
 	}
