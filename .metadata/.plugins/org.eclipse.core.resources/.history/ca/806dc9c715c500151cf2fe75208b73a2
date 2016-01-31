@@ -1,0 +1,17 @@
+package heuristicAlgorithms;
+
+import java.awt.Point;
+import java.util.Vector;
+
+public class InsertionHeuristic {
+	//Global Variables
+		private Vector<Point> cities;
+		private Vector<Point> resultData;
+		private Vector<Integer> convexHull;
+		private Vector<Double> travellingOrderDistances;
+		private double resultTourDistance;
+		private long executionTime;
+		private long tourLength;
+		private boolean processedCancelled;
+
+}

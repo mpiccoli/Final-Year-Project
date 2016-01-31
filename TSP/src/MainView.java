@@ -606,6 +606,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			points.clear();
 			algQueueExecution.clear();
 			addToExecution.setEnabled(true);
+			JOptionPane.showMessageDialog(null,"All data has been correctly deleted!", "Info", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
