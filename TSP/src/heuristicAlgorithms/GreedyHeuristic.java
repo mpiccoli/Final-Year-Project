@@ -16,7 +16,7 @@ public class GreedyHeuristic extends SwingWorker{
 	private long executionTime;
 	private long tourLength;
 	private boolean processedCancelled;
-	
+
 	public GreedyHeuristic(Vector<Point> places, Vector<Point> results){
 		cities=places;
 		this.resultData=results;
@@ -50,7 +50,7 @@ public class GreedyHeuristic extends SwingWorker{
 	private void calculateExecutionTime(long startTime, long finishTime){
 		//Verify that the Thread has not been stopped
 		if(!processedCancelled){
-			executionTime=(finishTime-startTime)/1000000;
+			executionTime=(finishTime-startTime);
 		}
 		else{
 			executionTime=-1;
@@ -60,7 +60,7 @@ public class GreedyHeuristic extends SwingWorker{
 		Double minTemp=1000.0;
 		Vector<Point> temp=null;
 		for(int i=0; i<travellingOrderDistances.size(); i++){
-			if(travellingOrderDistances.get(i)<=minTemp){
+			if(travellingOrderDistances.get(i)<minTemp){
 				minTemp=travellingOrderDistances.get(i);
 				temp=travellingOrders.get(i);
 			}
@@ -69,7 +69,9 @@ public class GreedyHeuristic extends SwingWorker{
 	}
 	private void findTourLength(int n){
 		//The formula used to find the number of cycles is: (n*n)(log2 of n)
-		tourLength=(long) ((n*n)*(Math.log(n)/Math.log(2)));
+		//tourLength=(long) ((n*n)*(Math.log(n)/Math.log(2)));
+		//Since this will run for too long, the formula has been cut down to this:
+		tourLength=(long) n*n;
 	}
 	private Vector<Point> findBestResult(){
 		//Store the current min value found and its position in the Vector
@@ -90,12 +92,13 @@ public class GreedyHeuristic extends SwingWorker{
 	@SuppressWarnings("unchecked")
 	protected Boolean doInBackground() throws Exception{
 		//Start the time for this process
-		long startTime=System.nanoTime();
+		long startTime=System.currentTimeMillis();
 		Point elePos1=null, elePos2=null, firstElement=null;
 		//Find how many tours are possible given the number of cities
 		this.findTourLength(cities.size());
 		for(int j=0; j<tourLength; j++){
 			double lengthTemp=0;
+			resultTourDistance=0;
 			Vector<Point> data_copy=(Vector<Point>) cities.clone();
 			resultData.clear();
 			int counter=0;
@@ -108,10 +111,10 @@ public class GreedyHeuristic extends SwingWorker{
 			while(data_copy.size()-1>0){
 				if(counter==0){
 					firstElement=elePos1;
+					resultData.add(elePos1);
 					counter=1;
 				}
 				lengthTemp+=this.calculateDistance(elePos1, elePos2);
-				resultData.add(elePos1);
 				resultData.add(elePos2);
 				data_copy.remove(elePos1);
 				if(data_copy.size()>1){
@@ -133,6 +136,7 @@ public class GreedyHeuristic extends SwingWorker{
 			Thread.sleep(3);
 			//Close the circle by calculating the distance between the first and last cities in the tour
 			lengthTemp+=this.calculateDistance(elePos2, firstElement);
+			resultTourDistance+=lengthTemp;
 			resultData.add(firstElement);
 			//Add the tour to the list as well as the tour length
 			travellingOrders.add(resultData);
@@ -142,7 +146,7 @@ public class GreedyHeuristic extends SwingWorker{
 		resultData=this.findBestResult();
 		this.setProgress((int)(Math.random()*10));
 		//Calculate the execution time before the thread completes the last action
-		this.calculateExecutionTime(startTime, System.nanoTime());
+		this.calculateExecutionTime(startTime, System.currentTimeMillis());
 		this.setProgress(100);
 		return true;
 	}

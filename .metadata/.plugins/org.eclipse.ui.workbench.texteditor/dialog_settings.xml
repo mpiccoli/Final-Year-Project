@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="points.clear()" key="selection"/>
+		<item value="drawingArea" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
-			<item value="points.clear()"/>
-			<item value="numDrawnPoints"/>
-			<item value="points"/>
 			<item value="drawingArea"/>
+			<item value="ExecutionView"/>
 			<item value="DrawingPanel"/>
-			<item value="points."/>
-			<item value="numPoints"/>
-			<item value="1500"/>
+			<item value="ButtonRenderer"/>
+			<item value="getTableCellRendererComponent"/>
+			<item value="data"/>
+			<item value="optionPanel"/>
+			<item value="executionPanel"/>
 		</list>
 		<list key="replacehistory">
 		</list>

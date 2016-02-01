@@ -3,7 +3,8 @@ import java.util.Vector;
 
 public class TradResultData {
 	private int numCities;
-	private double tourLength, timeExecution;
+	private double tourLength; 
+	private long timeExecution;
 	private String  details, algName;
 	private Vector<Point> listOfCities;
 	private Vector<Point> results;
@@ -11,13 +12,13 @@ public class TradResultData {
 	public TradResultData(){
 		numCities=0;
 		tourLength=0.0;
-		timeExecution=0.0;
+		timeExecution=0;
 		details="";
 		algName="";
 		results=new Vector<Point>();
 	}
 	//Constructor with parameters
-	public TradResultData(int nCities, double length, double time, String det, String name){
+	public TradResultData(int nCities, double length, long time, String det, String name){
 		numCities=nCities;
 		tourLength=length;
 		timeExecution=time;
@@ -43,10 +44,10 @@ public class TradResultData {
 	public double getTourLength(){
 		return tourLength;
 	}
-	public void setTimeExecution(double time){
+	public void setTimeExecution(long time){
 		timeExecution=time;
 	}
-	public double getExecutionTime(){
+	public long getExecutionTime(){
 		return timeExecution;
 	}
 	public void setDetails(String text){

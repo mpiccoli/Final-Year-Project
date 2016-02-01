@@ -3,7 +3,8 @@ public class GenResultData {
 	private int numCities, generationCount;
 	private float crossoverProbability, mutationProbability;
 	private String crossoverMethod, mutationMethod;
-	private double tourLength, fitness, timeExecution;
+	private double tourLength, fitness;
+	private long timeExecution;
 	private int populationSize, popFrom, popTo, maxGen;
 	
 	public GenResultData(){
@@ -15,14 +16,14 @@ public class GenResultData {
 		mutationMethod="";
 		tourLength=0.0;
 		fitness=0.0;
-		timeExecution=0.0;
+		timeExecution=0;
 		populationSize=0;
 		popFrom=0;
 		popTo=0;
 		maxGen=0;
 	}
 	//Constructor with parameters
-	public GenResultData(int cities, int genCount, float crossP, float mutP, String crossMet, String mutMet, double tour, double fit, double time,int popS, int popF, int popT, int maxG){
+	public GenResultData(int cities, int genCount, float crossP, float mutP, String crossMet, String mutMet, double tour, double fit, long time,int popS, int popF, int popT, int maxG){
 		numCities=cities;
 		generationCount=genCount;
 		crossoverProbability=crossP;
@@ -96,10 +97,10 @@ public class GenResultData {
 	public double getFitness(){
 		return fitness;
 	}
-	public void setTimeExecution(double time){
+	public void setExecutionTime(long time){
 		timeExecution=time;
 	}
-	public double getTimeExecution(){
+	public long getExecutionTime(){
 		return timeExecution;
 	}
 	public void setPopSize(int p){

@@ -1,12 +1,17 @@
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,13 +23,15 @@ import javax.swing.table.TableCellRenderer;
 public class ExecutionView extends JPanel implements ActionListener{
 
 	private JFrame mainFrame;
-	private JButton startAlgExecution, stopAlgExecution, removeAlg;
+	private JButton removeAlg;
 	private JTable tableAlg;
 	private JScrollPane scrollPaneTable;
 	private Vector<Object> dataAlgForTable;
 	private DefaultTableModel tableModel;
 	private static final String[] TABLE_COLUMN_NAMES={"Method","N. Cities","Tour Length","Time","Data"};
 	private static final Object[][] data={{"No Data",0,0,0,0}};
+	private DrawingPanel drawPath;
+	private JLabel previewLabel;
 	
 	public ExecutionView(Vector<Object> vec){
 		//Create the window
@@ -35,28 +42,25 @@ public class ExecutionView extends JPanel implements ActionListener{
 		mainFrame.setVisible(true);
 		mainFrame.setLayout(null);
 		//Initialize the global variables
-		startAlgExecution=new JButton("Start");
-		stopAlgExecution=new JButton("Stop");
-			stopAlgExecution.setEnabled(false);
 		removeAlg=new JButton("Remove Element");
 		tableModel=new DefaultTableModel(TABLE_COLUMN_NAMES, 1);
 		tableAlg=new JTable(data,TABLE_COLUMN_NAMES);
 		scrollPaneTable=new JScrollPane(tableAlg);
 			scrollPaneTable.setViewportView(tableAlg);
+		drawPath=new DrawingPanel(new Vector<Point>());
+		previewLabel=new JLabel("Shortest Path");
 		//Set position for the graphical elements
-		startAlgExecution.setBounds(150,15,80,20);
-		stopAlgExecution.setBounds(240,15,80,20);
 		removeAlg.setBounds(350,15,130,20);
 		scrollPaneTable.setBounds(490,10,380,450);
+		drawPath.setBounds(35, 85, 340, 325);
+		previewLabel.setBounds(15,45,100,20);
 		//Add Action Listener to the buttons
-		startAlgExecution.addActionListener(this);
-		stopAlgExecution.addActionListener(this);
 		removeAlg.addActionListener(this);
 		//Add elements to the frame
-		mainFrame.add(startAlgExecution);
-		mainFrame.add(stopAlgExecution);
 		mainFrame.add(removeAlg);
 		mainFrame.add(scrollPaneTable);
+		mainFrame.add(drawPath);
+		mainFrame.add(previewLabel);
 		dataAlgForTable=vec;
 		//Fill table with data passed from previous view
 		this.putDataIntoTable();
@@ -65,11 +69,9 @@ public class ExecutionView extends JPanel implements ActionListener{
 	private void performRemoveElementCheck() {
 		if(dataAlgForTable.size()>0){
 			removeAlg.setEnabled(true);
-			startAlgExecution.setEnabled(true);
 		}
 		else{
 			removeAlg.setEnabled(false);
-			startAlgExecution.setEnabled(false);
 		}		
 	}
 	//"Method","N. Cities","Tour Length","Time","Data"
@@ -82,28 +84,24 @@ public class ExecutionView extends JPanel implements ActionListener{
 			for(int i=0; i<dataAlgForTable.size(); i++){
 				Object temp=dataAlgForTable.elementAt(i);
 				if (temp instanceof GenResultData ){
-					tableModel.addRow(new Object[]{"Genetic",((GenResultData) temp).getNumCities(),((GenResultData) temp).getTourLength(),((GenResultData)temp).getTimeExecution(),"Open"});
+					long timeExtraction=((GenResultData)temp).getExecutionTime();
+					String tempTime=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExtraction),TimeUnit.MILLISECONDS.toSeconds(timeExtraction)%60, (timeExtraction%100));
+					tableModel.addRow(new Object[]{"Genetic",((GenResultData) temp).getNumCities(),((GenResultData) temp).getTourLength(),tempTime,"Open"});
 				}
 				else if(temp instanceof TradResultData){
-					tableModel.addRow(new Object[]{((TradResultData) temp).getAlgName(),((TradResultData) temp).getNumCities(),((TradResultData) temp).getTourLength(),((TradResultData) temp).getExecutionTime(),"Open"});
+					long timeExtraction=((TradResultData) temp).getExecutionTime();
+					String tempTime=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExtraction),TimeUnit.MILLISECONDS.toSeconds(timeExtraction)%60, (timeExtraction%100));
+					tableModel.addRow(new Object[]{((TradResultData) temp).getAlgName(),((TradResultData) temp).getNumCities(),((TradResultData) temp).getTourLength(),tempTime,"Open"});
 				}
 			}
 	        tableAlg.setModel(tableModel);
-	        tableAlg.getColumn("Data").setCellRenderer(new ButtonRenderer());
+	        tableAlg.getColumn("Data").setCellRenderer(new ButtonRenderer(dataAlgForTable, drawPath));
 	        tableAlg.getColumn("Data").setCellEditor(new ButtonEditor(new JCheckBox(), tableAlg, dataAlgForTable));
 	        tableAlg.setRowHeight(25);
 		}
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(startAlgExecution)){
-			startAlgExecution.setEnabled(false);
-			stopAlgExecution.setEnabled(true);
-		}
-		if(e.getSource().equals(stopAlgExecution)){
-			startAlgExecution.setEnabled(true);
-			stopAlgExecution.setEnabled(false);
-		}
 		if(e.getSource().equals(removeAlg)){
 			if(tableAlg.getSelectedRow()!=-1){
 				dataAlgForTable.remove(tableAlg.getSelectedRow());
@@ -119,16 +117,34 @@ public class ExecutionView extends JPanel implements ActionListener{
 
 class ButtonRenderer extends JButton implements TableCellRenderer {
 
-    public ButtonRenderer() {
+	private Vector<Object> data;
+	private DrawingPanel drawArea;
+    public ButtonRenderer(Vector<Object> d, DrawingPanel area) {
+    	data=d;
+    	drawArea=area;
         setOpaque(true);
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,boolean isSelected, boolean hasFocus, int row, int column) {
+    	//Define actions for when an item in the table is selected
         if (isSelected) {
             setForeground(table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
-        } else {
+            //Display the resulting path
+            Object temp=data.get(table.getSelectedRow());
+            
+        	if(temp instanceof TradResultData){
+        		TradResultData tem=(TradResultData)temp;
+        		Vector<Point> te=tem.getResultingPoints();
+        		drawArea.updateLinksAndRefresh(te);
+        		//ResultsView resView=new ResultsView("Result - Traditional Method", "tra",(TradResultData)temp);
+        	}
+        	else{
+        		//ResultsView resView=new ResultsView("Result - Genetic Method", "gen",(GenResultData)temp);
+        	}
+        } 
+        else {
             setForeground(table.getForeground());
             setBackground(UIManager.getColor("Button.background"));
         }
@@ -176,6 +192,7 @@ class ButtonEditor extends DefaultCellEditor {
 
     @Override
     public Object getCellEditorValue() {
+    	//Define actions for when the user clicks on the 'Open" button to view more specific results
         if (isPushed) {
             //PopUp ResultView Window for the selected row
         	Object temp=data.get(table.getSelectedRow());

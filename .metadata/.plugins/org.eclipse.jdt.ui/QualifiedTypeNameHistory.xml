@@ -5,9 +5,15 @@
 <fullyQualifiedTypeName name="GenResultData"/>
 <fullyQualifiedTypeName name="org.jgap.util.CloneException"/>
 <fullyQualifiedTypeName name="heuristicAlgorithms.ClosestNeighbour"/>
-<fullyQualifiedTypeName name="java.util.Vector"/>
-<fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
 <fullyQualifiedTypeName name="javax.swing.SwingWorker"/>
 <fullyQualifiedTypeName name="heuristicAlgorithms.GreedyHeuristic"/>
+<fullyQualifiedTypeName name="java.awt.Graphics2D"/>
+<fullyQualifiedTypeName name="java.awt.BasicStroke"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
+<fullyQualifiedTypeName name="java.awt.Point"/>
+<fullyQualifiedTypeName name="java.util.Vector"/>
+<fullyQualifiedTypeName name="ExecutionView"/>
+<fullyQualifiedTypeName name="javax.swing.JLabel"/>
 </qualifiedTypeNameHistroy>

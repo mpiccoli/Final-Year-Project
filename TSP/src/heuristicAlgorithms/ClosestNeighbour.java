@@ -58,7 +58,7 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	private void calculateExecutionTime(long startTime, long finishTime){
 		//Verify that the Thread has not been stopped
 		if(!processedCancelled){
-			executionTime=(finishTime-startTime)/1000000;
+			executionTime=(finishTime-startTime);
 		}
 		else{
 			executionTime=-1;
@@ -68,7 +68,7 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	@Override
 	protected Boolean doInBackground() throws Exception {
 		//Start the time for this process
-		long startTime=System.nanoTime();
+		long startTime=System.currentTimeMillis();
 		Vector<Point> citiesTemp=(Vector<Point>) cities.clone();
 		//The first place to visit is the first city in the list
 		travellingOrder.add(citiesTemp.get(0));
@@ -101,7 +101,7 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 			}
 		}
 		//Calculate the execution time before the thread completes the last action
-		this.calculateExecutionTime(startTime, System.nanoTime());
+		this.calculateExecutionTime(startTime, System.currentTimeMillis());
 		this.setProgress(100);
 		return true;
 	}

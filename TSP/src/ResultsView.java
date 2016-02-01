@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -176,8 +178,10 @@ public class ResultsView extends JPanel{
 		if(traGen.equals("tra")){
 			nCitiesTF.setText(""+tradObj.getNumCities());
 			tourTF.setText(""+tradObj.getTourLength());
-			timeTF.setText(""+tradObj.getExecutionTime());
-			traDetailsTA.setText(""+tradObj.getDetails());
+			long tempTime=tradObj.getExecutionTime();
+			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
+			timeTF.setText(""+timeString);
+			traDetailsTA.setText(tradObj.getDetails());
 		}
 		else{
 			nCitiesTF.setText(""+genObj.getNumCities());
@@ -191,7 +195,9 @@ public class ResultsView extends JPanel{
 			tourTF.setText(""+genObj.getTourLength());
 			generTF.setText(""+genObj.getGenerationCount());
 			fitnessTF.setText(""+genObj.getFitness());
-			timeTF.setText(""+genObj.getTimeExecution());
+			long tempTime=genObj.getExecutionTime();
+			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
+			timeTF.setText(timeString);
 		}
 	}
 }
