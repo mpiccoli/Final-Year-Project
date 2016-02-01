@@ -100,7 +100,6 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 				return false;
 			}
 		}
-		travellingOrder.add(travellingOrder.get(0));
 		//Calculate the execution time before the thread completes the last action
 		this.calculateExecutionTime(startTime, System.currentTimeMillis());
 		this.setProgress(100);

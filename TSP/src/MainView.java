@@ -184,7 +184,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		numCasualPointsCB=new JCheckBox("n. of Points:");
 		manualDrawCB=new JCheckBox("Draw Points");
 		manualDrawCB.setSelected(true);
-		importPointsCB=new JCheckBox("Import XML/JSON");
+		importPointsCB=new JCheckBox("Import CSV");
 		importXmlJson=false;
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
@@ -200,7 +200,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		undoPoint.setBounds(560,15,70,20);
 		resetAllPoints.setBounds(430,15,120,20);
 		numDrawnPoints.setBounds(10,15,80,20);
-		tradGAChooser.setBounds(650,15,140,20);
+		tradGAChooser.setBounds(650,15,200,20);
 		tradPanel.setBounds(650,40,200,160);
 		genPanel.setBounds(650,200,400,295);
 		optionPanel.setBounds(190,10,200,115);
@@ -219,11 +219,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		maxGenTF.setBounds(75,80,80,20);
 		crossoverLabel.setBounds(8,110,120,20);
 		crossoverMethods.setBounds(130,110,170,20);
-		crossoverProbLabel.setBounds(28,140,100,20);
+		crossoverProbLabel.setBounds(28,140,110,20);
 		crossProbSlider.setBounds(148,140,200,20);
 		mutationLabel.setBounds(8,180,120,10);
 		mutationMethods.setBounds(130,180,170,20);
-		mutationProbLabel.setBounds(28,210,100,20);
+		mutationProbLabel.setBounds(28,210,110,20);
 		mutProbSlider.setBounds(148,210,200,20);
 		casualPointsLabel.setBounds(8,20,80,20);
 		numCasualPointsCB.setBounds(20,40,110,20);
