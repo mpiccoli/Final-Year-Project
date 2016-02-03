@@ -1,0 +1,9 @@
+package geneticAlgorithms;
+
+import org.jgap.Gene;
+import org.jgap.IChromosome;
+
+public class Sales extends Salesman{
+
+
+}

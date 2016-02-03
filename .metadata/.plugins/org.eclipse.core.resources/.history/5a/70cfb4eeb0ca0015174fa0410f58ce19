@@ -1,0 +1,5 @@
+package geneticAlgorithms;
+
+public class Sales extends Salesman{
+
+}

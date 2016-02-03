@@ -1,0 +1,86 @@
+package geneticAlgorithms;
+import java.awt.Point;
+import java.util.Vector;
+
+import org.jgap.*;
+import org.jgap.impl.*;
+import org.jgap.impl.salesman.*;
+
+public class TSGA extends Salesman{
+	private int numCities;
+	private int[][] cities;
+
+	public TSGA(){
+		//numCities = 7;
+		//cities = new int[][] { {2, 4}, {7, 5}, {7, 11}, {8, 1}, {1, 6}, {5, 9}, {0, 11} };
+		numCities=0;
+		cities=new int[][]{};
+	}
+	public TSGA(Vector<Point> citiesData){
+		numCities=citiesData.size();
+		cities=this.convertVectorToMatrix(citiesData);
+	}
+
+	public IChromosome createSampleChromosome(Object a_initial_data) {
+		try {
+			Gene[] genes = new Gene[numCities];
+			for (int i = 0; i < genes.length; i++) {
+				genes[i] = new IntegerGene(getConfiguration(), 0, numCities-1);
+				genes[i].setAllele(new Integer(i));
+			}
+			IChromosome sample = new Chromosome(getConfiguration(), genes);
+			return sample;
+		}
+		catch (InvalidConfigurationException iex) {
+			throw new IllegalStateException(iex.getMessage());
+		}
+	}
+
+	public double distance(Gene a_from, Gene a_to) {
+		IntegerGene geneA = (IntegerGene) a_from;
+		IntegerGene geneB = (IntegerGene) a_to;
+		int a = geneA.intValue();
+		int b = geneB.intValue();
+		double xValue=(cities[a][0]-cities[b][0])*(cities[a][0]-cities[b][0]);
+		double yValue=(cities[a][1]-cities[b][1])*(cities[a][1]-cities[b][1]);
+		return Math.sqrt(xValue+yValue);
+	}
+
+	private int[][] convertVectorToMatrix(Vector<Point> data){
+		//new int[][] { {2, 4}, {7, 5}, {7, 11}, {8, 1}, {1, 6}, {5, 9}, {0, 11} };
+		if(data.size()>0){
+			int[][] citiesCoordinates=new int[data.size()][data.size()];
+			for(int i=0; i<data.size(); i++){
+				int tempX=(int) data.get(i).getX();
+				int tempY=(int) data.get(i).getY();
+				citiesCoordinates[i][0]=tempX;
+				citiesCoordinates[i][1]=tempY;
+			}
+			return citiesCoordinates;
+		}
+		return null;
+	}
+
+	public static void main(String[] args) {
+		try {
+			//TSGA t = new TSGA();
+			Vector<Point> data= new Vector<Point>();
+			data.add(new Point(2,4));
+			data.add(new Point(7,5));
+			data.add(new Point(7,11));
+			data.add(new Point(8,1));
+			data.add(new Point(1,6));
+			data.add(new Point(5,9));
+			data.add(new Point(0,11));
+			TSGA t = new TSGA(data);
+			IChromosome optimal = t.findOptimalPath(null);
+			System.out.println("Solution: ");
+			System.out.println(optimal);
+			System.out.println("Score " + (Integer.MAX_VALUE / 2 - optimal.getFitnessValue()));
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+}
+

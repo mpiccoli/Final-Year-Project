@@ -12,8 +12,22 @@
 <fullyQualifiedTypeName name="java.awt.BasicStroke"/>
 <fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
-<fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="java.util.Vector"/>
 <fullyQualifiedTypeName name="ExecutionView"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.TestGA"/>
+<fullyQualifiedTypeName name="org.jgap.impl.StringGene"/>
+<fullyQualifiedTypeName name="org.jgap.Configuration"/>
+<fullyQualifiedTypeName name="org.jgap.impl.DefaultConfiguration"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.MinimazingFitnessFunction"/>
+<fullyQualifiedTypeName name="org.jgap.FitnessFunction"/>
+<fullyQualifiedTypeName name="org.jgap.Gene"/>
+<fullyQualifiedTypeName name="org.jgap.impl.IntegerGene"/>
+<fullyQualifiedTypeName name="org.jgap.Chromosome"/>
+<fullyQualifiedTypeName name="org.jgap.Genotype"/>
+<fullyQualifiedTypeName name="org.jgap.IChromosome"/>
+<fullyQualifiedTypeName name="java.util.Vector"/>
+<fullyQualifiedTypeName name="java.awt.Point"/>
+<fullyQualifiedTypeName name="org.jgap.impl.GreedyCrossover"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
+<fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
 </qualifiedTypeNameHistroy>

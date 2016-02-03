@@ -1,0 +1,13 @@
+package Crossover;
+import org.jgap.*;
+import org.jgap.impl.*;
+import org.jgap.impl.salesman.*;
+
+public class CycleCrossover extends BaseGeneticOperator {
+
+	public CycleCrossover(Configuration a_configuration) throws InvalidConfigurationException {
+		super(a_configuration);
+		// TODO Auto-generated constructor stub
+	}
+
+}

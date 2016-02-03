@@ -1,0 +1,47 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Vector;
+
+import org.jgap.Chromosome;
+import org.jgap.Configuration;
+import org.jgap.FitnessFunction;
+import org.jgap.Gene;
+import org.jgap.Genotype;
+import org.jgap.IChromosome;
+import org.jgap.InvalidConfigurationException;
+import org.jgap.impl.DefaultConfiguration;
+import org.jgap.impl.IntegerGene;
+
+public class Test {
+
+	public static void main(String[] args) {
+		Configuration conf=new DefaultConfiguration();
+		double targetFitness=100;
+		Vector<Point> cities=new Vector<Point>();
+		cities.add(new Point(1,2));
+		cities.add(new Point(3,5));
+		cities.add(new Point(2,7));
+		cities.add(new Point(6,1));
+		cities.add(new Point(8,5));
+		FitnessFunction fun=new MinimazingFitnessFunction(targetFitness, cities);
+		try {
+			conf.setFitnessFunction(fun);
+			Gene[] sampleGenes = new Gene[ 4 ];
+			 sampleGenes[0] = new IntegerGene(conf, 0, 3 );
+			 sampleGenes[1] = new IntegerGene(conf, 0, 2 );
+			 sampleGenes[2] = new IntegerGene(conf, 0, 1 );
+			 sampleGenes[3] = new IntegerGene(conf, 0, 4 );
+			 Chromosome sampleChromosome = new Chromosome(conf, sampleGenes );
+			 conf.setSampleChromosome( sampleChromosome );
+			 conf.setPopulationSize(cities.size());
+			 
+			 Genotype population = Genotype.randomInitialGenotype( conf );
+			 population.evolve();
+			 IChromosome bestSolutionSoFar = population.getFittestChromosome();
+		} catch (InvalidConfigurationException e) {	
+			e.printStackTrace();
+		}
+		
+	}
+}

@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="tradGAChooser" key="selection"/>
+		<item value="conf" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
+			<item value="m_config"/>
+			<item value="createSampleChromosome"/>
+			<item value="distance"/>
+			<item value="population"/>
+			<item value="sampleChromosome"/>
+			<item value="a_initial_data"/>
 			<item value="tradGAChooser"/>
 			<item value="crossoverProbLabel"/>
-			<item value="Probability"/>
-			<item value="Probablity"/>
-			<item value="Genetic"/>
-			<item value="xml"/>
-			<item value="drawingArea"/>
-			<item value="ExecutionView"/>
 		</list>
 		<list key="replacehistory">
+			<item value="conf"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

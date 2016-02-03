@@ -22,9 +22,11 @@
 		<item value="false" key="create_package_info_java"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item value="2" key="pageIndex"/>
+		<item value="3" key="pageIndex"/>
 	</section>
 	<section name="completion_proposal_size">
+		<item value="192" key="size.y"/>
+		<item value="537" key="size.x"/>
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>

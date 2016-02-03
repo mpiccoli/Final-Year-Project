@@ -1,0 +1,24 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Vector;
+
+import org.jgap.Configuration;
+import org.jgap.impl.DefaultConfiguration;
+
+public class Test {
+
+	public static void main(String[] args) {
+		Configuration conf=new DefaultConfiguration();
+		double targetFitness=100;
+		Vector<Point> cities=new Vector<Point>();
+		cities.add(new Point(1,2));
+		cities.add(new Point(3,5));
+		cities.add(new Point(2,7));
+		cities.add(new Point(6,1));
+		cities.add(new Point(8,5));
+		FitnessFunction fun=new MinimazingFitnessFunction(targetFitness, citiesData)
+
+	}
+
+}

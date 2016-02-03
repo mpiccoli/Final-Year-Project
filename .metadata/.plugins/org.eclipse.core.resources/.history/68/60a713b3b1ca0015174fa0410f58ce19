@@ -1,0 +1,161 @@
+package geneticAlgorithms;
+import java.awt.Point;
+import java.util.Vector;
+
+import org.jgap.*;
+import org.jgap.impl.*;
+import org.jgap.impl.salesman.*;
+
+import geneticAlgorithms.Crossover.CycleCrossover;
+
+public class TSGA extends Salesman{
+	private int numCities;
+	private int[][] cities;
+	private Configuration conf;
+
+	public TSGA(Vector<Point> citiesData, Configuration c){
+		numCities=citiesData.size();
+		cities=this.convertVectorToMatrix(citiesData);
+		conf=c;
+	}
+
+	public IChromosome createSampleChromosome(Object a_initial_data) {
+		try {
+			//Configuration conf=this.getConfiguration();
+			Gene[] genes = new Gene[numCities];
+			for (int i = 0; i < genes.length; i++) {
+				//genes[i] = new IntegerGene(getConfiguration(), 0, numCities-1);
+				genes[i] = new IntegerGene(conf, 0, numCities-1);
+				genes[i].setAllele(new Integer(i));
+			}
+			IChromosome sample = new Chromosome(conf, genes);
+			//System.out.println(conf.toString());
+			return sample;
+		}
+		catch (InvalidConfigurationException iex) {
+			throw new IllegalStateException(iex.getMessage());
+		}
+	}
+
+	public double distance(Gene a_from, Gene a_to) {
+		IntegerGene geneA = (IntegerGene) a_from;
+		IntegerGene geneB = (IntegerGene) a_to;
+		int a = geneA.intValue();
+		int b = geneB.intValue();
+		double xValue=(cities[a][0]-cities[b][0])*(cities[a][0]-cities[b][0]);
+		double yValue=(cities[a][1]-cities[b][1])*(cities[a][1]-cities[b][1]);
+		return Math.sqrt(xValue+yValue);
+	}
+
+	private int[][] convertVectorToMatrix(Vector<Point> data){
+		//new int[][] { {2, 4}, {7, 5}, {7, 11}, {8, 1}, {1, 6}, {5, 9}, {0, 11} };
+		if(data.size()>0){
+			int[][] citiesCoordinates=new int[data.size()][data.size()];
+			for(int i=0; i<data.size(); i++){
+				int tempX=(int) data.get(i).getX();
+				int tempY=(int) data.get(i).getY();
+				citiesCoordinates[i][0]=tempX;
+				citiesCoordinates[i][1]=tempY;
+			}
+			return citiesCoordinates;
+		}
+		return null;
+	}
+
+	public static void main(String[] args) {
+		try {
+			//TSGA t = new TSGA();
+			Configuration conf = new Configuration();
+			Vector<Point> data= new Vector<Point>();
+			data.add(new Point(2,4));
+			data.add(new Point(7,5));
+			data.add(new Point(7,11));
+			data.add(new Point(8,1));
+			data.add(new Point(1,6));
+			data.add(new Point(5,9));
+			data.add(new Point(0,11));
+			//Setup the Configuration
+			//Specify the type of Crossover method
+			conf.addGeneticOperator(new CycleCrossover(conf));
+			//Specify the type of Mutation method
+			//conf.addGeneticOperator(a_operatorToAdd);
+			conf.setKeepPopulationSizeConstant(false);
+			conf.setMinimumPopSizePercent(2);
+			conf.setPopulationSize(data.size());
+			
+			//IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
+			//Genotype population = Genotype.randomInitialGenotype(conf);
+			// Evolve the population
+		    for (int i = 0; i < 10; i++) {
+		      //population.evolve();
+		    }
+		    //IChromosome bestSolutionSoFar = population.getFittestChromosome();
+		    //System.out.println(bestSolutionSoFar.toString());
+			TSGA t = new TSGA(data,conf);
+			IChromosome optimal = t.findOptimalPath(null);
+			System.out.println("Solution: ");
+			System.out.println(optimal);
+			System.out.println("Score " + (Integer.MAX_VALUE / 2 - optimal.getFitnessValue()));
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		/*
+		 * public static void main(String args[]) throws Exception{
+    Configuration conf;
+    try {
+      conf = new Configuration("jgapTest.con", false);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+      return;
+    }
+    // set up a sample chromosome
+    Gene[] sampleGenes = new Gene[3];
+    sampleGenes[0] = new IntegerGene(conf, 60, 100);
+    sampleGenes[1] = new IntegerGene(conf, 1, 50);
+    sampleGenes[2] = new IntegerGene(conf, 100, 150);
+    IChromosome sampleChromosome = new Chromosome(conf, sampleGenes);
+    Genotype population;
+    FitnessFunction fitFunc = new MaximizingFunctionFitnessFunction();
+    try {
+      conf.setFitnessFunction(fitFunc);
+      // The higher the value, the better
+      conf.setFitnessEvaluator(new DefaultFitnessEvaluator());
+      conf.setSampleChromosome(sampleChromosome);
+      BestChromosomesSelector bestChromsSelector = new
+          BestChromosomesSelector(conf, 1.0d);
+      bestChromsSelector.setDoubletteChromosomesAllowed(false);
+      conf.addNaturalSelector(bestChromsSelector, true);
+      conf.setRandomGenerator(new StockRandomGenerator());
+      conf.setEventManager(new EventManager());
+      conf.addGeneticOperator(new CrossoverOperator(conf));
+      conf.addGeneticOperator(new MutationOperator(conf, 15));
+      population = Genotype.randomInitialGenotype(conf);
+    }
+    catch (InvalidConfigurationException icEx) {
+      icEx.printStackTrace();
+      return;
+    }
+    // We expect the rest of the config parameter, for example the population
+    // size, to be set via the config file
+
+    // Evolve the population
+    for (int i = 0; i < 10; i++) {
+      population.evolve();
+    }
+    IChromosome bestSolutionSoFar = population.getFittestChromosome();
+    System.out.println("The best solution has a fitness value of " +
+                       bestSolutionSoFar.getFitnessValue());
+    Integer aVal = (Integer) bestSolutionSoFar.getGene(0).getAllele();
+    Integer bVal = (Integer) bestSolutionSoFar.getGene(1).getAllele();
+    Integer cVal = (Integer) bestSolutionSoFar.getGene(2).getAllele();
+    System.out.println("a = " + aVal.intValue());
+    System.out.println("b = " + bVal.intValue());
+    System.out.println("c = " + cVal.intValue());
+  }
+		 * 
+		 */
+	}
+}
+

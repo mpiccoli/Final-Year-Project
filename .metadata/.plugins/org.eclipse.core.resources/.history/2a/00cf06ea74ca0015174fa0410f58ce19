@@ -1,0 +1,6 @@
+package geneticAlgorithms;
+import org.jgap.impl.Salesman;
+
+public class TestGA implements Salesman{
+
+}
