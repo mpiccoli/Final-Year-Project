@@ -30,4 +30,5 @@
 <fullyQualifiedTypeName name="org.jgap.impl.GreedyCrossover"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

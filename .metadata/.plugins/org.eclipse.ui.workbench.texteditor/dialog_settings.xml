@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="conf" key="selection"/>
+		<item value="instanceof" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
+			<item value="instanceof"/>
+			<item value="sampleChromosome"/>
+			<item value="convertVectorToMatrix"/>
 			<item value="m_config"/>
 			<item value="createSampleChromosome"/>
 			<item value="distance"/>
 			<item value="population"/>
-			<item value="sampleChromosome"/>
 			<item value="a_initial_data"/>
-			<item value="tradGAChooser"/>
-			<item value="crossoverProbLabel"/>
 		</list>
 		<list key="replacehistory">
 			<item value="conf"/>
