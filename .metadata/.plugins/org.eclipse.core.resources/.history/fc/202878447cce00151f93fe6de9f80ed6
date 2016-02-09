@@ -1,0 +1,22 @@
+package geneticAlgorithms;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.SwingWorker;
+
+public class TSP_Worker<DrawingPanel> extends SwingWorker implements Observer{
+
+	@Override
+	protected Object doInBackground() throws Exception {
+		
+		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

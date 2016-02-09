@@ -47,6 +47,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jgap.util.CloneException;
 import org.omg.CORBA.portable.InputStream;
 
+import geneticAlgorithms.TSP_GA;
 import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
 
@@ -58,7 +59,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private MatteBorder matteB;
 	JMenuBar menuBar;
 	private JMenu fileMenu, impExp;
-	private JMenuItem close, loadMap, info, saveRes, expPoints;
+	private JMenuItem close, info, saveRes, expPoints;
 	private JButton undoPoint, resetAllPoints;
 	private JLabel numDrawnPoints;
 	private JComboBox<String> tradGAChooser;
@@ -84,6 +85,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private float crossoverProb, mutationProb;
 	private ClosestNeighbour closestNeighbourAlg;
 	private GreedyHeuristic greedyHeuristicAlg;
+	private TSP_GA geneticAlg;
 	private int index;
 	private String currentRunningAlg;
 	private long currentRunningTimeExec;
@@ -108,13 +110,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		fileMenu=new JMenu("File");
 		impExp=new JMenu("Import/Export");
 		close=new JMenuItem("Close");
-		loadMap=new JMenuItem("Load Map");
 		info=new JMenuItem("Info");
 		saveRes=new JMenuItem("Save Results");
 		expPoints=new JMenuItem("Export Points");
 		menuBar.add(fileMenu);
 		menuBar.add(impExp);
-		fileMenu.add(loadMap);
 		fileMenu.add(info);
 		fileMenu.add(close);
 		impExp.add(saveRes);
@@ -188,7 +188,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		importXmlJson=false;
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
-		viewResultsButton=new JButton("View Results");
+		viewResultsButton=new JButton("Edit Queue/View Results");
 		resetAllFieldsButton=new JButton("Reset All");
 		currentRunningTimeTF=new JTextField();
 		currentRunningTimeTF.setEditable(false);
@@ -234,16 +234,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		importPointsCB.setBounds(20,100,150,20);
 		startExecutionButton.setBounds(15,25,80,20);
 		addToExecution.setBounds(105,25,80,20);
-		viewResultsButton.setBounds(45,55,110,20);
+		viewResultsButton.setBounds(15,55,170,20);
 		resetAllFieldsButton.setBounds(45,82,110,20);
 		currentRunningAlgLabel.setBounds(10,25,100,20);
 		currentRunningAlgTF.setBounds(10,45,180,20);
 		currentRunningTimeLabel.setBounds(10,65,100,20);
 		currentRunningTimeTF.setBounds(10,85,180,20);
 
-
 		//Add control action for each object, thus to provide interactivity
-		loadMap.addActionListener(this);
 		info.addActionListener(this);
 		close.addActionListener(this);
 		saveRes.addActionListener(this);
@@ -348,20 +346,21 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	@Override
 	public void actionPerformed(ActionEvent actionE) {
 		//Load a background picture used as a map for the TSP
-		if(actionE.getSource().equals(loadMap)){
-
-		}
 		if(actionE.getSource().equals(info)){
-
+			JOptionPane.showMessageDialog(null, "Application Information:", "Info", JOptionPane.PLAIN_MESSAGE);
 		}
 		if(actionE.getSource().equals(close)){
 			this.initExitRequest();
 		}
 		if(actionE.getSource().equals(saveRes)){
-
+			if(algQueueExecution.size()>0){
+				//IMPLEMENT
+			}
 		}
 		if(actionE.getSource().equals(expPoints)){
-
+			if(points.size()>0){
+				//IMPLEMENT
+			}
 		}
 		if(actionE.getSource().equals(resetAllPoints)){
 			drawingArea.clearAllPoints();
@@ -472,13 +471,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			else{
 				execStopped=true;
 				startExecutionButton.setText("Start");
-				//addToExecution.setEnabled(true);
-				//points.clear();
 				if(listenToChanges.equals("cn")){
 					closestNeighbourAlg.cancel(true);
 				}
 				else if(listenToChanges.equals("gh")){
 					greedyHeuristicAlg.cancel(true);
+				}
+				else if(listenToChanges.equals("gas")){
+					geneticAlg.cancel(true);
 				}
 				//TO IMPLEMENT
 			}
@@ -673,7 +673,17 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				}
 			}
 			else if(obj instanceof GenResultData){
-				//TO IMPLEMENT
+				//Change the value of this variable to address the Genetic algorithms
+				listenToChanges="gas";
+				results.clear();
+				results=((GenResultData) obj).getResultingPoints();
+				points=((GenResultData) obj).getCities();
+				currentRunningAlg="Genetic Algorithm";
+				((GenResultData) obj).resetResultData();
+				geneticAlg=new TSP_GA(((GenResultData) obj).getCities(), ((GenResultData) obj).getResultingPoints());
+				geneticAlg.addPropertyChangeListener(this);
+				currentRunningTimeExec=System.currentTimeMillis();
+				geneticAlg.execute();
 			}
 		}
 		//This code is executed when the vector has reached its end and the execution is completed
@@ -772,6 +782,34 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					currentRunningTimeTF.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100)));
 					//Refresh the points
 					drawingArea.performLinks(true, greedyHeuristicAlg.getListOfCities(), greedyHeuristicAlg.getTravellingOrder());
+				}
+			}
+			else if(listenToChanges.equals("gas")){
+				if(geneticAlg.getProgress()==100 || geneticAlg.isDone()){
+					//Refresh the drawing area one last time in case of last second changes
+					drawingArea.performLinks(true, geneticAlg.getListOfCities(), geneticAlg.getTravellingOrder());
+					startExecutionButton.setText("Start");
+					//Get the only element in the vector and update it with the execution information
+					GenResultData transferData=(GenResultData) algQueueExecution.get(index);
+					transferData.setTourLength(geneticAlg.getTourDistance());
+					transferData.setTimeExecution(geneticAlg.getExecutionTime());
+					transferData.setResultingPoints(geneticAlg.getTravellingOrder());
+					transferData.setCities(geneticAlg.getListOfCities());
+					transferData.setResultingPoints(geneticAlg.getTravellingOrder());
+					currentRunningTimeExec=0;
+					//Increment the counter and verify if other algorithms are awaiting to be executed
+					if(!execStopped && index<algQueueExecution.size()){
+						index++;
+						this.beginQueueExecution();
+					}
+				}
+				else if(geneticAlg.getProgress()!=100){
+					currentRunningAlgTF.setText(currentRunningAlg);
+					//Update the execution time
+					long tempTime=(System.currentTimeMillis()-currentRunningTimeExec);
+					currentRunningTimeTF.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100)));
+					//Refresh the points
+					drawingArea.performLinks(true, geneticAlg.getListOfCities(), geneticAlg.getTravellingOrder());
 				}
 			}
 			//TO IMPLEMENT FOR EACH ALGORITHM (TRAD & GEN)

@@ -1,0 +1,31 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
+
+import javax.swing.SwingWorker;
+
+public class TSP_Worker<DrawingPanel> extends SwingWorker implements Observer{
+	private Vector<Vector<Point>> results;
+	
+	
+	@Override
+	protected Object doInBackground() throws Exception {
+
+		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg instanceof Vector) {
+			results = (Vector<Vector<Point>>) arg;
+			this.setProgress((int)(Math.random()*10));
+		} 
+		else {
+			System.out.	println("NameObserver: Some other change to subject!");
+		}
+	}
+
+}

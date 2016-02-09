@@ -8,31 +8,43 @@ import org.jgap.impl.*;
 import org.jgap.impl.salesman.*;
 
 import geneticAlgorithms.Crossover.CycleCrossover;
+import testTSPGA.TSP_GA_Adapter;
 
 public class TSP_GA extends Salesman{
 	private int numCities;
 	private int[][] cities;
-	private Vector<Point> citiesVector;
-	private Configuration conf;
+	public Vector<Point> citiesVector;
+	public Configuration conf;
+	public Vector<Vector<Point>> results;
+	public Vector<Double> pathDistances;
+	private TSP_GA_Adapter worker;
 
-	public TSP_GA(Vector<Point> citiesData, Configuration c){
+	public TSP_GA(Vector<Point> citiesData, Configuration c, TSP_GA_Adapter threadWorker, Vector<Vector<Point>> results, Vector<Double> distances){
 		numCities=citiesData.size();
+		this.results=results;
+		worker=threadWorker;
 		citiesVector=(Vector<Point>) citiesData.clone();
 		cities=this.convertVectorToMatrix(citiesData);
+		pathDistances=distances;
 		conf=c;
+	}
+	public void setTSP_Adapter(TSP_GA_Adapter adapter){
+		if(adapter!=null){
+			worker=adapter;
+		}
+		else{
+			worker=null;
+		}
 	}
 
 	public IChromosome createSampleChromosome(Object a_initial_data) {
 		try {
-			//Configuration conf=this.getConfiguration();
 			Gene[] genes = new Gene[numCities];
 			for (int i = 0; i < genes.length; i++) {
-				//genes[i] = new IntegerGene(getConfiguration(), 0, numCities-1);
 				genes[i] = new IntegerGene(conf, 0, numCities-1);
 				genes[i].setAllele(new Integer(i));
 			}
 			IChromosome sample = new Chromosome(conf, genes);
-			//System.out.println(conf.toString());
 			return sample;
 		}
 		catch (InvalidConfigurationException e) {
@@ -51,7 +63,6 @@ public class TSP_GA extends Salesman{
 	}
 
 	private int[][] convertVectorToMatrix(Vector<Point> data){
-		//new int[][] { {2, 4}, {7, 5}, {7, 11}, {8, 1}, {1, 6}, {5, 9}, {0, 11} };
 		if(data.size()>0){
 			int[][] citiesCoordinates=new int[data.size()][data.size()];
 			for(int i=0; i<data.size(); i++){
@@ -110,68 +121,26 @@ public class TSP_GA extends Salesman{
 				population.evolve();
 				tempBest = population.getFittestChromosome();
 				//If the chromosome has got a fitness value inferior to the current best value, store the new best chromosome 
-				if((Integer.MAX_VALUE / 2 - tempBest.getFitnessValue()) < bestFitnessValue){
+				if((Integer.MAX_VALUE/2 - tempBest.getFitnessValue()) < bestFitnessValue){
 					best=tempBest;
-					bestFitnessValue=(Integer.MAX_VALUE / 2 - tempBest.getFitnessValue());
-					//Send the current best result back
-					this.updateBestResultSoFar(best);
-					//System.out.println(this.convertArrayResultToVectorPoint(best.getGenes()).toString());
-					//System.out.println("Score " +  (Integer.MAX_VALUE / 2 - best.getFitnessValue()));
+					bestFitnessValue=(Integer.MAX_VALUE/2 - tempBest.getFitnessValue());
 				}
+				this.addToResults(tempBest);
 			}
 		return best;
 	}
+	
 	//This method call is executed when a chromosome with a better fitness value is found
-	public void updateBestResultSoFar(IChromosome ic){
+	/*public void updateBestResultSoFar(IChromosome ic){
 		System.out.println(this.convertArrayResultToVectorPoint(ic.getGenes()).toString());
 		double score=(Integer.MAX_VALUE / 2 - ic.getFitnessValue());
 		System.out.println("Score " + score);
-	}
-
-	public static void main(String[] args) {
-		try {
-			Configuration conf = new Configuration();
-			Vector<Point> data= new Vector<Point>();
-			data.add(new Point(2,4)); 
-			data.add(new Point(7,5)); 
-			data.add(new Point(7,11)); 
-			data.add(new Point(8,1)); 
-			data.add(new Point(5,9)); 
-			data.add(new Point(0,11)); 
-			data.add(new Point(1,6));
-			data.add(new Point(2,7)); 
-			data.add(new Point(9,9)); 
-			data.add(new Point(0,8));
-			
-			data.add(new Point(2232,43)); 
-			data.add(new Point(23,45)); 
-			data.add(new Point(45,21));
-			data.add(new Point(35,11232)); 
-			data.add(new Point(68,41235)); 
-			data.add(new Point(11233,46));
-			data.add(new Point(56,23)); 
-			data.add(new Point(21233,65)); 
-			data.add(new Point(45,12));
-			//Setup the Configuration
-			conf.setKeepPopulationSizeConstant(false);
-			conf.setMinimumPopSizePercent(2);
-			conf.setPopulationSize(data.size());
-			//Specify the type of Crossover method
-			conf.addGeneticOperator(new CycleCrossover(conf));
-			//Specify the type of Mutation method
-			//conf.addGeneticOperator(a_operatorToAdd);
-			//Initialize the process and Start the evolution
-			TSP_GA t = new TSP_GA(data,conf);
-			//Set a maximum number of interactions
-			t.setMaxEvolution(1000);
-			IChromosome optimal = t.findOptimalPath(null);
-			System.out.println("Solution: ");
-			System.out.println(optimal);
-			System.out.println("Score " + (Integer.MAX_VALUE / 2 - optimal.getFitnessValue()));
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
+	}*/
+	public void addToResults(IChromosome ic){
+		Vector<Point> temp=this.convertArrayResultToVectorPoint(ic.getGenes());
+		results.add(temp);
+		pathDistances.add((Integer.MAX_VALUE/2 - ic.getFitnessValue()));
+		worker.updateProgress((int)(Math.random()*10));
 	}
 }
 

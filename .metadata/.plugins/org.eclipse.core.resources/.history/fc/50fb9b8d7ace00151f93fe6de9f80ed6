@@ -1,0 +1,20 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Observable;
+import java.util.Vector;
+
+import org.jgap.Configuration;
+
+public class TSP_Observable extends Observable{
+	private TSP_GA tsp;
+	private int numCities;
+	private int[][] cities;
+	private Vector<Point> citiesVector;
+	private Configuration conf;
+	
+	public TSP_Observable(Vector<Point> cities, Configuration conf){
+		this.citiesVector=cities;
+		this.conf=conf;
+	}
+}

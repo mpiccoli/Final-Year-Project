@@ -1,0 +1,9 @@
+package geneticAlgorithms.test;
+
+public class Test2 {
+	public static void main(String[] args){
+		TestObserver to=new TestObserver();
+		to.execute();
+	}
+
+}

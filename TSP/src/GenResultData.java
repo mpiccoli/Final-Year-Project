@@ -1,3 +1,5 @@
+import java.awt.Point;
+import java.util.Vector;
 
 public class GenResultData {
 	private int numCities, generationCount;
@@ -6,6 +8,8 @@ public class GenResultData {
 	private double tourLength, fitness;
 	private long timeExecution;
 	private int populationSize, popFrom, popTo, maxGen;
+	private Vector<Point> listOfCities;
+	private Vector<Point> results;
 	
 	public GenResultData(){
 		numCities=0;
@@ -126,6 +130,21 @@ public class GenResultData {
 	}
 	public int getMaxGen(){
 		return maxGen;
+	}
+	public void setResultingPoints(Vector<Point> data){
+		results=data; 
+	}
+	public Vector<Point> getResultingPoints(){
+		return results;
+	}
+	public void setCities(Vector<Point> data){
+		listOfCities=(Vector<Point>) data.clone();
+	}
+	public Vector<Point> getCities(){
+		return listOfCities;
+	}
+	public void resetResultData(){
+		results.clear();
 	}
 	@Override
 	public boolean equals(Object obj){

@@ -1,0 +1,21 @@
+package geneticAlgorithms.test;
+
+import java.awt.Point;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
+
+public class ResultsObserver implements Observer{
+	private Vector<Vector<Point>> results;
+	
+	public  ResultsObserver() {
+		results=new Vector<Vector<Point>>();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		results=(Vector<Vector<Point>>) arg;
+		System.out.println("Updated!!");
+	}
+
+}

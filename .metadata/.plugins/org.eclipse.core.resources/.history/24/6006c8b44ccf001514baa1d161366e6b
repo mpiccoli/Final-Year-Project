@@ -1,0 +1,41 @@
+package testTSPGA;
+
+import java.awt.Point;
+import java.util.Vector;
+
+import javax.swing.SwingWorker;
+
+import org.jgap.Configuration;
+import org.jgap.IChromosome;
+
+import geneticAlgorithms.TSP_GA;
+
+public class TSP_GA_Worker extends SwingWorker{
+	//private TSP_GA tsp;
+	//private Vector<Vector<Point>> resultsData;
+	private TSP_GA_Adapter work;
+	//private Vector<Double> pathDistances;
+	
+	//private IChromosome bestPath;
+	
+	public TSP_GA_Worker(TSP_GA tspGaRef, Vector<Point> cities, Configuration c, Vector<Vector<Point>> results, Vector<Double> distances){
+		//resultsData=tspGaRef.results;
+		//bestPath=tspGaRef.bestPath;
+		work=new TSP_GA_Adapter(this, cities,c,results, distances);
+	}
+
+	@Override
+	protected Object doInBackground(){
+		work.doInBackground();
+		//this.done();
+		//this.setProgress(100);
+		return null;
+	}
+	
+	public void updateProgress(int v){
+		//System.out.println("Updated");
+		this.setProgress(v);
+		//System.out.print(resultsData.size());
+	}
+
+}

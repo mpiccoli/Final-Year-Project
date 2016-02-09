@@ -1,0 +1,13 @@
+package geneticAlgorithms;
+
+import javax.swing.SwingWorker;
+
+public class TSP_Worker<DrawingPanel> extends SwingWorker implements TSP_GA{
+
+	@Override
+	protected Object doInBackground() throws Exception {
+		
+		return null;
+	}
+
+}

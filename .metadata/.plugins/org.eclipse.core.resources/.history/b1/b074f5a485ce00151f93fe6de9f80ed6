@@ -1,0 +1,82 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Vector;
+
+import javax.swing.SwingWorker;
+
+import org.jgap.Configuration;
+import org.jgap.IChromosome;
+
+public class TSP_Test extends SwingWorker{
+	private TSP_Observable tspObservable;
+	private Results_Observer resObserver;
+	
+	private Vector<Point> cities;
+	private Configuration config;
+	private TSP_GA tsp;
+	
+	public TSP_Test(Vector<Point>points, Configuration conf, TSP_GA tsp){
+		this.tsp=tsp;
+		tspObservable=new TSP_Observable(this.tsp);
+		resObserver=new Results_Observer();
+		tspObservable.addObserver(resObserver);
+		cities=points;
+		config=conf;
+	}
+	@Override
+	protected Object doInBackground() throws Exception {
+		tsp = new TSP_GA(cities, config);
+		System.out.print(tsp);
+		//Set a maximum number of interactions
+		tsp.setMaxEvolution(1000);
+		IChromosome optimal = tsp.findOptimalPath(null);
+		System.out.println("Solution: ");
+		System.out.println(optimal);
+		System.out.println("Score " + (Integer.MAX_VALUE / 2 - optimal.getFitnessValue()));
+		return null;
+	}
+	/*public static void main(String[] args) {
+		try {
+			Configuration conf = new Configuration();
+			Vector<Point> data= new Vector<Point>();
+			data.add(new Point(2,4)); 
+			data.add(new Point(7,5)); 
+			data.add(new Point(7,11)); 
+			data.add(new Point(8,1)); 
+			data.add(new Point(5,9)); 
+			data.add(new Point(0,11)); 
+			data.add(new Point(1,6));
+			data.add(new Point(2,7)); 
+			data.add(new Point(9,9)); 
+			data.add(new Point(0,8));
+			
+			data.add(new Point(2232,43)); 
+			data.add(new Point(23,45)); 
+			data.add(new Point(45,21));
+			data.add(new Point(35,11232)); 
+			data.add(new Point(68,41235)); 
+			data.add(new Point(11233,46));
+			data.add(new Point(56,23)); 
+			data.add(new Point(21233,65)); 
+			data.add(new Point(45,12));
+			//Setup the Configuration
+			conf.setKeepPopulationSizeConstant(false);
+			conf.setMinimumPopSizePercent(2);
+			conf.setPopulationSize(data.size());
+			//Specify the type of Crossover method
+			//conf.addGeneticOperator(new CycleCrossover(conf));
+			//Specify the type of Mutation method
+			//conf.addGeneticOperator(a_operatorToAdd);
+			//Initialize the process and Start the evolution
+			TSP_Worker t = new TSP_Worker(data,conf);
+			TSP_Observable nameObs = new TSP_Observable();
+			nameObs.addObserver(t);
+			//Set a maximum number of interactions
+			t.execute();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}*/
+}

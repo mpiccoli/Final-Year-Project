@@ -1,0 +1,13 @@
+package geneticAlgorithms;
+
+import javax.swing.SwingWorker;
+
+public class TSP_Worker extends SwingWorker{
+
+	@Override
+	protected Object doInBackground() throws Exception {
+		
+		return null;
+	}
+
+}

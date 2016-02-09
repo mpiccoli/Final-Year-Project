@@ -1,0 +1,7 @@
+package geneticAlgorithms.test;
+
+import java.util.Observable;
+
+public class TSP_GA_ConcreteSubject extends Observable{
+
+}

@@ -1,0 +1,29 @@
+package geneticAlgorithms.test;
+
+import java.awt.Point;
+import java.util.Observable;
+import java.util.Vector;
+
+import geneticAlgorithms.TSP_GA;
+
+public class TSP_GA_ConcreteSubject extends Observable{
+	private TSP_GA tsp;
+	private Vector<Vector<Point>> results;
+	private TestObserver testObs;
+	
+	public TSP_GA_ConcreteSubject(TestObserver testObs){
+		results=new Vector<Vector<Point>>();
+		this.testObs=testObs;
+	}
+	
+	public void addData(Vector<Point> data){
+		results.add(data);
+		setChanged();
+		notifyObservers(results);
+		testObs.updateProgress(10);
+	}
+	
+	public void startTSP(){
+		tsp.startExecution();
+	}
+}
