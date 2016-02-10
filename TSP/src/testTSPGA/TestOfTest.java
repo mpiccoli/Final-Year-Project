@@ -54,12 +54,15 @@ public class TestOfTest {
 			//conf.addGeneticOperator(a_operatorToAdd);
 			//Initialize the process and Start the evolution
 			tsp= new TSP_GA(cities,conf,null,resultsData, pathDistances);
-			ft=new TSP_GA_Worker(tsp, cities,conf,resultsData, pathDistances,200);
+			ft=new TSP_GA_Worker(tsp, cities,conf,resultsData, pathDistances,600);
 			ft.addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if(ft.getProgress()==100 || ft.isDone()){
 						System.out.println("Final Result:");
+						int index=tsp.getBestPathIndex();
+						System.out.println("Index: "+index+"\nBest Distance: "+pathDistances.elementAt(index));
+						System.out.println("Elements: "+resultsData.elementAt(index).toString());
 					}
 					else{
 						if(pathDistances.size()>0){

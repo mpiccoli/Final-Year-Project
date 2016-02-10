@@ -184,7 +184,6 @@ public class ResultsView extends JPanel{
 			traDetailsTA.setText(tradObj.getDetails());
 		}
 		else{
-			nCitiesTF.setText(""+genObj.getNumCities());
 			popSizeTF.setText(""+genObj.getPopSize());
 			fromToTF.setText(""+genObj.getPopFrom()+"-"+genObj.getPopTo());
 			maxGenTF.setText(""+genObj.getMaxGen());
@@ -192,7 +191,6 @@ public class ResultsView extends JPanel{
 			crossProbTF.setText(""+genObj.getCrossoverProbability());
 			mutMetTF.setText(""+genObj.getMutationMethod());
 			mutProbTF.setText(""+genObj.getMutationProbability());
-			tourTF.setText(""+genObj.getTourLength());
 			generTF.setText(""+genObj.getGenerationCount());
 			fitnessTF.setText(""+genObj.getFitness());
 			long tempTime=genObj.getExecutionTime();

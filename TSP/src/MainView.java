@@ -44,12 +44,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jgap.Configuration;
 import org.jgap.util.CloneException;
 import org.omg.CORBA.portable.InputStream;
 
 import geneticAlgorithms.TSP_GA;
 import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
+import testTSPGA.TSP_GA_Worker;
 
 public class MainView extends JPanel implements ActionListener, PropertyChangeListener, ChangeListener {
 
@@ -85,7 +87,15 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private float crossoverProb, mutationProb;
 	private ClosestNeighbour closestNeighbourAlg;
 	private GreedyHeuristic greedyHeuristicAlg;
-	private TSP_GA geneticAlg;
+	//Variables used by the Genetic Algorithms
+	private TSP_GA tspAlg;
+	private TSP_GA_Worker tspWorker;
+	Vector<Vector<Point>> resultsDataTSP=new Vector<Vector<Point>>();
+	//Vector<Point> cities= new Vector<Point>();
+	Vector<Double> pathDistancesTSP=new Vector<Double>();
+	//Configuration confTSP = new Configuration();
+	private Object currentGeneticAlg=null;
+
 	private int index;
 	private String currentRunningAlg;
 	private long currentRunningTimeExec;
@@ -478,7 +488,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					greedyHeuristicAlg.cancel(true);
 				}
 				else if(listenToChanges.equals("gas")){
-					geneticAlg.cancel(true);
+					try{
+						tspWorker.cancel(true);
+					}
+					catch(Exception e){}
 				}
 				//TO IMPLEMENT
 			}
@@ -550,14 +563,23 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				}
 				//Only Genetic algorithms are available to user selection
 				else{
-					int popS, fromP, toP, maxG;
 					try{
-						popS=Integer.parseInt(popSizeTF.getText());
+						int popS, fromP, toP, maxG;
+						Configuration setup=new Configuration();
+						popS=numPoints;
 						fromP=Integer.parseInt(fromTF.getText());
 						toP=Integer.parseInt(toTF.getText());
 						maxG=Integer.parseInt(maxGenTF.getText());
-						//String crossM, String mutM, float crossP, float mutP
-						GenResultData tempGen=new GenResultData(numPoints, popS,fromP, toP, maxG, crossoverSelected, mutationSelected, crossoverProb,mutationProb);
+						//Setup the configuration for the TSP
+						setup.setKeepPopulationSizeConstant(false);
+						setup.setMinimumPopSizePercent(fromP);
+						setup.setPopulationSize(popS);
+						tspAlg= new TSP_GA(points,setup,null,resultsDataTSP,pathDistancesTSP);
+						tspWorker=new TSP_GA_Worker(tspAlg, points,setup,resultsDataTSP,pathDistancesTSP,maxG);
+						GenResultData tempGen=new GenResultData(popS,fromP,toP,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,setup,tspAlg,tspWorker);
+						tempGen.setCities(points,false);
+						//tempGen.setPathDistances(pathDistancesTSP,false);
+						tempGen.setResultsData(resultsDataTSP,false);
 						//Do this if vector is not empty
 						if(algQueueExecution.size()>0){
 							boolean isAlgInQueue=false;
@@ -576,7 +598,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								algQueueExecution.add(tempGen);
 								JOptionPane.showMessageDialog(null, "Element Added!"
 										+ "\nPopulation Size: "+tempGen.getPopSize()
-										+"\nNum. Cities: "+tempGen.getNumCities()
 										+"\nFrom: "+tempGen.getPopFrom()
 										+"\nTo: "+tempGen.getPopTo()
 										+"\nMax Gen: "+tempGen.getMaxGen()
@@ -595,7 +616,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							algQueueExecution.add(tempGen);
 							JOptionPane.showMessageDialog(null, "Element Added!"
 									+ "\nPopulation Size: "+tempGen.getPopSize()
-									+"\nNum. Cities: "+tempGen.getNumCities()
 									+"\nFrom: "+tempGen.getPopFrom()
 									+"\nTo: "+tempGen.getPopTo()
 									+"\nMax Gen: "+tempGen.getMaxGen()
@@ -676,14 +696,17 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Change the value of this variable to address the Genetic algorithms
 				listenToChanges="gas";
 				results.clear();
+				currentGeneticAlg=obj;
 				results=((GenResultData) obj).getResultingPoints();
 				points=((GenResultData) obj).getCities();
 				currentRunningAlg="Genetic Algorithm";
 				((GenResultData) obj).resetResultData();
-				geneticAlg=new TSP_GA(((GenResultData) obj).getCities(), ((GenResultData) obj).getResultingPoints());
-				geneticAlg.addPropertyChangeListener(this);
+				tspAlg=((GenResultData) obj).getTSP();
+				tspWorker=((GenResultData) obj).getTSP_Worker();
+
+				tspWorker.addPropertyChangeListener(this);
 				currentRunningTimeExec=System.currentTimeMillis();
-				geneticAlg.execute();
+				tspWorker.execute();
 			}
 		}
 		//This code is executed when the vector has reached its end and the execution is completed
@@ -785,31 +808,53 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				}
 			}
 			else if(listenToChanges.equals("gas")){
-				if(geneticAlg.getProgress()==100 || geneticAlg.isDone()){
-					//Refresh the drawing area one last time in case of last second changes
-					drawingArea.performLinks(true, geneticAlg.getListOfCities(), geneticAlg.getTravellingOrder());
+				if(tspWorker.getProgress()==100 || tspWorker.isDone()){
 					startExecutionButton.setText("Start");
-					//Get the only element in the vector and update it with the execution information
+					int indexElement=tspAlg.getBestPathIndex();
 					GenResultData transferData=(GenResultData) algQueueExecution.get(index);
-					transferData.setTourLength(geneticAlg.getTourDistance());
-					transferData.setTimeExecution(geneticAlg.getExecutionTime());
-					transferData.setResultingPoints(geneticAlg.getTravellingOrder());
-					transferData.setCities(geneticAlg.getListOfCities());
-					transferData.setResultingPoints(geneticAlg.getTravellingOrder());
+					transferData.setPathDistances(((GenResultData) currentGeneticAlg).getPathDistances(),true);
+					transferData.setResultsData(((GenResultData) currentGeneticAlg).getResultsData(),true);
+					transferData.setResultingPoints(resultsDataTSP.elementAt(indexElement),true);
+					transferData.setGenerationCount(resultsDataTSP.size());
+					transferData.setFitness(pathDistancesTSP.elementAt(indexElement));
+					transferData.setExecutionTime(tspWorker.getExecutionTime());
+					transferData.setResultingPoints(resultsDataTSP.elementAt(indexElement), false);
+					//results=((GenResultData) currentGeneticAlg).getResultingPoints();
+					//points=((GenResultData) obj).getCities();
+					//transferData.setResultingPoints(tsp);
+					//transferData.setFitness(tsp);
+					//transferData.setTimeExecution(greedyHeuristicAlg.getExecutionTime());
+					//transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
+					//transferData.setCities(greedyHeuristicAlg.getListOfCities());
+					//transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
 					currentRunningTimeExec=0;
+					//Refresh the drawing area one last time in case of last second changes
+					drawingArea.performLinks(true, ((GenResultData) currentGeneticAlg).getCities(),resultsDataTSP.elementAt(indexElement));
+
+					//System.out.println("Final Result:");
+					//int index=tspAlg.getBestPathIndex();
+					//System.out.println("Index: "+index+"\nBest Distance: "+pathDistancesTSP.elementAt(index));
+					//System.out.println("Elements: "+resultsDataTSP.elementAt(index).toString());
+					tspAlg=null;
+					tspWorker=null;
+					currentGeneticAlg=null;
 					//Increment the counter and verify if other algorithms are awaiting to be executed
 					if(!execStopped && index<algQueueExecution.size()){
 						index++;
 						this.beginQueueExecution();
 					}
 				}
-				else if(geneticAlg.getProgress()!=100){
+				else if(tspWorker.getProgress()!=100){
 					currentRunningAlgTF.setText(currentRunningAlg);
-					//Update the execution time
 					long tempTime=(System.currentTimeMillis()-currentRunningTimeExec);
 					currentRunningTimeTF.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100)));
 					//Refresh the points
-					drawingArea.performLinks(true, geneticAlg.getListOfCities(), geneticAlg.getTravellingOrder());
+					drawingArea.performLinks(true,tspAlg.citiesVector, resultsDataTSP.lastElement());
+					//drawingArea.performLinks(true,tspAlg.citiesVector, ((GenResultData) currentGeneticAlg).getResultsData().lastElement());
+					/*if(pathDistancesTSP.size()>0){
+						System.out.println("In Progress: "+ pathDistancesTSP.size());
+						System.out.println(resultsDataTSP.lastElement().toString()+"\nPath Distance: "+pathDistancesTSP.lastElement());
+					}*/
 				}
 			}
 			//TO IMPLEMENT FOR EACH ALGORITHM (TRAD & GEN)

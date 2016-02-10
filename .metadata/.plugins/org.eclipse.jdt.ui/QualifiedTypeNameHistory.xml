@@ -36,12 +36,12 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.test.TSP_GA_ConcreteSubject"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.test.TestObserver"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.test.ResultsObserver"/>
-<fullyQualifiedTypeName name="java.util.Vector"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="testTSPGA.TSP_GA_Worker"/>
 <fullyQualifiedTypeName name="javax.swing.SwingWorker"/>
 <fullyQualifiedTypeName name="org.jgap.IChromosome"/>
 <fullyQualifiedTypeName name="org.jgap.Chromosome"/>
-<fullyQualifiedTypeName name="geneticAlgorithms.TSP_GA"/>
 <fullyQualifiedTypeName name="org.jgap.Configuration"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.TSP_GA"/>
+<fullyQualifiedTypeName name="testTSPGA.TSP_GA_Worker"/>
+<fullyQualifiedTypeName name="java.util.Vector"/>
 </qualifiedTypeNameHistroy>

@@ -142,5 +142,20 @@ public class TSP_GA extends Salesman{
 		pathDistances.add((Integer.MAX_VALUE/2 - ic.getFitnessValue()));
 		worker.updateProgress((int)(Math.random()*10));
 	}
+	
+	public int getBestPathIndex(){
+		int index=0;
+		if(results.size()>0){
+			double max=Integer.MAX_VALUE;
+			for(int i=0; i<pathDistances.size(); i++){
+				if(pathDistances.elementAt(i)<max){
+					max=pathDistances.elementAt(i);
+					index=i;
+				}
+			}
+			return index;
+		}
+		return -1;
+	}
 }
 

@@ -1,48 +1,59 @@
 import java.awt.Point;
 import java.util.Vector;
 
+import org.jgap.Configuration;
+
+import geneticAlgorithms.TSP_GA;
+import testTSPGA.TSP_GA_Worker;
+
 public class GenResultData {
-	private int numCities, generationCount;
+	private int generationCount, popSize, popFrom, popTo, maxGen;
 	private float crossoverProbability, mutationProbability;
 	private String crossoverMethod, mutationMethod;
-	private double tourLength, fitness;
+	private double fitness;
 	private long timeExecution;
-	private int populationSize, popFrom, popTo, maxGen;
-	private Vector<Point> listOfCities;
-	private Vector<Point> results;
-	
-	public GenResultData(){
+	private Vector<Point> listOfCities, results;
+	private Vector<Double> pathDistances;
+	private Vector<Vector<Point>> resultsData;
+	private Configuration conf;
+	private TSP_GA tsp;
+	private TSP_GA_Worker tspWorker;
+
+	/*public GenResultData(){
 		numCities=0;
 		generationCount=0;
 		crossoverProbability=0f;
 		mutationProbability=0f;
 		crossoverMethod="";
 		mutationMethod="";
-		tourLength=0.0;
 		fitness=0.0;
 		timeExecution=0;
 		populationSize=0;
 		popFrom=0;
 		popTo=0;
 		maxGen=0;
-	}
+	}*/
 	//Constructor with parameters
-	public GenResultData(int cities, int genCount, float crossP, float mutP, String crossMet, String mutMet, double tour, double fit, long time,int popS, int popF, int popT, int maxG){
-		numCities=cities;
-		generationCount=genCount;
+	public GenResultData(int popS, int popF, int popT, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
+			Configuration conf, TSP_GA tsp, TSP_GA_Worker tspWorker){	
 		crossoverProbability=crossP;
 		mutationProbability=mutP;
 		crossoverMethod=crossMet;
 		mutationMethod=mutMet;
-		tourLength=tour;
-		fitness=fit;
-		timeExecution=time;
-		populationSize=popS;
+		popSize=popS;
 		popFrom=popF;
 		popTo=popT;
-		maxGen=maxG;		
+		maxGen=maxG;
+		this.conf=conf;
+		this.tsp=tsp;
+		this.tspWorker=tspWorker;
+		//Instantiate variables
+		fitness=0;
+		generationCount=0;
+		timeExecution=0;
+		results=new Vector<Point>();
 	}
-	public GenResultData(int cities, int popS, int popF, int popT, int maxG, String crossM, String mutM, float crossP, float mutP){
+	/*public GenResultData(int cities, int popS, int popF, int popT, int maxG, String crossM, String mutM, float crossP, float mutP){
 		numCities=cities;
 		populationSize=popS;
 		popFrom=popF;
@@ -52,13 +63,7 @@ public class GenResultData {
 		mutationMethod=mutM;
 		crossoverProbability=crossP;
 		mutationProbability=mutP;
-	}
-	public void setNumCities(int cities){
-		numCities=cities;
-	}
-	public int getNumCities(){
-		return numCities;
-	}
+	}*/
 	public void setGenerationCount(int genC){
 		generationCount=genC;
 	}
@@ -89,12 +94,6 @@ public class GenResultData {
 	public String getMutationMethod(){
 		return mutationMethod;
 	}
-	public void setTourLength(double tL){
-		tourLength=tL;
-	}
-	public double getTourLength(){
-		return tourLength;
-	}
 	public void setFitness(double fit){
 		fitness=fit;
 	}
@@ -108,10 +107,10 @@ public class GenResultData {
 		return timeExecution;
 	}
 	public void setPopSize(int p){
-		populationSize=p;
+		popSize=p;
 	}
 	public int getPopSize(){
-		return populationSize;
+		return popSize;
 	}
 	public void setPopFrom(int pF){
 		popFrom=pF;
@@ -131,18 +130,69 @@ public class GenResultData {
 	public int getMaxGen(){
 		return maxGen;
 	}
-	public void setResultingPoints(Vector<Point> data){
-		results=data; 
+	public void setResultingPoints(Vector<Point> data, boolean option){
+		if(option){
+			results=data;
+		}
+		else{
+			results=(Vector<Point>) data.clone(); 
+		}
 	}
 	public Vector<Point> getResultingPoints(){
 		return results;
 	}
-	public void setCities(Vector<Point> data){
-		listOfCities=(Vector<Point>) data.clone();
+	public void setCities(Vector<Point> data, boolean option){
+		if(option){
+			listOfCities=data;
+		}
+		else{
+			listOfCities=(Vector<Point>) data.clone();
+		}
 	}
 	public Vector<Point> getCities(){
 		return listOfCities;
 	}
+	public void setPathDistances(Vector<Double> distances, boolean option){
+		if(option){
+			pathDistances=distances;
+		}
+		else{
+			pathDistances=(Vector<Double>) distances.clone();
+		}
+	}
+	public Vector<Double> getPathDistances(){
+		return pathDistances;
+	}
+	public void setConfigurationTSP(Configuration c){
+		conf=c;
+	}
+	public Configuration getConfigurationTSP(){
+		return conf;
+	}
+	public void setTSP(TSP_GA tsp){
+		this.tsp=tsp;
+	}
+	public TSP_GA getTSP(){
+		return tsp;
+	}
+	public void setTSP_Worker(TSP_GA_Worker tspWork){
+		tspWorker=tspWork;
+	}
+	public TSP_GA_Worker getTSP_Worker(){
+		return tspWorker;
+	}
+	public void setResultsData(Vector<Vector<Point>> data, boolean option){
+		if(option){
+			resultsData=data;
+		}
+		else{
+			resultsData=(Vector<Vector<Point>>) data.clone();
+		}
+	}
+	public Vector<Vector<Point>> getResultsData(){
+		return resultsData;
+	}
+
 	public void resetResultData(){
 		results.clear();
 	}
@@ -152,7 +202,7 @@ public class GenResultData {
 			return false;
 		}
 		GenResultData temp=(GenResultData)obj;
-		return (this.numCities==temp.numCities && this.populationSize==temp.populationSize && this.popFrom==temp.popFrom && this.popTo==temp.popTo &&
+		return (this.popSize==temp.popSize && this.popFrom==temp.popFrom && this.popTo==temp.popTo &&
 				this.maxGen==temp.maxGen && this.crossoverMethod.equals(temp.crossoverMethod) && this.crossoverProbability==temp.crossoverProbability &&
 				this.mutationMethod.equals(temp.mutationMethod) && this.mutationProbability==temp.mutationProbability);
 	}

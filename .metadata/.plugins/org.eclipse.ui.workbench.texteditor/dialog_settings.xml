@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="createSampleChromosome" key="selection"/>
+		<item value="processedCancelled" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
-			<item value="createSampleChromosome"/>
-			<item value="worker"/>
-			<item value="threadWorker"/>
-			<item value="greedyHeuristicAlg"/>
-			<item value="destinationPanel"/>
-			<item value="Locations"/>
-			<item value="Load Map"/>
-			<item value="viewResultsButton"/>
+			<item value="processedCancelled"/>
+			<item value=".setResultsData(resultsDataTSP);"/>
+			<item value=""/>
+			<item value="resultsDataTSP"/>
+			<item value="travelli"/>
+			<item value="results"/>
+			<item value="crossoverSelected"/>
+			<item value="fromP"/>
 		</list>
 		<list key="replacehistory">
 			<item value="conf"/>
