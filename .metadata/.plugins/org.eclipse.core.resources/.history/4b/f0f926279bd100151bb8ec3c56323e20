@@ -1,0 +1,209 @@
+import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+
+public class ResultsView extends JPanel{
+
+	private static final long serialVersionUID = 8268951247350658510L;
+	//Graphical Elements
+	private JFrame mainFrame;
+	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
+	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel,fromToLabel,maxGenLabel, tradNameLabel;
+	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, fromToTF, maxGenTF, tradNameTF;
+	private JTextArea traDetailsTA;
+	private TradResultData tradObj;
+	private GenResultData genObj;
+	private String traGen;
+	
+	public ResultsView(String windowTitle, String traGe, Object obj){
+		//Create the window
+		mainFrame=new JFrame();
+		mainFrame.setTitle(windowTitle);
+		mainFrame.setResizable(false);
+		mainFrame.setVisible(true);
+		mainFrame.setLayout(null);
+		//Initiate shared graphical objects
+		nCitiesLabel=new JLabel("N. Cities");
+		nCitiesTF=new JTextField();
+		nCitiesTF.setEditable(false);
+		tourLabel=new JLabel("Tour Length");
+		tourTF=new JTextField();
+		tourTF.setEditable(false);
+		timeLabel=new JLabel("Time");
+		timeTF=new JTextField();
+		timeTF.setEditable(false);
+		//Adapt the view for a tradition algorithm
+		this.traGenView(traGe, obj);
+		//Add data to the Text Fields
+		this.setTextBoxes();
+	}
+	
+	private void traGenView(String s, Object objPassed){
+		if(s.equals("tra")){
+			mainFrame.setSize(450, 250);
+			traGen="tra";
+			tradObj=(TradResultData)objPassed;
+			tradNameLabel=new JLabel("Name");
+			tradNameTF=new JTextField();
+			mainTradDetailsPanel=new JPanel();
+				//mainTradDetailsPanel.setBorder(new TitledBorder("Method "+tradObj.getAlgName()+" Details"));
+				mainTradDetailsPanel.setBorder(new TitledBorder("Method Details"));
+				mainTradDetailsPanel.setLayout(null);
+			traDetailsPanel=new JPanel();
+				traDetailsPanel.setBorder(new TitledBorder("Details"));
+				traDetailsPanel.setLayout(null);
+			traDetailsTA=new JTextArea();
+				//The area is not editable by the user and the its background is translucent
+				traDetailsTA.setOpaque(false);
+				traDetailsTA.setEditable(false);
+			
+			mainTradDetailsPanel.setBounds(10,5,430,100);
+			nCitiesLabel.setBounds(20,30,60,20);
+			nCitiesTF.setBounds(80,30,60,20);
+			tourLabel.setBounds(160,30,80,20);
+			tourTF.setBounds(250,30,80,20);
+			timeLabel.setBounds(20,65,40,20);
+			timeTF.setBounds(80,65,80,20);
+			tradNameLabel.setBounds(170, 65,45,20);
+			tradNameTF.setBounds(225,65,120,20);
+			traDetailsPanel.setBounds(10,110,430,100);
+			traDetailsTA.setBounds(7,20,416,75);
+			
+			mainFrame.add(mainTradDetailsPanel);
+			mainTradDetailsPanel.add(nCitiesLabel);
+			mainTradDetailsPanel.add(nCitiesTF);
+			mainTradDetailsPanel.add(tourLabel);
+			mainTradDetailsPanel.add(tourTF);
+			mainTradDetailsPanel.add(timeLabel);
+			mainTradDetailsPanel.add(timeTF);
+			mainFrame.add(traDetailsPanel);
+			traDetailsPanel.add(traDetailsTA);
+		}
+		//Adapt the view for a genetic algorithm
+		else{
+			mainFrame.setSize(535, 250);
+			traGen="gen";
+			genObj=(GenResultData)objPassed;
+			mainGeDetailsPanel=new JPanel();
+				mainGeDetailsPanel.setBorder(new TitledBorder("Method Details"));
+				mainGeDetailsPanel.setLayout(null);
+			geDataProducedPanel=new JPanel();
+				geDataProducedPanel.setBorder(new TitledBorder("Data Produced"));
+				geDataProducedPanel.setLayout(null);
+			crossMetLabel=new JLabel("Crossover Method");
+			crossMetTF=new JTextField();
+			crossMetTF.setEditable(false);
+			crossProbLabel=new JLabel("Probability");
+			crossProbTF=new JTextField();
+			crossProbTF.setEditable(false);
+			mutMetLabel=new JLabel("Metation Method");
+			mutMetTF=new JTextField();
+			mutMetTF.setEditable(false);
+			mutProbLabel=new JLabel("Probability");
+			mutProbTF=new JTextField();
+			mutProbTF.setEditable(false);
+			generLabel=new JLabel("Generations");
+			generTF=new JTextField();
+			generTF.setEditable(false);
+			fitnessLabel=new JLabel("Fitness");
+			fitnessTF=new JTextField();
+			fitnessTF.setEditable(false);
+			fromToLabel=new JLabel("Lapse");
+			fromToTF=new JTextField();
+			fromToTF.setEditable(false);
+			maxGenLabel=new JLabel("Max Gen");
+			maxGenTF=new JTextField();
+			maxGenTF.setEditable(false);
+			
+			mainGeDetailsPanel.setBounds(10,5,515,110);
+			nCitiesLabel.setBounds(7,20,60,20);
+			nCitiesTF.setBounds(70,20,70,20);
+			fromToLabel.setBounds(190,20,40,20);
+			fromToTF.setBounds(230,20,80,20);
+			maxGenLabel.setBounds(360,20,60,20);
+			maxGenTF.setBounds(420,20,80,20);
+			crossMetLabel.setBounds(7,45,110,20);
+			crossMetTF.setBounds(120,45,180,20);
+			crossProbLabel.setBounds(315,45,70,20);
+			crossProbTF.setBounds(385,45,40,20);
+			mutMetLabel.setBounds(7,75,110,20);
+			mutMetTF.setBounds(120,75,180,20);
+			mutProbLabel.setBounds(315,75,70,20);
+			mutProbTF.setBounds(385,75,40,20);
+			geDataProducedPanel.setBounds(10,120,430,90);
+			//tourLabel.setBounds(10,25,80,20);
+			//tourTF.setBounds(90,25,90,20);
+			//generLabel.setBounds(210,25,80,20);
+			//generTF.setBounds(290,25,80,20);
+			generLabel.setBounds(10,25,80,20);
+			generTF.setBounds(90,25,90,20);
+			//fitnessLabel.setBounds(10,55,60,20);
+			//fitnessTF.setBounds(70,55,50,20);
+			//timeLabel.setBounds(210,55,50,20);
+			//timeTF.setBounds(260,55,80,20);
+			fitnessLabel.setBounds(200,25,60,20);
+			fitnessTF.setBounds(260,25,140,20);
+			timeLabel.setBounds(160,55,50,20);
+			timeTF.setBounds(210,55,80,20);
+			
+			mainFrame.add(mainGeDetailsPanel);
+			mainGeDetailsPanel.add(nCitiesLabel);
+			mainGeDetailsPanel.add(nCitiesTF);
+			mainGeDetailsPanel.add(fromToLabel);
+			mainGeDetailsPanel.add(fromToTF);
+			mainGeDetailsPanel.add(maxGenLabel);
+			mainGeDetailsPanel.add(maxGenTF);
+			mainGeDetailsPanel.add(crossMetLabel);
+			mainGeDetailsPanel.add(crossMetTF);
+			mainGeDetailsPanel.add(crossProbLabel);
+			mainGeDetailsPanel.add(crossProbTF);
+			mainGeDetailsPanel.add(mutMetLabel);
+			mainGeDetailsPanel.add(mutMetTF);
+			mainGeDetailsPanel.add(mutProbLabel);
+			mainGeDetailsPanel.add(mutProbTF);
+			mainFrame.add(geDataProducedPanel);
+			//geDataProducedPanel.add(tourLabel);
+			//geDataProducedPanel.add(tourTF);
+			geDataProducedPanel.add(generLabel);
+			geDataProducedPanel.add(generTF);
+			geDataProducedPanel.add(fitnessLabel);
+			geDataProducedPanel.add(fitnessTF);
+			geDataProducedPanel.add(timeLabel);
+			geDataProducedPanel.add(timeTF);
+		}
+	}
+	
+	private void setTextBoxes(){
+		if(traGen.equals("tra")){
+			nCitiesTF.setText(""+tradObj.getNumCities());
+			tourTF.setText(""+tradObj.getTourLength());
+			long tempTime=tradObj.getExecutionTime();
+			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
+			timeTF.setText(""+timeString);
+			traDetailsTA.setText(tradObj.getDetails());
+		}
+		else{
+			nCitiesTF.setText(""+genObj.getPopSize());
+			fromToTF.setText(""+genObj.getPopFrom()+"-"+genObj.getPopTo());
+			maxGenTF.setText(""+genObj.getMaxGen());
+			crossMetTF.setText(""+genObj.getCrossoverMethod());
+			crossProbTF.setText(""+genObj.getCrossoverProbability());
+			mutMetTF.setText(""+genObj.getMutationMethod());
+			mutProbTF.setText(""+genObj.getMutationProbability());
+			generTF.setText(""+genObj.getGenerationCount());
+			double fitnessValue = genObj.getFitness();
+			//Some times the fitness value is too long, in this way only 8 decimal places are kept to keep the application consistant
+	        DecimalFormat fv = new DecimalFormat("#.########");
+	        fitnessTF.setText(""+fv.format(fitnessValue));
+			long tempTime=genObj.getExecutionTime();
+			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
+			timeTF.setText(timeString);
+		}
+	}
+}

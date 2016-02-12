@@ -482,15 +482,17 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			else{
 				execStopped=true;
 				startExecutionButton.setText("Start");
+				startExecutionButton.setEnabled(false);
 				if(listenToChanges.equals("cn")){
 					closestNeighbourAlg.cancel(true);
 				}
 				else if(listenToChanges.equals("gh")){
 					greedyHeuristicAlg.cancel(true);
 				}
-				else if(listenToChanges.equals("gas")){
-					tspWorker.cancel(true);
-				}
+				//else if(listenToChanges.equals("gas")){
+					//tspWorker.cancel(true);
+					//tspAlg.stopExecution();
+				//}
 				//TO IMPLEMENT
 			}
 		}
@@ -564,7 +566,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				else{
 					try{
 						int fromP, toP, maxG;
-
 						Configuration setup=new Configuration();
 						fromP=Integer.parseInt(fromTF.getText());
 						toP=Integer.parseInt(toTF.getText());
@@ -614,6 +615,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 										+"\nMutation Method: "+tempGen.getMutationMethod()
 										+"\nMutation Probability: "+tempGen.getMutationProbability(),
 										"Confirm", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!","Warning", JOptionPane.WARNING_MESSAGE);
 							}
 							else{
 								JOptionPane.showMessageDialog(null, "This execution is already in the queue", "Duplicate Value", JOptionPane.WARNING_MESSAGE);
@@ -632,6 +634,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 									+"\nMutation Method: "+tempGen.getMutationMethod()
 									+"\nMutation Probability: "+tempGen.getMutationProbability(),
 									"Confirm", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!","Warning", JOptionPane.WARNING_MESSAGE);
 						}
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, "Enter valid numbers please!","Error", JOptionPane.ERROR_MESSAGE);
@@ -709,7 +712,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				currentGeneticAlg.resetResultData();
 				tspWorker.addPropertyChangeListener(this);
 				currentRunningTimeExec=System.currentTimeMillis();
-
 				tspWorker.execute();
 			}
 		}
@@ -763,7 +765,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					startExecutionButton.setText("Start");
 					//Get the only element in the vector and update it with the execution information
 					TradResultData transferData=(TradResultData) algQueueExecution.get(index);
-					transferData.setTourLength(closestNeighbourAlg.getTourLength());
+					transferData.setTourLength(closestNeighbourAlg.getTourDistance());
 					transferData.setTimeExecution(closestNeighbourAlg.getExecutionTime());
 					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
 					transferData.setCities(closestNeighbourAlg.getListOfCities());
@@ -827,7 +829,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					//Refresh the drawing area one last time in case of last second changes
 					drawingArea.performLinks(true, ((GenResultData) currentGeneticAlg).getCities(),resultsDataTSP.elementAt(indexElement));
 					startExecutionButton.setText("Start");
-					//currentGeneticAlg=null;
+					startExecutionButton.setEnabled(true);
 					//Increment the counter and verify if other algorithms are awaiting to be executed
 					if(!execStopped && index<algQueueExecution.size()){
 						index++;
@@ -835,6 +837,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					}
 				}
 				else if(tspWorker.getProgress()!=100){
+					startExecutionButton.setEnabled(false);
 					currentRunningAlgTF.setText(currentRunningAlg);
 					long tempTime=(System.currentTimeMillis()-currentRunningTimeExec);
 					currentRunningTimeTF.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100)));

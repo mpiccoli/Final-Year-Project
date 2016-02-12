@@ -35,7 +35,11 @@ public class TSP_GA_Worker extends SwingWorker{
 			work.startEvolution();
 			if(this.isCancelled()){
 				processedCancelled=true;
+				work.stopExecution();
+				this.updateProgress(100);
 				this.cancel(true);
+				return null;
+				//this.cancel(true);
 			}
 		}
 		catch(Exception e){

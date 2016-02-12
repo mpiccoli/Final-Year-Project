@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
@@ -13,8 +14,8 @@ public class ResultsView extends JPanel{
 	//Graphical Elements
 	private JFrame mainFrame;
 	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
-	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel, popSizeLabel,fromToLabel,maxGenLabel;
-	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, popSizeTF, fromToTF, maxGenTF;
+	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel,fromToLabel,maxGenLabel, tradNameLabel;
+	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, fromToTF, maxGenTF, tradNameTF;
 	private JTextArea traDetailsTA;
 	private TradResultData tradObj;
 	private GenResultData genObj;
@@ -48,6 +49,8 @@ public class ResultsView extends JPanel{
 			mainFrame.setSize(450, 250);
 			traGen="tra";
 			tradObj=(TradResultData)objPassed;
+			tradNameLabel=new JLabel("Name");
+			tradNameTF=new JTextField();
 			mainTradDetailsPanel=new JPanel();
 				//mainTradDetailsPanel.setBorder(new TitledBorder("Method "+tradObj.getAlgName()+" Details"));
 				mainTradDetailsPanel.setBorder(new TitledBorder("Method Details"));
@@ -61,12 +64,14 @@ public class ResultsView extends JPanel{
 				traDetailsTA.setEditable(false);
 			
 			mainTradDetailsPanel.setBounds(10,5,430,100);
-			nCitiesLabel.setBounds(20,30,50,20);
-			nCitiesTF.setBounds(70,30,60,20);
-			tourLabel.setBounds(240,30,80,20);
-			tourTF.setBounds(320,30,80,20);
-			timeLabel.setBounds(135,70,40,20);
-			timeTF.setBounds(175,70,80,20);
+			nCitiesLabel.setBounds(20,30,60,20);
+			nCitiesTF.setBounds(80,30,60,20);
+			tourLabel.setBounds(160,30,80,20);
+			tourTF.setBounds(250,30,80,20);
+			timeLabel.setBounds(20,65,40,20);
+			timeTF.setBounds(65,65,80,20);
+			tradNameLabel.setBounds(170, 65,45,20);
+			tradNameTF.setBounds(215,65,150,20);
 			traDetailsPanel.setBounds(10,110,430,100);
 			traDetailsTA.setBounds(7,20,416,75);
 			
@@ -77,6 +82,8 @@ public class ResultsView extends JPanel{
 			mainTradDetailsPanel.add(tourTF);
 			mainTradDetailsPanel.add(timeLabel);
 			mainTradDetailsPanel.add(timeTF);
+			mainTradDetailsPanel.add(tradNameLabel);
+			mainTradDetailsPanel.add(tradNameTF);
 			mainFrame.add(traDetailsPanel);
 			traDetailsPanel.add(traDetailsTA);
 		}
@@ -103,15 +110,12 @@ public class ResultsView extends JPanel{
 			mutProbLabel=new JLabel("Probability");
 			mutProbTF=new JTextField();
 			mutProbTF.setEditable(false);
-			generLabel=new JLabel("Generation");
+			generLabel=new JLabel("Generations");
 			generTF=new JTextField();
 			generTF.setEditable(false);
 			fitnessLabel=new JLabel("Fitness");
 			fitnessTF=new JTextField();
 			fitnessTF.setEditable(false);
-			popSizeLabel=new JLabel("Pop. size");
-			popSizeTF=new JTextField();
-			popSizeTF.setEditable(false);
 			fromToLabel=new JLabel("Lapse");
 			fromToTF=new JTextField();
 			fromToTF.setEditable(false);
@@ -120,14 +124,12 @@ public class ResultsView extends JPanel{
 			maxGenTF.setEditable(false);
 			
 			mainGeDetailsPanel.setBounds(10,5,515,110);
-			nCitiesLabel.setBounds(7,20,50,20);
-			nCitiesTF.setBounds(60,20,70,20);
-			popSizeLabel.setBounds(140,20,60,20);
-			popSizeTF.setBounds(195,20,60,20);
-			fromToLabel.setBounds(265,20,50,20);
-			fromToTF.setBounds(305,20,60,20);
-			maxGenLabel.setBounds(385,20,50,20);
-			maxGenTF.setBounds(440,20,65,20);
+			nCitiesLabel.setBounds(7,20,60,20);
+			nCitiesTF.setBounds(70,20,70,20);
+			fromToLabel.setBounds(190,20,40,20);
+			fromToTF.setBounds(230,20,80,20);
+			maxGenLabel.setBounds(360,20,60,20);
+			maxGenTF.setBounds(420,20,80,20);
 			crossMetLabel.setBounds(7,45,110,20);
 			crossMetTF.setBounds(120,45,180,20);
 			crossProbLabel.setBounds(315,45,70,20);
@@ -137,20 +139,24 @@ public class ResultsView extends JPanel{
 			mutProbLabel.setBounds(315,75,70,20);
 			mutProbTF.setBounds(385,75,40,20);
 			geDataProducedPanel.setBounds(10,120,430,90);
-			tourLabel.setBounds(10,25,80,20);
-			tourTF.setBounds(90,25,90,20);
-			generLabel.setBounds(210,25,80,20);
-			generTF.setBounds(290,25,80,20);
-			fitnessLabel.setBounds(10,55,60,20);
-			fitnessTF.setBounds(70,55,50,20);
-			timeLabel.setBounds(210,55,50,20);
-			timeTF.setBounds(260,55,80,20);
+			//tourLabel.setBounds(10,25,80,20);
+			//tourTF.setBounds(90,25,90,20);
+			//generLabel.setBounds(210,25,80,20);
+			//generTF.setBounds(290,25,80,20);
+			generLabel.setBounds(10,25,80,20);
+			generTF.setBounds(90,25,90,20);
+			//fitnessLabel.setBounds(10,55,60,20);
+			//fitnessTF.setBounds(70,55,50,20);
+			//timeLabel.setBounds(210,55,50,20);
+			//timeTF.setBounds(260,55,80,20);
+			fitnessLabel.setBounds(200,25,60,20);
+			fitnessTF.setBounds(260,25,140,20);
+			timeLabel.setBounds(160,55,50,20);
+			timeTF.setBounds(200,55,80,20);
 			
 			mainFrame.add(mainGeDetailsPanel);
 			mainGeDetailsPanel.add(nCitiesLabel);
 			mainGeDetailsPanel.add(nCitiesTF);
-			mainGeDetailsPanel.add(popSizeLabel);
-			mainGeDetailsPanel.add(popSizeTF);
 			mainGeDetailsPanel.add(fromToLabel);
 			mainGeDetailsPanel.add(fromToTF);
 			mainGeDetailsPanel.add(maxGenLabel);
@@ -164,8 +170,8 @@ public class ResultsView extends JPanel{
 			mainGeDetailsPanel.add(mutProbLabel);
 			mainGeDetailsPanel.add(mutProbTF);
 			mainFrame.add(geDataProducedPanel);
-			geDataProducedPanel.add(tourLabel);
-			geDataProducedPanel.add(tourTF);
+			//geDataProducedPanel.add(tourLabel);
+			//geDataProducedPanel.add(tourTF);
 			geDataProducedPanel.add(generLabel);
 			geDataProducedPanel.add(generTF);
 			geDataProducedPanel.add(fitnessLabel);
@@ -182,10 +188,11 @@ public class ResultsView extends JPanel{
 			long tempTime=tradObj.getExecutionTime();
 			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
 			timeTF.setText(""+timeString);
+			tradNameTF.setText(tradObj.getAlgName());
 			traDetailsTA.setText(tradObj.getDetails());
 		}
 		else{
-			popSizeTF.setText(""+genObj.getPopSize());
+			nCitiesTF.setText(""+genObj.getPopSize());
 			fromToTF.setText(""+genObj.getPopFrom()+"-"+genObj.getPopTo());
 			maxGenTF.setText(""+genObj.getMaxGen());
 			crossMetTF.setText(""+genObj.getCrossoverMethod());
@@ -193,7 +200,10 @@ public class ResultsView extends JPanel{
 			mutMetTF.setText(""+genObj.getMutationMethod());
 			mutProbTF.setText(""+genObj.getMutationProbability());
 			generTF.setText(""+genObj.getGenerationCount());
-			fitnessTF.setText(""+genObj.getFitness());
+			double fitnessValue = genObj.getFitness();
+			//Some times the fitness value is too long, in this way only 8 decimal places are kept to keep the application consistant
+	        DecimalFormat fv = new DecimalFormat("#.########");
+	        fitnessTF.setText(""+fv.format(fitnessValue));
 			long tempTime=genObj.getExecutionTime();
 			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
 			timeTF.setText(timeString);

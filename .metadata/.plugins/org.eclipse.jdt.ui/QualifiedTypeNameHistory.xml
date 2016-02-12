@@ -30,7 +30,6 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.Results_Observer"/>
 <fullyQualifiedTypeName name="java.beans.PropertyChangeEvent"/>
 <fullyQualifiedTypeName name="java.beans.PropertyChangeListener"/>
-<fullyQualifiedTypeName name="java.lang.Thread"/>
 <fullyQualifiedTypeName name="java.util.Observable"/>
 <fullyQualifiedTypeName name="java.util.Observer"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.test.TSP_GA_ConcreteSubject"/>
@@ -44,4 +43,7 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.TSP_GA"/>
 <fullyQualifiedTypeName name="testTSPGA.TSP_GA_Worker"/>
 <fullyQualifiedTypeName name="java.util.Vector"/>
+<fullyQualifiedTypeName name="java.text.DecimalFormat"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
 </qualifiedTypeNameHistroy>

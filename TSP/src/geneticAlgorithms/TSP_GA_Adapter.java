@@ -48,4 +48,7 @@ public class TSP_GA_Adapter {
 	public void updateProgress(int value){
 		tspWorker.updateProgress(value);
 	}
+	public void stopExecution(){
+		tsp.stopExecution();
+	}
 }
