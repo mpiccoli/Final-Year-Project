@@ -1,16 +1,13 @@
 package geneticAlgorithms;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Vector;
 
+import java.awt.Point;
+import java.util.Vector;
 import org.jgap.*;
 import org.jgap.impl.*;
 import org.jgap.impl.salesman.*;
 
-import geneticAlgorithms.Crossover.CycleCrossover;
-import testTSPGA.TSP_GA_Adapter;
-
 public class TSP_GA extends Salesman{
+	private static final long serialVersionUID = 5489585985877059554L;
 	private int numCities;
 	private int[][] cities;
 	public Vector<Point> citiesVector;
@@ -19,6 +16,7 @@ public class TSP_GA extends Salesman{
 	public Vector<Double> pathDistances;
 	private TSP_GA_Adapter worker;
 
+	@SuppressWarnings("unchecked")
 	public TSP_GA(Vector<Point> citiesData, Configuration c, TSP_GA_Adapter threadWorker, Vector<Vector<Point>> results, Vector<Double> distances){
 		numCities=citiesData.size();
 		this.results=results;
@@ -80,6 +78,7 @@ public class TSP_GA extends Salesman{
 		//Create some temporary object to store the data
 		Vector<Point> points=new Vector<Point>();
 		//Make a copy of the cities
+		@SuppressWarnings("unchecked")
 		Vector<Point> tempCities=(Vector<Point>) citiesVector.clone();
 		points.setSize(data.length);
 		//This loop inserts the elements in the right position
@@ -92,6 +91,7 @@ public class TSP_GA extends Salesman{
 		return points;
 	}
 	//This code below has been adapted from the class Salesman, which this class is extending from
+	@SuppressWarnings("unused")
 	@Override
 	public IChromosome findOptimalPath(final Object a_initial_data) throws Exception {
 		conf = createConfiguration(a_initial_data);
@@ -138,6 +138,8 @@ public class TSP_GA extends Salesman{
 	}*/
 	public void addToResults(IChromosome ic){
 		Vector<Point> temp=this.convertArrayResultToVectorPoint(ic.getGenes());
+		//Add the starting point so when the drawing occurs, the path is completed
+		temp.add(citiesVector.elementAt(0));
 		results.add(temp);
 		pathDistances.add((Integer.MAX_VALUE/2 - ic.getFitnessValue()));
 		worker.updateProgress((int)(Math.random()*10));

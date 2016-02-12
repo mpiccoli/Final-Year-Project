@@ -6,7 +6,7 @@ import java.util.Vector;
 import javax.swing.SwingWorker;
 
 @SuppressWarnings("rawtypes")
-public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
+public class ClosestNeighbour extends SwingWorker{
 	//Global Variables
 	private Vector<Point> cities;
 	private Vector<Point> travellingOrder;
@@ -31,9 +31,11 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	public double getTourDistance(){
 		return tourDistance;
 	}
+	@SuppressWarnings("unchecked")
 	public Vector<Point> getListOfCities(){
 		return (Vector<Point>) cities.clone();
 	}
+	@SuppressWarnings("unchecked")
 	public Vector<Point> getTravellingOrder(){
 		return (Vector<Point>)travellingOrder.clone();
 	}
@@ -69,6 +71,7 @@ public class ClosestNeighbour<DrawingPanel> extends SwingWorker{
 	protected Boolean doInBackground() throws Exception {
 		//Start the time for this process
 		long startTime=System.currentTimeMillis();
+		@SuppressWarnings("unchecked")
 		Vector<Point> citiesTemp=(Vector<Point>) cities.clone();
 		//The first place to visit is the first city in the list
 		travellingOrder.add(citiesTemp.get(0));

@@ -1,16 +1,14 @@
-//import java.awt.Graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class DrawingPanel extends JPanel{
+	private static final long serialVersionUID = 2980221873573882055L;
 	private Vector<Point> vPoints;
 	private JLabel numPoints;
 	private boolean singleAlg;

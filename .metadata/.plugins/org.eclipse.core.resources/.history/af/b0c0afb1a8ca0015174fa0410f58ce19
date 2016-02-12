@@ -1,5 +1,0 @@
-package Crossover;
-
-public class CycleCrossover implements BasicGeneticOperator {
-
-}

@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class ExitRequest extends JFrame implements ActionListener{
-
+	private static final long serialVersionUID = -3522747050735126560L;
 	//Global Variables
 	private JButton yesButton, noButton;
 	private JLabel confirm;

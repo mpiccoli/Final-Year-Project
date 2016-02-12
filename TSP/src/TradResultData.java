@@ -68,6 +68,7 @@ public class TradResultData {
 	public Vector<Point> getResultingPoints(){
 		return results;
 	}
+	@SuppressWarnings("unchecked")
 	public void setCities(Vector<Point> data){
 		listOfCities=(Vector<Point>) data.clone();
 	}

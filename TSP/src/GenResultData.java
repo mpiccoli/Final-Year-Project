@@ -1,10 +1,8 @@
 import java.awt.Point;
 import java.util.Vector;
-
 import org.jgap.Configuration;
-
 import geneticAlgorithms.TSP_GA;
-import testTSPGA.TSP_GA_Worker;
+import geneticAlgorithms.TSP_GA_Worker;
 
 public class GenResultData {
 	private int generationCount, popSize, popFrom, popTo, maxGen;
@@ -19,20 +17,6 @@ public class GenResultData {
 	private TSP_GA tsp;
 	private TSP_GA_Worker tspWorker;
 
-	/*public GenResultData(){
-		numCities=0;
-		generationCount=0;
-		crossoverProbability=0f;
-		mutationProbability=0f;
-		crossoverMethod="";
-		mutationMethod="";
-		fitness=0.0;
-		timeExecution=0;
-		populationSize=0;
-		popFrom=0;
-		popTo=0;
-		maxGen=0;
-	}*/
 	//Constructor with parameters
 	public GenResultData(int popS, int popF, int popT, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
 			Configuration conf, TSP_GA tsp, TSP_GA_Worker tspWorker){	
@@ -53,17 +37,6 @@ public class GenResultData {
 		timeExecution=0;
 		results=new Vector<Point>();
 	}
-	/*public GenResultData(int cities, int popS, int popF, int popT, int maxG, String crossM, String mutM, float crossP, float mutP){
-		numCities=cities;
-		populationSize=popS;
-		popFrom=popF;
-		popTo=popT;
-		maxGen=maxG;
-		crossoverMethod=crossM;
-		mutationMethod=mutM;
-		crossoverProbability=crossP;
-		mutationProbability=mutP;
-	}*/
 	public void setGenerationCount(int genC){
 		generationCount=genC;
 	}
@@ -130,6 +103,7 @@ public class GenResultData {
 	public int getMaxGen(){
 		return maxGen;
 	}
+	@SuppressWarnings("unchecked")
 	public void setResultingPoints(Vector<Point> data, boolean option){
 		if(option){
 			results=data;
@@ -141,6 +115,7 @@ public class GenResultData {
 	public Vector<Point> getResultingPoints(){
 		return results;
 	}
+	@SuppressWarnings("unchecked")
 	public void setCities(Vector<Point> data, boolean option){
 		if(option){
 			listOfCities=data;
@@ -152,6 +127,7 @@ public class GenResultData {
 	public Vector<Point> getCities(){
 		return listOfCities;
 	}
+	@SuppressWarnings("unchecked")
 	public void setPathDistances(Vector<Double> distances, boolean option){
 		if(option){
 			pathDistances=distances;
@@ -181,6 +157,7 @@ public class GenResultData {
 	public TSP_GA_Worker getTSP_Worker(){
 		return tspWorker;
 	}
+	@SuppressWarnings("unchecked")
 	public void setResultsData(Vector<Vector<Point>> data, boolean option){
 		if(option){
 			resultsData=data;
@@ -195,6 +172,8 @@ public class GenResultData {
 
 	public void resetResultData(){
 		results.clear();
+		pathDistances.clear();
+		resultsData.clear();
 	}
 	@Override
 	public boolean equals(Object obj){

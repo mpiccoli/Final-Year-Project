@@ -8,6 +8,7 @@ public class InsertionHeuristic {
 		private Vector<Point> cities;
 		private Vector<Point> resultData;
 		private Vector<Integer> convexHull;
+		@SuppressWarnings("unused")
 		private Vector<Double> travellingOrderDistances;
 		private double resultTourDistance;
 		private long executionTime;
@@ -33,9 +34,11 @@ public class InsertionHeuristic {
 		public double getTourDistance(){
 			return resultTourDistance;
 		}
+		@SuppressWarnings("unchecked")
 		public Vector<Point> getListOfCities(){
 			return (Vector<Point>) cities.clone();
 		}
+		@SuppressWarnings("unchecked")
 		public Vector<Point> getTravellingOrder(){
 			return (Vector<Point>)resultData.clone();
 		}
@@ -44,6 +47,7 @@ public class InsertionHeuristic {
 			double yValue=(a.getY()-b.getY())*(a.getY()-b.getY());
 			return Math.sqrt(xValue+yValue);
 		}
+		@SuppressWarnings("unused")
 		private void calculateExecutionTime(long startTime, long finishTime){
 			//Verify that the Thread has not been stopped
 			if(!processedCancelled){
@@ -53,6 +57,7 @@ public class InsertionHeuristic {
 				executionTime=-1;
 			}
 		}
+		@SuppressWarnings("unused")
 		private Vector<Point> findConvexHull(Vector<Point> data, Point startingP, double givenDistance){
 			Vector<Integer> positionPointsConvexHull=new Vector<Integer>();
 			Vector<Double> distances=new Vector<Double>();
@@ -75,6 +80,7 @@ public class InsertionHeuristic {
 		}
 		protected Vector<Point> sortConvexHull(Vector<Double> data, Vector<Integer> positionData){
 			Vector<Point> sorted=new Vector<Point>();
+			@SuppressWarnings("unused")
 			Vector<Point> tempPos=new Vector<Point>();
 			//Store the position of both distance (inside data) and its position (inside positionData) as X and Y value into tempPos
 			//This is to prevent loosing the position of the actual point during the sort
@@ -86,8 +92,10 @@ public class InsertionHeuristic {
 		protected Boolean doInBackground() throws Exception{
 			
 			//Create a copy of the cities data
+			@SuppressWarnings("unchecked")
 			Vector<Point>cities_copy=(Vector<Point>) cities.clone();
 			//Get the first element in the list
+			@SuppressWarnings("unused")
 			Point startingPoint=cities_copy.get(0);
 			cities_copy.remove(0);
 			for(int i=0; i<cities_copy.size(); i++){

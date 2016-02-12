@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.swing.SwingWorker;
 
+@SuppressWarnings("rawtypes")
 public class GreedyHeuristic extends SwingWorker{
 	//Global Variables
 	private Vector<Point> cities;
@@ -36,9 +37,11 @@ public class GreedyHeuristic extends SwingWorker{
 	public double getTourDistance(){
 		return resultTourDistance;
 	}
+	@SuppressWarnings("unchecked")
 	public Vector<Point> getListOfCities(){
 		return (Vector<Point>) cities.clone();
 	}
+	@SuppressWarnings("unchecked")
 	public Vector<Point> getTravellingOrder(){
 		return (Vector<Point>)resultData.clone();
 	}
@@ -56,6 +59,7 @@ public class GreedyHeuristic extends SwingWorker{
 			executionTime=-1;
 		}
 	}
+	@SuppressWarnings("unused")
 	private Vector<Point> findMinDistanceTour(){
 		Double minTemp=1000.0;
 		Vector<Point> temp=null;

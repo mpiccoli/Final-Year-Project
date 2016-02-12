@@ -7,6 +7,7 @@ public class Closest_Test {
 
 	public static void main(String[] args) {
 		Vector<Point> data=new Vector<Point>();
+		@SuppressWarnings("unused")
 		Vector<Point> results=new Vector<Point>();
 		data.add(new Point(1,1));
 		data.add(new Point(6,2));

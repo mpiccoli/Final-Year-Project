@@ -8,7 +8,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class ResultsView extends JPanel{
-	
+
+	private static final long serialVersionUID = 8268951247350658510L;
 	//Graphical Elements
 	private JFrame mainFrame;
 	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
