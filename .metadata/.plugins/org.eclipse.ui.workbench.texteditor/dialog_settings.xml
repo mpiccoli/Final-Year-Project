@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Stop" key="selection"/>
+		<item value="info" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
-		<item value="false" key="wholeword"/>
+		<item value="true" key="wholeword"/>
 		<list key="findhistory">
-			<item value="Stop"/>
-			<item value="drawingArea"/>
-			<item value="progressBar.setValue"/>
-			<item value="progressBar.setVisible(false);"/>
-			<item value="progressBar.setVisible(true);"/>
-			<item value="progressBar.setValue((algQueueExecution.size()*100)/(index+1));"/>
-			<item value="startExecutionButton.setEnabled(false);"/>
-			<item value="execStopped"/>
+			<item value="Info"/>
+			<item value="sorry, there"/>
+			<item value="Sorry the"/>
+			<item value="Sorry there"/>
+			<item value="InputStreamReader"/>
+			<item value="InputStream"/>
+			<item value="printStackTrace"/>
+			<item value="csvImport"/>
 		</list>
 		<list key="replacehistory">
+			<item value="csvImportExport"/>
 			<item value="conf"/>
 		</list>
 	</section>

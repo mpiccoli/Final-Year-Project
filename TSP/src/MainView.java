@@ -13,16 +13,18 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
-
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -48,7 +50,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jgap.Configuration;
 import org.jgap.util.CloneException;
-import org.omg.CORBA.portable.InputStream;
 
 import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
@@ -65,17 +66,15 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	JMenuBar menuBar;
 	private JMenu fileMenu, impExp;
 	private JMenuItem close, info, saveRes, expPoints;
-	private JButton undoPoint, resetAllPoints;
-	private JLabel numDrawnPoints;
-	private JComboBox<String> tradGAChooser;
-	//Traditional and Genetic Algorithms
+	private JProgressBar progressBar;
+	//Traditional and Genetic Algorithm variables
 	private JPanel tradPanel, genPanel, optionPanel, destinationPanel, executionPanel;
-	private JCheckBox trad1CB,trad2CB,trad3CB, manualDrawCB, importPointsCB, numCasualPointsCB;
-	private JLabel popSizeLabel, fromLabel, toLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel, casualPointsLabel, manualPointsLabel;
-	private JTextField popSizeTF, fromTF, toTF, maxGenTF, casualPointsTF;
-	private JComboBox<String> crossoverMethods, mutationMethods;
+	private JCheckBox trad1CB,trad2CB,trad3CB, manualDrawCB, importPointsCB, numRandomPointsCB;
+	private JLabel fromLabel, toLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel, randomPointsLabel, manualPointsLabel, currentRunningTimeLabel, currentRunningAlgLabel, numDrawnPoints;
+	private JTextField fromTF, toTF, maxGenTF, randomPointsTF, currentRunningTimeTF, currentRunningAlgTF;
+	private JComboBox<String> crossoverMethods, mutationMethods, tradGAChooser;
 	private JSlider crossProbSlider, mutProbSlider;
-	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton;
+	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton, undoPoint, resetAllPoints;
 	private boolean importCSV, execStopped;
 	//Drawing area which allows the user to draw points and perform the TSP on those points
 	private DrawingPanel drawingArea;
@@ -84,27 +83,22 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private Vector<Point> points;
 	private Vector<Object> algQueueExecution;
 	private Vector<Point> results;
-	private JFileChooser csvImport;
-	private FileNameExtensionFilter csvFilter;
+	private Vector<Vector<Point>> resultsDataTSP;
+	private Vector<Double> pathDistancesTSP;
 	private String crossoverSelected, mutationSelected,listenToChanges;
 	private float crossoverProb, mutationProb;
 	private ClosestNeighbour closestNeighbourAlg;
 	private GreedyHeuristic greedyHeuristicAlg;
-
-	//Variables used by the Genetic Algorithms
 	private TSP_GA tspAlg;
 	private TSP_GA_Worker tspWorker;
-	private Vector<Vector<Point>> resultsDataTSP=new Vector<Vector<Point>>();
-	private Vector<Double> pathDistancesTSP=new Vector<Double>();
-	private GenResultData currentGeneticAlg=null;
+	private GenResultData currentGeneticAlg;
 	private int index;
 	private String currentRunningAlg;
 	private long currentRunningTimeExec;
-	private JTextField currentRunningTimeTF, currentRunningAlgTF;
-	private JLabel currentRunningTimeLabel, currentRunningAlgLabel;
+	//Variables used to export/import data
+	private JFileChooser csvImportExport;
+	private FileNameExtensionFilter csvFilter;
 
-	//Variables used by the Progress bar
-	private JProgressBar progressBar;
 
 	public MainView(JFrame frame){
 		this.mainFrame=frame;
@@ -141,9 +135,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		resetAllPoints=new JButton("Clear Points");
 		numDrawnPoints=new JLabel("Points: "+0);
 		tradGAChooser=new JComboBox<String>();
-		//Add data to the ComboBox 
-		tradGAChooser.addItem("Traditional Algorithms");
-		tradGAChooser.addItem("Genetic Algorithms");
+			//Add data to the ComboBox 
+			tradGAChooser.addItem("Traditional Algorithms");
+			tradGAChooser.addItem("Genetic Algorithms");
+		//Initialize all the JPanel the window contains
 		tradPanel=new JPanel();
 		tradPanel.setBorder(new TitledBorder("Traditional"));
 		tradPanel.setLayout(null);
@@ -159,89 +154,81 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		executionPanel=new JPanel();
 		executionPanel.setBorder(new TitledBorder("Execution"));
 		executionPanel.setLayout(null);
+		
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
-		popSizeLabel=new JLabel("Population Size:");
 		fromLabel=new JLabel("From:");
 		toLabel=new JLabel("To:");
 		maxGenLabel=new JLabel("Max Gen:");
-		popSizeTF=new JTextField();
 		fromTF=new JTextField();
 		toTF=new JTextField();
 		maxGenTF=new JTextField();
 		crossoverLabel=new JLabel("Crossover Method:");
 		crossoverMethods=new JComboBox<String>();
-		crossoverMethods.addItem("Cycle Crossover");
-		crossoverMethods.addItem("One Point Crossover");
-		crossoverMethods.addItem("Ordered Crossover");
-		crossoverMethods.addItem("Partially Mapped Crossover");
-		crossoverMethods.addItem("Two Point Crossover");
+			crossoverMethods.addItem("Cycle Crossover");
+			crossoverMethods.addItem("One Point Crossover");
+			crossoverMethods.addItem("Ordered Crossover");
+			crossoverMethods.addItem("Partially Mapped Crossover");
+			crossoverMethods.addItem("Two Point Crossover");
 		mutationLabel=new JLabel("Mutation Method:");
 		mutationMethods=new JComboBox<String>();
-		mutationMethods.addItem("Insertion Mutation");
-		mutationMethods.addItem("Reciprocal Exchange Mutation");
+			mutationMethods.addItem("Insertion Mutation");
+			mutationMethods.addItem("Reciprocal Exchange Mutation");
 		crossoverProbLabel=new JLabel("Probability: 0.4");
 		crossProbSlider= new JSlider(JSlider.HORIZONTAL,0,100,40);
-		//crossProbSlider.setMinorTickSpacing(0);
-		//crossProbSlider.setMajorTickSpacing(50);
-		//crossProbSlider.setPaintTicks(true);
-		//crossProbSlider.setPaintLabels(true);
 		mutationProbLabel=new JLabel("Probability: 0.20");
 		mutProbSlider=new JSlider(JSlider.HORIZONTAL,0,100,20);
-		casualPointsLabel=new JLabel("Random");
-		casualPointsTF=new JTextField();
-		casualPointsTF.setEnabled(false);
+		randomPointsLabel=new JLabel("Random");
+		randomPointsTF=new JTextField();
+		randomPointsTF.setEnabled(false);
 		goDrawButton=new JButton("Go");
 		goDrawButton.setEnabled(false);
 		manualPointsLabel=new JLabel("Manual");
-		numCasualPointsCB=new JCheckBox("n. of Points:");
+		numRandomPointsCB=new JCheckBox("n. of Points:");
 		manualDrawCB=new JCheckBox("Draw Points");
 		manualDrawCB.setSelected(true);
 		importPointsCB=new JCheckBox("Import CSV");
-		importCSV=false;
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
 		viewResultsButton=new JButton("Edit Queue/View Results");
 		resetAllFieldsButton=new JButton("Reset All");
 		currentRunningTimeTF=new JTextField();
-		currentRunningTimeTF.setEditable(false);
+			currentRunningTimeTF.setEditable(false);
 		currentRunningTimeLabel=new JLabel("Time");
 		currentRunningAlgTF=new JTextField();
-		currentRunningAlgTF.setEditable(false);
-		currentRunningAlgLabel=new JLabel("Algorithm");
+			currentRunningAlgTF.setEditable(false);
+		currentRunningAlgLabel=new JLabel("Details");
 		//Define position of the object on the jFrame
 		undoPoint.setBounds(560,15,70,20);
 		resetAllPoints.setBounds(430,15,120,20);
 		numDrawnPoints.setBounds(10,15,80,20);
 		tradGAChooser.setBounds(650,15,200,20);
 		tradPanel.setBounds(650,40,200,160);
-		genPanel.setBounds(650,200,400,295);
+		genPanel.setBounds(650,200,400,235);
 		optionPanel.setBounds(190,10,200,115);
 		destinationPanel.setBounds(860,40,190,160);
-		executionPanel.setBounds(650,500,400,135);
+		executionPanel.setBounds(650,440,400,195);
 		trad1CB.setBounds(6,20,180,20);
 		trad2CB.setBounds(6,45,180,20);
 		trad3CB.setBounds(6,70,180,20);
-		popSizeLabel.setBounds(8,20,100,20);
-		popSizeTF.setBounds(110,20,70,20);
-		fromLabel.setBounds(8,50,40,20);
-		fromTF.setBounds(50,50,55,20);
-		toLabel.setBounds(115,50,20,20);
-		toTF.setBounds(145,50,70,20);
-		maxGenLabel.setBounds(8,80,60,20);
-		maxGenTF.setBounds(75,80,80,20);
-		crossoverLabel.setBounds(8,110,120,20);
-		crossoverMethods.setBounds(130,110,170,20);
-		crossoverProbLabel.setBounds(28,140,110,20);
-		crossProbSlider.setBounds(148,140,200,20);
-		mutationLabel.setBounds(8,180,120,10);
-		mutationMethods.setBounds(130,180,170,20);
-		mutationProbLabel.setBounds(28,210,110,20);
-		mutProbSlider.setBounds(148,210,200,20);
-		casualPointsLabel.setBounds(8,20,80,20);
-		numCasualPointsCB.setBounds(20,40,110,20);
-		casualPointsTF.setBounds(130,40,50,20);
+		fromLabel.setBounds(8,30,40,20);
+		fromTF.setBounds(50,30,55,20);
+		toLabel.setBounds(115,30,20,20);
+		toTF.setBounds(145,30,70,20);
+		maxGenLabel.setBounds(8,60,60,20);
+		maxGenTF.setBounds(75,60,100,20);
+		crossoverLabel.setBounds(8,90,120,20);
+		crossoverMethods.setBounds(130,90,170,20);
+		crossoverProbLabel.setBounds(28,120,110,20);
+		crossProbSlider.setBounds(148,120,200,20);
+		mutationLabel.setBounds(8,160,120,10);
+		mutationMethods.setBounds(130,160,170,20);
+		mutationProbLabel.setBounds(28,190,110,20);
+		mutProbSlider.setBounds(148,190,200,20);
+		randomPointsLabel.setBounds(8,20,80,20);
+		numRandomPointsCB.setBounds(20,40,110,20);
+		randomPointsTF.setBounds(130,40,50,20);
 		goDrawButton.setBounds(130,130,50,20);
 		manualPointsLabel.setBounds(8,60,80,20);
 		manualDrawCB.setBounds(20,80,110,20);
@@ -271,7 +258,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		crossProbSlider.addChangeListener(this);
 		mutProbSlider.addChangeListener(this);
 		goDrawButton.addActionListener(this);
-		numCasualPointsCB.addActionListener(this);
+		numRandomPointsCB.addActionListener(this);
 		manualDrawCB.addActionListener(this);
 		importPointsCB.addActionListener(this);
 		startExecutionButton.addActionListener(this);
@@ -290,8 +277,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		tradPanel.add(trad1CB);
 		tradPanel.add(trad2CB);
 		tradPanel.add(trad3CB);
-		genPanel.add(popSizeLabel);
-		genPanel.add(popSizeTF);
 		genPanel.add(fromLabel);
 		genPanel.add(fromTF);
 		genPanel.add(toLabel);
@@ -306,9 +291,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		genPanel.add(mutationMethods);
 		genPanel.add(mutationProbLabel);
 		genPanel.add(mutProbSlider);
-		destinationPanel.add(casualPointsLabel);
-		destinationPanel.add(numCasualPointsCB);
-		destinationPanel.add(casualPointsTF);
+		destinationPanel.add(randomPointsLabel);
+		destinationPanel.add(numRandomPointsCB);
+		destinationPanel.add(randomPointsTF);
 		destinationPanel.add(goDrawButton);
 		destinationPanel.add(manualPointsLabel);
 		destinationPanel.add(manualDrawCB);
@@ -322,12 +307,17 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		optionPanel.add(addToExecution);
 		optionPanel.add(viewResultsButton);
 		optionPanel.add(resetAllFieldsButton);
-		//Initialise global objects
+		
+		//Initialize global objects
 		points=new Vector<Point>();
 		results=new Vector<Point>();
 		algQueueExecution=new Vector<Object>();
+		resultsDataTSP=new Vector<Vector<Point>>();
+		pathDistancesTSP=new Vector<Double>();
+		currentGeneticAlg=null;
 		index=0;
 		execStopped=false;
+		importCSV=false;
 		currentRunningAlg="";
 		currentRunningTimeExec=0;
 		crossoverSelected=crossoverMethods.getItemAt(0).toString();
@@ -338,33 +328,35 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 
 		//Progress bar
 		progressBar = new JProgressBar();
-		progressBar.setValue(0);
-		progressBar.setStringPainted(true);
+			progressBar.setValue(0);
+			progressBar.setStringPainted(true);
 		Border border = BorderFactory.createTitledBorder("Loading...");
 		progressBar.setBorder(border);
-		progressBar.setBounds(155,2,160,32);
-		this.add(progressBar);
+		progressBar.setBounds(15,140,350,35);
+		executionPanel.add(progressBar);
 		progressBar.setVisible(false);
 		progressBar.setOpaque(false);
-
-		csvImport=new JFileChooser();
-		csvFilter=new FileNameExtensionFilter(".jpg", "jpg");
+		
+		csvImportExport=new JFileChooser();
+		csvFilter=new FileNameExtensionFilter(".csv", "CSV");
+		
 		//Add Drawing area
 		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
-		drawingArea.setBounds(10, 50, 620, 590);
-		drawingArea.setBackground(new Color(200,200,200));
-		mainFrame.add(drawingArea);
-		//Create a level difference between the main window and the drawing area
-		drawingArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		drawingArea.addMouseListener(new MouseAdapter(){
-			//Draw when the mouse is clicked and then released inside the area
-			public void mouseReleased(MouseEvent mE){
-				if(manualDrawCB.isSelected()){
-					//Add the new point to the vector and update the view
-					drawingArea.passPoint(new Point(mE.getX(),mE.getY()));
+			drawingArea.setBounds(10, 50, 620, 590);
+			drawingArea.setBackground(new Color(200,200,200));
+			//Create a level difference between the main window and the drawing area
+			drawingArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+			drawingArea.addMouseListener(new MouseAdapter(){
+				//Draw when the mouse is clicked and then released inside the area
+				public void mouseReleased(MouseEvent mE){
+					if(manualDrawCB.isSelected()){
+						//Add the new point to the vector and update the view
+						drawingArea.passPoint(new Point(mE.getX(),mE.getY()));
+					}
 				}
-			}
-		});
+			});
+		mainFrame.add(drawingArea);
+		
 		//Enable the Traditional Algorithm view
 		this.tradGenView(tradGAChooser.getSelectedIndex());
 	}
@@ -373,7 +365,30 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	public void actionPerformed(ActionEvent actionE) {
 		//Load a background picture used as a map for the TSP
 		if(actionE.getSource().equals(info)){
-			JOptionPane.showMessageDialog(null, "Application Information:", "Info", JOptionPane.PLAIN_MESSAGE);
+			String info="Author: Michael Piccoli\nDate Created: Nov 2015\nVersion n. 1"
+					+ "\n\nWhat does this application do?:\n"
+					+ "   This software compares heuristic and genetic algorithms through a user friendly interface to solve\n"
+					+ "   the Traveling Salesman Problem.\n\n"
+					+ "How can I use it?:\n"
+					+ "   To application allows to perform single or multiple algorithms with different cities allocated to each method.\n"
+					+ "   Follow theese steps:\n"
+					+ "     1) Add some cities by drawing, importing or let the machine create some coordinates for you\n"
+					+ "     2) Select which algorithm you may want to add the queue of execution\n"
+					+ "     3) Press the \"Add Button\"\n"
+					+ "   Follow the same procedure to add more execution to the queue\n\n"
+					+ "How does a genetic algorithm work?:\n"
+					+ "   To perform a genetic algorithm, add some cities and then specify:\n"
+					+ "     1) The population size the algorithm can pick to create a best possible path\n"
+					+ "     2) A maximum number of generations (number of interations) the algorithm will perform to find an optimal path\n"
+					+ "     3) A Crossover and mutation algorithm\n"
+					+ "     4) The probability of using the selected crossover and mutation method\n\n"
+					+ "The application can perform the algorithms stored in the queue multiple times, however,\n"
+					+ "the Genetic Algorithms can sometimes stop working due to a library issue they are build on\n"
+					+ "that does not respond corrently on certain operations.\n"
+					+ "In this case, results data will not be available (since it has not been processed),\n"
+					+ "a message will be shown to the user and the application will continue performing the other algorithms\n"
+					+ "in the queue temporarely bypassing the error.";
+			JOptionPane.showMessageDialog(null, info, "Application Information", JOptionPane.PLAIN_MESSAGE);
 		}
 		if(actionE.getSource().equals(close)){
 			this.initExitRequest();
@@ -385,7 +400,36 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		}
 		if(actionE.getSource().equals(expPoints)){
 			if(points.size()>0){
-				//IMPLEMENT
+				try{
+					//Set the filter to the JFileChooser
+					csvImportExport.setFileFilter(csvFilter);
+					//Store whether the user has confirmed or close the export file view
+					int resultSelection=csvImportExport.showSaveDialog(this);
+					//Dot this in case the action has been confirmed
+					if(resultSelection == JFileChooser.APPROVE_OPTION){
+						//Create writable object which will write data to a file
+						PrintWriter writer=new PrintWriter(csvImportExport.getSelectedFile()+".csv");
+						//Write current data
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+						Date date = new Date();
+						writer.println("Data exported on: "+dateFormat.format(date));
+						//Create a table type data format
+						writer.println("City,X Value,Y Value");
+						//Write coordinates
+						for(int i=0; i<points.size(); i++){
+							writer.println((i+1)+","+points.elementAt(i).getX()+","+points.elementAt(i).getY());
+						}
+						//Close the file and release its instance
+						writer.close();
+						//Show Confirmation to the user
+						JOptionPane.showMessageDialog(null, "Cities exported correctly!","Information", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Sorry, There is no coordinates to export!","No Data", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		if(actionE.getSource().equals(resetAllPoints)){
@@ -415,9 +459,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		}
 		if(actionE.getSource().equals(goDrawButton)){
 			//Start drawing n random points
-			if(numCasualPointsCB.isSelected()){
+			if(numRandomPointsCB.isSelected()){
 				try{
-					int randPoints=Integer.parseInt(casualPointsTF.getText());
+					int randPoints=Integer.parseInt(randomPointsTF.getText());
 					if(randPoints<1501){
 						//Remove all points previously added
 						drawingArea.clearAllPoints();
@@ -431,18 +475,60 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						points=drawingArea.getAllPoints();
 					}
 					else{
-						casualPointsTF.setText("");
+						randomPointsTF.setText("");
 						JOptionPane.showMessageDialog(null, "Limit of 1500 points exceeded!", "Limit Exceeded", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 				catch(NumberFormatException err){
-					casualPointsTF.setText("");
+					randomPointsTF.setText("");
 					JOptionPane.showMessageDialog(null,"Please enter a valid number!","Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			//Import points from a XML/JSON file, chosen by the user
+			//Import points from a CSV file, chosen by the user
 			else{
-				//TO IMPLEMENT
+				try{
+					String lineFile="";
+					//Set the filter to the JFileChooser
+					csvImportExport.setFileFilter(csvFilter);
+					int resultSelection=csvImportExport.showOpenDialog(this);
+					if(resultSelection==JFileChooser.APPROVE_OPTION){
+						//Create a file container that stores the file itself and its location
+						File csvFileImported=csvImportExport.getSelectedFile();
+						Path csvFilePathImported=Paths.get(csvFileImported.getPath());
+						//Clean the cities coordinates
+						drawingArea.clearAllPoints();
+						try(InputStream inFile=Files.newInputStream(csvFilePathImported);
+								BufferedReader buffReader=new BufferedReader(new InputStreamReader(inFile))){
+							//Read each line contained in the file
+							//Skip the first 2 lines of the file
+							int skipIndex0=0;
+							while((lineFile=buffReader.readLine())!=null){
+								if(skipIndex0<2){
+									skipIndex0++;
+								}
+								else{
+									String[] lineData=lineFile.split(",");
+									//The X and Y value are in the 1st and 2nd position of each line
+									String xValueString=lineData[1];
+									String yValueString=lineData[2];
+									//Convert the string values into float
+									float xValueFloat=Float.parseFloat(xValueString);
+									float yValueFloat=Float.parseFloat(yValueString);
+									//Extract the integer values from the float variables
+									int xValue=Math.round(xValueFloat);
+									int yValue=Math.round(yValueFloat);
+									//Add the point to the window
+									drawingArea.passPoint(new Point(xValue,yValue));
+								}
+							}
+						}
+						//Copy the reference of the Vector containing the city coordinates
+						points=drawingArea.getAllPoints();
+					}
+					
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null, "There has been an error while importing the city coordinates, Try again later!","Error",JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 		if(actionE.getSource().equals(crossoverMethods)){
@@ -451,9 +537,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		if(actionE.getSource().equals(mutationMethods)){
 			mutationSelected=mutationMethods.getSelectedItem().toString();
 		}
-		if(actionE.getSource().equals(numCasualPointsCB)){
-			numCasualPointsCB.setSelected(true);
-			casualPointsTF.setEnabled(true);
+		if(actionE.getSource().equals(numRandomPointsCB)){
+			numRandomPointsCB.setSelected(true);
+			randomPointsTF.setEnabled(true);
 			manualDrawCB.setSelected(false);
 			importPointsCB.setSelected(false);
 			importCSV=false;
@@ -462,8 +548,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			goDrawButton.setEnabled(true);
 		}
 		if(actionE.getSource().equals(manualDrawCB)){
-			numCasualPointsCB.setSelected(false);
-			casualPointsTF.setEnabled(false);
+			numRandomPointsCB.setSelected(false);
+			randomPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(true);
 			importPointsCB.setSelected(false);
 			importCSV=false;
@@ -472,8 +558,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			goDrawButton.setEnabled(false);
 		}
 		if(actionE.getSource().equals(importPointsCB)){
-			numCasualPointsCB.setSelected(false);
-			casualPointsTF.setEnabled(false);
+			numRandomPointsCB.setSelected(false);
+			randomPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(false);
 			importPointsCB.setSelected(true);
 			importCSV=true;
@@ -675,17 +761,21 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			drawingArea.clearAllPoints();
 			points.clear();
 			algQueueExecution.clear();
+			numDrawnPoints.setText("Points: 0");
+			randomPointsTF.setText("");
+			currentRunningAlgTF.setText("");
+			currentRunningTimeTF.setText("");
 			addToExecution.setEnabled(true);
 			startExecutionButton.setEnabled(true);
 			JOptionPane.showMessageDialog(null,"All data has been correctly deleted!", "Info", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-
 	private void beginQueueExecution(){
 		//Start performing the algorithm
 		//Verify whether the algorithm to perform is Traditional or Genetic
 		startExecutionButton.setText("Stop");
+		currentRunningAlgTF.setForeground(Color.BLACK);
 		try{
 			Object obj=algQueueExecution.get(index);
 			if(obj instanceof TradResultData){
@@ -761,10 +851,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		//This code is executed when the vector has reached its end and the execution is completed
 		catch(Exception e){
 			startExecutionButton.setText("Start");
-			currentRunningAlgTF.setText("");
+			currentRunningAlgTF.setForeground(Color.RED);
+			currentRunningAlgTF.setText("COMPLETED!");
 			progressBar.setVisible(false);
-			//startExecutionButton.setEnabled(false);
-			JOptionPane.showMessageDialog(null,"Execution Successfully Completed!");
+			//Update the graph one last time
+			drawingArea.repaint();
+			//JOptionPane.showMessageDialog(null,"Execution Successfully Completed!");
 		}
 	}
 
