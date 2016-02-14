@@ -169,12 +169,6 @@ public class GenResultData {
 	public Vector<Vector<Point>> getResultsData(){
 		return resultsData;
 	}
-
-	public void resetResultData(){
-		results.clear();
-		pathDistances.clear();
-		resultsData.clear();
-	}
 	@Override
 	public boolean equals(Object obj){
 		if (!(obj instanceof GenResultData )){

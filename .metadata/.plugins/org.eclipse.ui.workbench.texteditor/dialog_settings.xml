@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="execStopped" key="selection"/>
+		<item value="Stop" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Stop"/>
+			<item value="drawingArea"/>
+			<item value="progressBar.setValue"/>
+			<item value="progressBar.setVisible(false);"/>
+			<item value="progressBar.setVisible(true);"/>
+			<item value="progressBar.setValue((algQueueExecution.size()*100)/(index+1));"/>
+			<item value="startExecutionButton.setEnabled(false);"/>
 			<item value="execStopped"/>
-			<item value="tourTF"/>
-			<item value="N. "/>
-			<item value="tourLength"/>
-			<item value="tourDistance"/>
-			<item value="tradObj"/>
-			<item value="resetAllFiel"/>
-			<item value="resetAll"/>
 		</list>
 		<list key="replacehistory">
 			<item value="conf"/>

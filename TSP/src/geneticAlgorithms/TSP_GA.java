@@ -34,6 +34,9 @@ public class TSP_GA extends Salesman{
 			worker=null;
 		}
 	}
+	public Vector<Point> getCities(){
+		return citiesVector;
+	}
 
 	public IChromosome createSampleChromosome(Object a_initial_data) {
 		try {

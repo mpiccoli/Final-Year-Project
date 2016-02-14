@@ -24,7 +24,6 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
 <fullyQualifiedTypeName name="GenResultData"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TSP_Observable"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.Results_Observer"/>
@@ -46,4 +45,7 @@
 <fullyQualifiedTypeName name="java.text.DecimalFormat"/>
 <fullyQualifiedTypeName name="java.lang.Thread"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="javax.swing.JProgressBar"/>
+<fullyQualifiedTypeName name="javax.swing.border.Border"/>
 </qualifiedTypeNameHistroy>
