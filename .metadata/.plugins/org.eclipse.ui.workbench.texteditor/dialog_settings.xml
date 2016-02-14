@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="info" key="selection"/>
+		<item value="csvImportExport" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
+			<item value="§"/>
+			<item value="csvImportExport"/>
+			<item value="getGeneration"/>
 			<item value="Info"/>
 			<item value="sorry, there"/>
 			<item value="Sorry the"/>
 			<item value="Sorry there"/>
 			<item value="InputStreamReader"/>
-			<item value="InputStream"/>
-			<item value="printStackTrace"/>
-			<item value="csvImport"/>
 		</list>
 		<list key="replacehistory">
 			<item value="csvImportExport"/>

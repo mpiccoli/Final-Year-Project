@@ -24,7 +24,6 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="GenResultData"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TSP_Observable"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.Results_Observer"/>
 <fullyQualifiedTypeName name="java.beans.PropertyChangeEvent"/>
@@ -56,4 +55,6 @@
 <fullyQualifiedTypeName name="java.io.InputStream"/>
 <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
 <fullyQualifiedTypeName name="java.lang.Math"/>
+<fullyQualifiedTypeName name="TradResultData"/>
+<fullyQualifiedTypeName name="GenResultData"/>
 </qualifiedTypeNameHistroy>

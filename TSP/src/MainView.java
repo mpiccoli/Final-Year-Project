@@ -75,7 +75,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JComboBox<String> crossoverMethods, mutationMethods, tradGAChooser;
 	private JSlider crossProbSlider, mutProbSlider;
 	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton, undoPoint, resetAllPoints;
-	private boolean importCSV, execStopped;
+	private boolean execStopped;
 	//Drawing area which allows the user to draw points and perform the TSP on those points
 	private DrawingPanel drawingArea;
 	//Global Objects
@@ -96,8 +96,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private String currentRunningAlg;
 	private long currentRunningTimeExec;
 	//Variables used to export/import data
-	private JFileChooser csvImportExport;
-	private FileNameExtensionFilter csvFilter;
+	private JFileChooser csvImportExport, txtExport;
+	private FileNameExtensionFilter csvFilter, txtFilter;
 
 
 	public MainView(JFrame frame){
@@ -317,7 +317,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		currentGeneticAlg=null;
 		index=0;
 		execStopped=false;
-		importCSV=false;
 		currentRunningAlg="";
 		currentRunningTimeExec=0;
 		crossoverSelected=crossoverMethods.getItemAt(0).toString();
@@ -339,6 +338,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		
 		csvImportExport=new JFileChooser();
 		csvFilter=new FileNameExtensionFilter(".csv", "CSV");
+		txtExport=new JFileChooser();
+		txtFilter=new FileNameExtensionFilter(".txt ","Plain Text");
 		
 		//Add Drawing area
 		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
@@ -395,7 +396,45 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		}
 		if(actionE.getSource().equals(saveRes)){
 			if(algQueueExecution.size()>0){
-				//IMPLEMENT
+				try{
+					//Set the filter to the JFileChooser
+					txtExport.setFileFilter(txtFilter);
+					//Store whether the user has confirmed or rejected the export view
+					int resultSelection=txtExport.showSaveDialog(this);
+					//In case the user confirmed the action
+					if(resultSelection==JFileChooser.APPROVE_OPTION){
+						//Create writable object that will write data to a file
+						PrintWriter writer=new PrintWriter(txtExport.getSelectedFile()+".txt");
+						//Write current date and time on file
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+						Date date = new Date();
+						writer.println("Data exported on: "+dateFormat.format(date)+"\n\n");
+						//Make a string containing all the data to export and add to the writer
+						//Repeat this action for each element of the queue of execution
+						for(int i=0; i<algQueueExecution.size(); i++){
+							Object tempElement=algQueueExecution.elementAt(i);
+							String data="";
+							//Verify what element this is and call the opportune method to retrieve the algorithm summary
+							if(tempElement instanceof TradResultData){
+								TradResultData tempTrad=(TradResultData)tempElement;
+								data+=tempTrad.wrapDataForFileWriter();
+							}
+							else if(tempElement instanceof GenResultData){
+								GenResultData tempGen=(GenResultData)tempElement;
+								data+=tempGen.wrapDataForFileWriter();
+							}
+							writer.println(data);
+							writer.println("------------------------------------------------------");
+						}
+						//Close the file and release its instance
+						writer.close();
+						//Show Confirmation to the user
+						JOptionPane.showMessageDialog(null, "Result Data exported correctly!","Information", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 		if(actionE.getSource().equals(expPoints)){
@@ -403,13 +442,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				try{
 					//Set the filter to the JFileChooser
 					csvImportExport.setFileFilter(csvFilter);
-					//Store whether the user has confirmed or close the export file view
+					//Store whether the user has confirmed or closed the export file view
 					int resultSelection=csvImportExport.showSaveDialog(this);
 					//Dot this in case the action has been confirmed
 					if(resultSelection == JFileChooser.APPROVE_OPTION){
 						//Create writable object which will write data to a file
 						PrintWriter writer=new PrintWriter(csvImportExport.getSelectedFile()+".csv");
-						//Write current data
+						//Write current date and time
 						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date = new Date();
 						writer.println("Data exported on: "+dateFormat.format(date));
@@ -542,7 +581,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			randomPointsTF.setEnabled(true);
 			manualDrawCB.setSelected(false);
 			importPointsCB.setSelected(false);
-			importCSV=false;
 			undoPoint.setEnabled(false);
 			resetAllPoints.setEnabled(false);
 			goDrawButton.setEnabled(true);
@@ -552,7 +590,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			randomPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(true);
 			importPointsCB.setSelected(false);
-			importCSV=false;
 			undoPoint.setEnabled(true);
 			resetAllPoints.setEnabled(true);
 			goDrawButton.setEnabled(false);
@@ -562,7 +599,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			randomPointsTF.setEnabled(false);
 			manualDrawCB.setSelected(false);
 			importPointsCB.setSelected(true);
-			importCSV=true;
 			undoPoint.setEnabled(false);
 			resetAllPoints.setEnabled(false);
 			goDrawButton.setEnabled(true);
@@ -771,6 +807,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	private void beginQueueExecution(){
 		//Start performing the algorithm
 		//Verify whether the algorithm to perform is Traditional or Genetic
@@ -806,7 +843,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			}
 			else if(obj instanceof GenResultData){
 				//Change the value of this variable to address the Genetic algorithms
-
 				listenToChanges="gas";
 				currentGeneticAlg=(GenResultData)obj;
 				currentGeneticAlg.getConfigurationTSP().reset();
@@ -820,7 +856,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				setup.setPopulationSize(currentGeneticAlg.getPopSize());
 				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
 				tempVecVec.clear();
-				@SuppressWarnings("unused")
 				Vector<Point> tempSolution=currentGeneticAlg.getCities();
 				tempSolution.clear();
 				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();
