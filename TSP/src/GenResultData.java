@@ -172,7 +172,7 @@ public class GenResultData {
 		//Add the algorithm information
 		s+="Algorithm Name: Genetic Algorithm\n"
 				+ "Number of Cities: "+popSize+"\n"
-				+ "Chromosome Range: "+popFrom+"-"+popTo+"\n"
+				+ "Chromosomes Range: "+popFrom+"-"+popTo+"\n"
 				+ "Number of Generations: "+maxGen+"\n"
 				+ "Crossover Method: "+crossoverMethod+"\n"
 				+ "Probability associated to the Crossover: "+(crossoverProbability*100)+"%\n"

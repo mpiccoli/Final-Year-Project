@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
@@ -54,11 +55,12 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jgap.Configuration;
+import org.jgap.GeneticOperator;
 import org.jgap.util.CloneException;
 
 import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
-import geneticAlgorithms.Crossover.CycleCrossover;
+import geneticAlgorithms.CrossoverMethods.CycleCrossover;
 import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
 
@@ -763,7 +765,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						setup.setKeepPopulationSizeConstant(false);
 						setup.setMinimumPopSizePercent(fromP);
 						setup.setPopulationSize(points.size());
-						//setup.addGeneticOperator(new CycleCrossover(setup));
+						setup.addGeneticOperator(new CycleCrossover());
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
 						Vector<Point> tempSolution=new Vector<Point>();
@@ -886,14 +888,19 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Change the value of this variable to address the Genetic algorithms
 				listenToChanges="gas";
 				currentGeneticAlg=(GenResultData)obj;
+				//Retrieve all the crossover and mutation methods added to this execution
+				List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
 				currentGeneticAlg.getConfigurationTSP().reset();
-
 				Configuration setup=new Configuration();
 				int toP=currentGeneticAlg.getPopTo();
 				int maxG=currentGeneticAlg.getMaxGen();
 				setup.setKeepPopulationSizeConstant(false);
 				setup.setMinimumPopSizePercent(currentGeneticAlg.getPopFrom());
 				setup.setPopulationSize(currentGeneticAlg.getPopSize());
+				//Add all the crossover and mutation methods to the configuration setting
+				for(GeneticOperator go:geneticOperators){
+					setup.addGeneticOperator(go);
+				}
 				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
 				Vector<Point> tempSolution=currentGeneticAlg.getCities();
 				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();

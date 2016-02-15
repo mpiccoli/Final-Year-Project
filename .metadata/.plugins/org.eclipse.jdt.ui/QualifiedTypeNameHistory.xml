@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.awt.Component"/>
-<fullyQualifiedTypeName name="org.jgap.util.CloneException"/>
 <fullyQualifiedTypeName name="heuristicAlgorithms.ClosestNeighbour"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
 <fullyQualifiedTypeName name="heuristicAlgorithms.GreedyHeuristic"/>
@@ -20,7 +18,6 @@
 <fullyQualifiedTypeName name="org.jgap.impl.IntegerGene"/>
 <fullyQualifiedTypeName name="org.jgap.Genotype"/>
 <fullyQualifiedTypeName name="org.jgap.impl.GreedyCrossover"/>
-<fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TSP_Observable"/>
@@ -60,4 +57,7 @@
 <fullyQualifiedTypeName name="java.awt.Toolkit"/>
 <fullyQualifiedTypeName name="javax.swing.UIManager"/>
 <fullyQualifiedTypeName name="java.awt.Font"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="org.jgap.GeneticOperator"/>
 </qualifiedTypeNameHistroy>

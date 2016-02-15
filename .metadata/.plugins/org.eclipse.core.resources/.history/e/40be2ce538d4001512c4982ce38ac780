@@ -1,0 +1,18 @@
+package geneticAlgorithms.Crossover;
+
+import java.util.List;
+import org.jgap.*;
+
+public class CycleCrossover implements GeneticOperator {
+
+	public void operate(Population arg0, List arg1) {
+		//To implement the cycle crossover structure
+		//At the minute, it just takes every city and make them available to be picked
+		int len = arg0.size(); 
+        for ( int i = 0; i < len; i++ ) 
+        {
+            arg1.add( arg0.getChromosome(i).clone() ); 
+        }
+	}
+
+}

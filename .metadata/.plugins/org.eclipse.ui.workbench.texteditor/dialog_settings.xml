@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="drawingArea" key="selection"/>
+		<item value=".setPopulationSize" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
-		<item value="true" key="wholeword"/>
+		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="drawingArea"/>
-			<item value="tradPanel"/>
-			<item value="removeAlg"/>
-			<item value="ExecutionQueueView"/>
-			<item value="ExecutionQueue"/>
-			<item value="DrawingPanel"/>
-			<item value="fitnessTF"/>
-			<item value="textFieldBackground"/>
+			<item value=".setPopulationSize"/>
+			<item value="chromosome"/>
+			<item value="crossProbTF"/>
+			<item value="tradGenView"/>
+			<item value="tradPanel.setEnabled(true);"/>
+			<item value="valid numbers"/>
+			<item value="enter"/>
+			<item value="Enter Valid"/>
 		</list>
 		<list key="replacehistory">
+			<item value="chromosomes"/>
 			<item value="TEXTFIELD_BACKGROUND_COLOUR"/>
 			<item value="BACKGROUND_COLOUR"/>
 			<item value="ITALIC_SEGOE_13"/>
@@ -25,14 +26,13 @@
 			<item value="PLAIN_SEGOE_12"/>
 			<item value="TRUETRYPE_SEGOE_14"/>
 			<item value="ITALIC_SEGOE_12"/>
-			<item value="BOLD_SEGOE_12"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="265" key="DIALOG_WIDTH"/>
 		<item value="1|.SF NS Text|11.0|0|COCOA|1|.SFNSText-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="399" key="DIALOG_HEIGHT"/>
-		<item value="836" key="DIALOG_X_ORIGIN"/>
-		<item value="177" key="DIALOG_Y_ORIGIN"/>
+		<item value="857" key="DIALOG_X_ORIGIN"/>
+		<item value="12" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
