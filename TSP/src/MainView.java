@@ -1,8 +1,12 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -40,6 +44,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
@@ -57,8 +62,18 @@ import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
 
 public class MainView extends JPanel implements ActionListener, PropertyChangeListener, ChangeListener {
-
+	
+	//Define the Constants used in this application
 	private static final long serialVersionUID = -6661641861407996566L;
+	private static final Font BOLD_SEGOE_12=new Font("Segoe UI", Font.BOLD, 12);
+	private static final Font ITALIC_SEGOE_12=new Font("Segoe UI", Font.ITALIC, 12);
+	private static final Font ITALIC_SEGOE_13=new Font("Segoe UI", Font.ITALIC, 13);
+	private static final Font TRUETRYPE_SEGOE_14=new Font("Segoe UI", Font.TRUETYPE_FONT, 14);
+	private static final Font PLAIN_SEGOE_12=new Font("Segoe UI", Font.PLAIN, 12);
+	private static final Font PLAIN_SEGOE_13=new Font("Segoe UI", Font.PLAIN, 13);
+	private static final Color BACKGROUND_COLOUR=new Color(78, 129, 162);
+	private static final Color TEXTFIELD_BACKGROUND_COLOUR=new Color(198, 225, 235);
+	
 	//Graphical Elements
 	private JFrame mainFrame;
 	JToolBar toolBar;
@@ -99,7 +114,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JFileChooser csvImportExport, txtExport;
 	private FileNameExtensionFilter csvFilter, txtFilter;
 
-
 	public MainView(JFrame frame){
 		this.mainFrame=frame;
 		//Add a window listener so the programmer can decide what operations execute when certain window action are about to occur
@@ -130,7 +144,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		toolBar.setBorder(matteB);
 		toolBar.setFloatable(true);
 		toolBar.setLayout((LayoutManager) new FlowLayout(FlowLayout.CENTER));
-		//Initialise all the swing objects
+		//Initialize all the swing objects
 		undoPoint=new JButton("Undo");
 		resetAllPoints=new JButton("Clear Points");
 		numDrawnPoints=new JLabel("Points: "+0);
@@ -140,21 +154,20 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			tradGAChooser.addItem("Genetic Algorithms");
 		//Initialize all the JPanel the window contains
 		tradPanel=new JPanel();
-		tradPanel.setBorder(new TitledBorder("Traditional"));
-		tradPanel.setLayout(null);
+			tradPanel.setBorder(new TitledBorder("Traditional"));
+			tradPanel.setLayout(null);
 		genPanel=new JPanel();
-		genPanel.setBorder(new TitledBorder("Genetic"));
-		genPanel.setLayout(null);
+			genPanel.setBorder(new TitledBorder("Genetic"));
+			genPanel.setLayout(null);
 		optionPanel=new JPanel();
-		optionPanel.setBorder(new TitledBorder("Options"));
-		optionPanel.setLayout(null);
+			optionPanel.setBorder(new TitledBorder("Options"));
+			optionPanel.setLayout(null);
 		destinationPanel=new JPanel();
-		destinationPanel.setBorder(new TitledBorder("Locations"));
-		destinationPanel.setLayout(null);
+			destinationPanel.setBorder(new TitledBorder("Locations"));
+			destinationPanel.setLayout(null);
 		executionPanel=new JPanel();
-		executionPanel.setBorder(new TitledBorder("Execution"));
-		executionPanel.setLayout(null);
-		
+			executionPanel.setBorder(new TitledBorder("Execution"));
+			executionPanel.setLayout(null);
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
@@ -181,13 +194,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		mutProbSlider=new JSlider(JSlider.HORIZONTAL,0,100,20);
 		randomPointsLabel=new JLabel("Random");
 		randomPointsTF=new JTextField();
-		randomPointsTF.setEnabled(false);
+			randomPointsTF.setEnabled(false);
 		goDrawButton=new JButton("Go");
-		goDrawButton.setEnabled(false);
+			goDrawButton.setEnabled(false);
 		manualPointsLabel=new JLabel("Manual");
 		numRandomPointsCB=new JCheckBox("n. of Points:");
 		manualDrawCB=new JCheckBox("Draw Points");
-		manualDrawCB.setSelected(true);
+			manualDrawCB.setSelected(true);
 		importPointsCB=new JCheckBox("Import CSV");
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
@@ -199,6 +212,58 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		currentRunningAlgTF=new JTextField();
 			currentRunningAlgTF.setEditable(false);
 		currentRunningAlgLabel=new JLabel("Details");
+		
+		//Add a background colour to the following elements
+		this.setBackground(BACKGROUND_COLOUR);
+		toolBar.setBackground(BACKGROUND_COLOUR);
+		tradPanel.setBackground(BACKGROUND_COLOUR);
+		genPanel.setBackground(BACKGROUND_COLOUR);
+		optionPanel.setBackground(BACKGROUND_COLOUR);
+		destinationPanel.setBackground(BACKGROUND_COLOUR);
+		executionPanel.setBackground(BACKGROUND_COLOUR);
+		toTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		maxGenTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		fromTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		randomPointsTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		currentRunningAlgTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		currentRunningTimeTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		
+		//Change the font of the objects
+		undoPoint.setFont(BOLD_SEGOE_12);
+		resetAllPoints.setFont(BOLD_SEGOE_12);
+		numDrawnPoints.setFont(BOLD_SEGOE_12);
+		tradGAChooser.setFont(ITALIC_SEGOE_12);
+		trad1CB.setFont(TRUETRYPE_SEGOE_14);
+		trad2CB.setFont(TRUETRYPE_SEGOE_14);
+		trad3CB.setFont(TRUETRYPE_SEGOE_14);
+		fromLabel.setFont(BOLD_SEGOE_12);
+		toLabel.setFont(BOLD_SEGOE_12);
+		maxGenLabel.setFont(BOLD_SEGOE_12);
+		fromTF.setFont(ITALIC_SEGOE_12);
+		toTF.setFont(ITALIC_SEGOE_12);
+		maxGenTF.setFont(ITALIC_SEGOE_12);
+		crossoverLabel.setFont(BOLD_SEGOE_12);
+		crossoverMethods.setFont(ITALIC_SEGOE_12);
+		mutationLabel.setFont(BOLD_SEGOE_12);
+		mutationMethods.setFont(ITALIC_SEGOE_12);
+		crossoverProbLabel.setFont(PLAIN_SEGOE_12);
+		mutationProbLabel.setFont(PLAIN_SEGOE_12);
+		randomPointsLabel.setFont(BOLD_SEGOE_12);
+		randomPointsTF.setFont(ITALIC_SEGOE_12);
+		goDrawButton.setFont(BOLD_SEGOE_12);
+		manualPointsLabel.setFont(BOLD_SEGOE_12);
+		numRandomPointsCB.setFont(PLAIN_SEGOE_13);
+		manualDrawCB.setFont(PLAIN_SEGOE_13);
+		importPointsCB.setFont(PLAIN_SEGOE_13);
+		startExecutionButton.setFont(BOLD_SEGOE_12);
+		addToExecution.setFont(BOLD_SEGOE_12);
+		viewResultsButton.setFont(BOLD_SEGOE_12);
+		resetAllFieldsButton.setFont(BOLD_SEGOE_12);
+		currentRunningTimeTF.setFont(ITALIC_SEGOE_13);
+		currentRunningTimeLabel.setFont(BOLD_SEGOE_12);
+		currentRunningAlgTF.setFont(ITALIC_SEGOE_13);
+		currentRunningAlgLabel.setFont(BOLD_SEGOE_12);
+		
 		//Define position of the object on the jFrame
 		undoPoint.setBounds(560,15,70,20);
 		resetAllPoints.setBounds(430,15,120,20);
@@ -326,27 +391,28 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		listenToChanges="";
 
 		//Progress bar
+		Border border = BorderFactory.createTitledBorder("Loading...");
 		progressBar = new JProgressBar();
 			progressBar.setValue(0);
 			progressBar.setStringPainted(true);
-		Border border = BorderFactory.createTitledBorder("Loading...");
-		progressBar.setBorder(border);
-		progressBar.setBounds(15,140,350,35);
+			progressBar.setBorder(border);
+			progressBar.setBounds(15,140,350,35);
+			progressBar.setVisible(false);
+			progressBar.setOpaque(false);
+			progressBar.setBackground(new Color(73, 157, 98));
 		executionPanel.add(progressBar);
-		progressBar.setVisible(false);
-		progressBar.setOpaque(false);
 		
 		csvImportExport=new JFileChooser();
-		csvFilter=new FileNameExtensionFilter(".csv", "CSV");
+		csvFilter=new FileNameExtensionFilter(".csv", ".CSV");
 		txtExport=new JFileChooser();
 		txtFilter=new FileNameExtensionFilter(".txt ","Plain Text");
 		
 		//Add Drawing area
 		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
 			drawingArea.setBounds(10, 50, 620, 590);
-			drawingArea.setBackground(new Color(200,200,200));
-			//Create a level difference between the main window and the drawing area
-			drawingArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+			drawingArea.setBackground(new Color(125, 158, 183));
+			//Create a border between the drawing area and the main frame
+			drawingArea.setBorder(BorderFactory.createEtchedBorder());
 			drawingArea.addMouseListener(new MouseAdapter(){
 				//Draw when the mouse is clicked and then released inside the area
 				public void mouseReleased(MouseEvent mE){
@@ -389,6 +455,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					+ "In this case, results data will not be available (since it has not been processed),\n"
 					+ "a message will be shown to the user and the application will continue performing the other algorithms\n"
 					+ "in the queue temporarely bypassing the error.";
+			//Change font to the string
 			JOptionPane.showMessageDialog(null, info, "Application Information", JOptionPane.PLAIN_MESSAGE);
 		}
 		if(actionE.getSource().equals(close)){
@@ -431,11 +498,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						//Show Confirmation to the user
 						JOptionPane.showMessageDialog(null, "Result Data exported correctly!","Information", JOptionPane.INFORMATION_MESSAGE);
 					}
-					
-				}catch(Exception e){
-					JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);
-				}
+				}catch(Exception e){ JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);}
 			}
+			else{ JOptionPane.showMessageDialog(null, "Sorry, There is no Data to export!","No Data", JOptionPane.ERROR_MESSAGE);}
 		}
 		if(actionE.getSource().equals(expPoints)){
 			if(points.size()>0){
@@ -463,16 +528,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						//Show Confirmation to the user
 						JOptionPane.showMessageDialog(null, "Cities exported correctly!","Information", JOptionPane.INFORMATION_MESSAGE);
 					}
-				}catch(Exception e){
-					JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);
-				}
+				}catch(Exception e){ JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error", JOptionPane.ERROR_MESSAGE);}
 			}
-			else{
-				JOptionPane.showMessageDialog(null, "Sorry, There is no coordinates to export!","No Data", JOptionPane.ERROR_MESSAGE);
-			}
+			else{ JOptionPane.showMessageDialog(null, "Sorry, There is no coordinates to export!","No Data", JOptionPane.ERROR_MESSAGE);}
 		}
-		if(actionE.getSource().equals(resetAllPoints)){
-			drawingArea.clearAllPoints();
+		if(actionE.getSource().equals(resetAllPoints)){ 
+			drawingArea.clearAllPoints(); 
 		}
 		if(actionE.getSource().equals(undoPoint)){
 			//Remove last added point and update the view
@@ -564,10 +625,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						//Copy the reference of the Vector containing the city coordinates
 						points=drawingArea.getAllPoints();
 					}
-					
-				}catch(Exception e){
-					JOptionPane.showMessageDialog(null, "There has been an error while importing the city coordinates, Try again later!","Error",JOptionPane.ERROR_MESSAGE);
-				}
+				}catch(Exception e){ JOptionPane.showMessageDialog(null, "There has been an error while importing the city coordinates, Try again later!","Error",JOptionPane.ERROR_MESSAGE); }
 			}
 		}
 		if(actionE.getSource().equals(crossoverMethods)){
@@ -614,17 +672,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					progressBar.setVisible(true);
 					this.beginQueueExecution();
 				}
-				else{
-					JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);
-				}
+				else{ JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);}
 			}
 			else{
 				execStopped=true;
 				startExecutionButton.setText("Start");
 				startExecutionButton.setEnabled(true);
-				if(listenToChanges.equals("cn")){
+				if(listenToChanges.equals("cn"))
 					closestNeighbourAlg.cancel(true);
-				}
 				else if(listenToChanges.equals("gh")){
 					greedyHeuristicAlg.cancel(true);
 				}
@@ -632,13 +687,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Refresh the GUI
 				drawingArea.repaint();
 				this.repaint();
-				//TO IMPLEMENT
 			}
 		}
 		if(actionE.getSource().equals(addToExecution)){		
 			int numPoints=points.size();
-			//Reset the index of execution
-			//index=0;
 			if(numPoints>2){
 				//Verify if the selected algorithm with that number of points has already in the execution queue
 				//Only Traditional algorithms are available to user selection
@@ -671,9 +723,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 									TradResultData tempTr=(TradResultData)algQueueExecution.elementAt(i);
 									//If this traditional algorithm with this num of points is not already contained in the execution queue, add it to the queue
 									isAlgInQueue=tempTra.equals(tempTr);
-								}
-								catch(Exception err){
-								}
+								} catch(Exception err){}
 							}
 							if(!isAlgInQueue){
 								algQueueExecution.add(tempTra);
@@ -683,9 +733,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 										+"\nNum. Cities: "+tempTra.getNumCities(),
 										"Confirm", JOptionPane.INFORMATION_MESSAGE);
 							}
-							else{
-								JOptionPane.showMessageDialog(null, "This execution is already in the queue", "Duplicate Value", JOptionPane.WARNING_MESSAGE);
-							}
+							else{ JOptionPane.showMessageDialog(null, "This execution is already in the queue", "Duplicate Value", JOptionPane.WARNING_MESSAGE);}
 						}
 						//Do this if vector is empty
 						else{
@@ -697,9 +745,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 									"Confirm", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
-					else{
-						JOptionPane.showMessageDialog(null, "Select an algorithm to perform", "Confirm", JOptionPane.INFORMATION_MESSAGE);
-					}
+					else{ JOptionPane.showMessageDialog(null, "Select an algorithm to perform", "Confirm", JOptionPane.INFORMATION_MESSAGE);}
 				}
 				//Only Genetic algorithms are available to user selection
 				else{
@@ -713,8 +759,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						setup.setKeepPopulationSizeConstant(false);
 						setup.setMinimumPopSizePercent(fromP);
 						setup.setPopulationSize(points.size());
-						//resultsDataTSP=new Vector<Vector<Point>>();
-						//pathDistancesTSP=new Vector<Double>();
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
 						Vector<Point> tempSolution=new Vector<Point>();
@@ -724,7 +768,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						TSP_GA tsp= new TSP_GA(tempCities,setup,null,tempVecVec,tempDistances);
 						TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,setup,tempVecVec,tempDistances,maxG);
 						GenResultData tempGen=new GenResultData(points.size(),fromP,toP,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,setup,tsp,worker);
-						tempGen.setCities(tempCities,true);
+						tempGen.setCities(tempCities);
 						tempGen.setResultsData(tempVecVec,true);
 						tempGen.setPathDistances(tempDistances, true);
 						//Do this if vector is not empty
@@ -734,12 +778,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								try{
 									GenResultData tempG=(GenResultData)algQueueExecution.elementAt(i);
 									//If this genetic algorithm is not already contained in the execution queue, add it to the queue
-									if(tempG.equals(tempGen)){
+									if(tempG.equals(tempGen))
 										isAlgInQueue=true;
-									}
-								}
-								catch(Exception err){
-								}
+								} catch(Exception err){}
 							}
 							if(!isAlgInQueue){
 								algQueueExecution.add(tempGen);
@@ -755,9 +796,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 										"Confirm", JOptionPane.INFORMATION_MESSAGE);
 								JOptionPane.showMessageDialog(null, "A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!","Warning", JOptionPane.WARNING_MESSAGE);
 							}
-							else{
-								JOptionPane.showMessageDialog(null, "This execution is already in the queue", "Duplicate Value", JOptionPane.WARNING_MESSAGE);
-							}
+							else{ JOptionPane.showMessageDialog(null, "This execution is already in the queue", "Duplicate Value", JOptionPane.WARNING_MESSAGE);}
 						}
 						//Do this if vector is empty
 						else{
@@ -774,23 +813,17 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 									"Confirm", JOptionPane.INFORMATION_MESSAGE);
 							JOptionPane.showMessageDialog(null, "A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!","Warning", JOptionPane.WARNING_MESSAGE);
 						}
-					}catch(Exception e){
-						JOptionPane.showMessageDialog(null, "Enter valid numbers please!","Error", JOptionPane.ERROR_MESSAGE);
-					}
+					}catch(Exception e){ JOptionPane.showMessageDialog(null, "Enter valid numbers please!","Error", JOptionPane.ERROR_MESSAGE);}
 				}
 			}
-			else{
-				JOptionPane.showMessageDialog(null, "Add some points to the drawing area first","Error", JOptionPane.ERROR_MESSAGE);
-			}
+			else{ JOptionPane.showMessageDialog(null, "Add some points to the drawing area first","Error", JOptionPane.ERROR_MESSAGE);}
 		}
 		if(actionE.getSource().equals(viewResultsButton)){
 			if(algQueueExecution.size()>0){
 				@SuppressWarnings("unused")
 				ExecutionQueueView execView=new ExecutionQueueView(algQueueExecution);
 			}
-			else{
-				JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);
-			}
+			else{ JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);}
 		}
 		//Remove all points and empty the execution queue to start with new data
 		if(actionE.getSource().equals(resetAllFieldsButton)){	
@@ -850,26 +883,26 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				Configuration setup=new Configuration();
 				int toP=currentGeneticAlg.getPopTo();
 				int maxG=currentGeneticAlg.getMaxGen();
-
 				setup.setKeepPopulationSizeConstant(false);
 				setup.setMinimumPopSizePercent(currentGeneticAlg.getPopFrom());
 				setup.setPopulationSize(currentGeneticAlg.getPopSize());
 				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
-				tempVecVec.clear();
 				Vector<Point> tempSolution=currentGeneticAlg.getCities();
-				tempSolution.clear();
 				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();
+				//Clear any data contained within these vectors
+				tempVecVec.clear();
+				tempSolution.clear();
 				tempDistances.clear();
 				@SuppressWarnings("unchecked")
 				Vector<Point> tempCities=(Vector<Point>) currentGeneticAlg.getTSP().getCities().clone();
 				TSP_GA tsp= new TSP_GA(tempCities,setup,null,tempVecVec,tempDistances);
 				TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,setup,tempVecVec,tempDistances,maxG);
 				GenResultData tempGen=new GenResultData(tempCities.size(),currentGeneticAlg.getPopFrom(),toP,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getCrossoverProbability(),currentGeneticAlg.getMutationMethod(),currentGeneticAlg.getMutationProbability(),setup,tsp,worker);
-				tempGen.setCities(tempCities,true);
+				tempGen.setCities(tempCities);
 				tempGen.setResultsData(tempVecVec,true);
 				tempGen.setPathDistances(tempDistances, true);
 				currentGeneticAlg=tempGen;
-
+				//Copy the memory allocations of the following objects
 				tspAlg=currentGeneticAlg.getTSP();
 				tspWorker=currentGeneticAlg.getTSP_Worker();
 				results=currentGeneticAlg.getResultingPoints();
@@ -880,6 +913,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				tspWorker.addPropertyChangeListener(this);
 				currentRunningTimeExec=System.currentTimeMillis();
 				startExecutionButton.setEnabled(false);
+				//Start the execution of the algorithm
 				tspWorker.execute();
 			}
 		}
@@ -891,7 +925,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			progressBar.setVisible(false);
 			//Update the graph one last time
 			drawingArea.repaint();
-			//JOptionPane.showMessageDialog(null,"Execution Successfully Completed!");
 		}
 	}
 
@@ -1039,7 +1072,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					JOptionPane.showMessageDialog(null, "Multiple configuration are not acceptable!\nExecution Interrupted and blocked,\n\nPress Reset All to perform another list of algorithms","Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			//TO IMPLEMENT FOR EACH ALGORITHM (TRAD & GEN)
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Vector;
 import javax.swing.SwingWorker;
 import org.jgap.Configuration;
+import org.jgap.InvalidConfigurationException;
 
 @SuppressWarnings("rawtypes")
 public class TSP_GA_Worker extends SwingWorker{
@@ -12,7 +13,7 @@ public class TSP_GA_Worker extends SwingWorker{
 	private long executionTime;
 	private boolean processedCancelled;
 	
-	public TSP_GA_Worker(Vector<Point> cities, Configuration c, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen){
+	public TSP_GA_Worker(Vector<Point> cities, Configuration c, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen) throws InvalidConfigurationException{
 		work=new TSP_GA_Adapter(this, cities,c,results, distances, maxGen);
 		processedCancelled=false;
 	}

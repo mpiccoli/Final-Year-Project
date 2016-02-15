@@ -1,9 +1,12 @@
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,54 +17,74 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 public class ExecutionQueueView extends JPanel implements ActionListener{
+	
+	//Declare the constants of this class
 	private static final long serialVersionUID = -3926009345985683959L;
+	private static final String[] TABLE_COLUMN_NAMES={"Method","N. Cities","Tour Length","Time","Data"};
+	private static final Object[][] data={{"No Data",0,0,0,0}};
+	//Global Objects
 	private JFrame mainFrame;
-	private JButton removeAlg;
+	private JPanel optionsPanel;
+	private JButton removeAlg, addAlg;
 	private JTable tableAlg;
 	private JScrollPane scrollPaneTable;
 	private Vector<Object> dataAlgForTable;
 	private DefaultTableModel tableModel;
-	private static final String[] TABLE_COLUMN_NAMES={"Method","N. Cities","Tour Length","Time","Data"};
-	private static final Object[][] data={{"No Data",0,0,0,0}};
 	private DrawingPanel drawPath;
 	private JLabel previewLabel;
 	
 	public ExecutionQueueView(Vector<Object> vec){
 		//Create the window
 		mainFrame=new JFrame();
+		//mainFrame.setBackground(new Color(78, 129, 162));
 		mainFrame.setSize(900, 500);
-		mainFrame.setTitle("Execution");
+		mainFrame.setTitle("Queue Of Execution");
 		mainFrame.setResizable(false);
-		mainFrame.setVisible(true);
 		mainFrame.setLayout(null);
 		//Initialize the global variables
+		optionsPanel=new JPanel();
+			optionsPanel.setBorder(new TitledBorder("Options"));
+			optionsPanel.setLayout(null);
+		
 		removeAlg=new JButton("Remove Element");
+		addAlg=new JButton("Add Element");
 		tableModel=new DefaultTableModel(TABLE_COLUMN_NAMES, 1);
 		tableAlg=new JTable(data,TABLE_COLUMN_NAMES);
 		scrollPaneTable=new JScrollPane(tableAlg);
 			scrollPaneTable.setViewportView(tableAlg);
 		drawPath=new DrawingPanel(new Vector<Point>());
-		previewLabel=new JLabel("Shortest Path");
+			drawPath.setBackground(new Color(125, 158, 183));
+			drawPath.setBorder(BorderFactory.createEtchedBorder());
+		previewLabel=new JLabel("Shortest Path Found");
 		//Set position for the graphical elements
-		removeAlg.setBounds(350,15,130,20);
-		scrollPaneTable.setBounds(490,10,380,450);
-		drawPath.setBounds(35, 85, 340, 325);
-		previewLabel.setBounds(15,45,100,20);
+		optionsPanel.setBounds(35,10,320,60);
+		removeAlg.setBounds(20,20,130,20);
+		addAlg.setBounds(160,20,130,20);
+		scrollPaneTable.setBounds(420,10,450,450);
+		previewLabel.setBounds(130,80,130,20);
+		drawPath.setBounds(35, 100, 340, 325);
 		//Add Action Listener to the buttons
 		removeAlg.addActionListener(this);
+		addAlg.addActionListener(this);
 		//Add elements to the frame
-		mainFrame.add(removeAlg);
+		mainFrame.add(optionsPanel);
+		optionsPanel.add(removeAlg);
+		optionsPanel.add(addAlg);
 		mainFrame.add(scrollPaneTable);
 		mainFrame.add(drawPath);
 		mainFrame.add(previewLabel);
+		
 		dataAlgForTable=vec;
 		//Fill table with data passed from previous view
 		this.putDataIntoTable();
 		this.performRemoveElementCheck();
+		
+		mainFrame.setVisible(true);
 	}
 	private void performRemoveElementCheck() {
 		if(dataAlgForTable.size()>0){
@@ -109,6 +132,11 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Please select an algorithm you would like to remove!","Warning",JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		if(e.getSource().equals(addAlg)){
+			mainFrame.setVisible(false);
+			//Destroy the object from memory
+			mainFrame.dispose();
+		}
 	}
 }
 
@@ -126,7 +154,6 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value,boolean isSelected, boolean hasFocus, int row, int column) {
     	//Define actions for when an item in the table is selected
         if (isSelected) {
-            setForeground(table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
             //Display the resulting path
             Object temp=data.get(table.getSelectedRow());

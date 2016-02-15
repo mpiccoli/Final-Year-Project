@@ -1,7 +1,0 @@
-package geneticAlgorithms;
-
-import java.util.Observable;
-
-public class TSP_Observable extends Observable{
-
-}

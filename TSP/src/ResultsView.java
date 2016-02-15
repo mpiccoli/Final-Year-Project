@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -9,8 +10,13 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class ResultsView extends JPanel{
-
+	
+	//Define constants for this class
 	private static final long serialVersionUID = 8268951247350658510L;
+	private static final Font BOLD_SEGOE_12=new Font("Segoe UI", Font.BOLD, 12);
+	private static final Font ITALIC_SEGOE_12=new Font("Segoe UI", Font.ITALIC, 12);
+	private static final Font PLAIN_SEGOE_12=new Font("Segoe UI", Font.PLAIN, 12);
+	
 	//Graphical Elements
 	private JFrame mainFrame;
 	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
@@ -30,14 +36,20 @@ public class ResultsView extends JPanel{
 		mainFrame.setLayout(null);
 		//Initiate shared graphical objects
 		nCitiesLabel=new JLabel("N. Cities");
+			nCitiesLabel.setFont(BOLD_SEGOE_12);
 		nCitiesTF=new JTextField();
-		nCitiesTF.setEditable(false);
+			nCitiesTF.setFont(ITALIC_SEGOE_12);
+			nCitiesTF.setEditable(false);
 		tourLabel=new JLabel("Tour Length");
+			tourLabel.setFont(BOLD_SEGOE_12);
 		tourTF=new JTextField();
-		tourTF.setEditable(false);
+			tourTF.setFont(ITALIC_SEGOE_12);
+			tourTF.setEditable(false);
 		timeLabel=new JLabel("Time");
+			timeLabel.setFont(BOLD_SEGOE_12);
 		timeTF=new JTextField();
-		timeTF.setEditable(false);
+			timeTF.setFont(ITALIC_SEGOE_12);
+			timeTF.setEditable(false);
 		//Adapt the view for a tradition algorithm
 		this.traGenView(traGe, obj);
 		//Add data to the Text Fields
@@ -50,10 +62,12 @@ public class ResultsView extends JPanel{
 			traGen="tra";
 			tradObj=(TradResultData)objPassed;
 			tradNameLabel=new JLabel("Name");
+				tradNameLabel.setFont(BOLD_SEGOE_12);
 			tradNameTF=new JTextField();
 			mainTradDetailsPanel=new JPanel();
 				//mainTradDetailsPanel.setBorder(new TitledBorder("Method "+tradObj.getAlgName()+" Details"));
 				mainTradDetailsPanel.setBorder(new TitledBorder("Method Details"));
+				mainTradDetailsPanel.setFont(PLAIN_SEGOE_12);
 				mainTradDetailsPanel.setLayout(null);
 			traDetailsPanel=new JPanel();
 				traDetailsPanel.setBorder(new TitledBorder("Details"));
@@ -65,9 +79,9 @@ public class ResultsView extends JPanel{
 			
 			mainTradDetailsPanel.setBounds(10,5,430,100);
 			nCitiesLabel.setBounds(20,30,60,20);
-			nCitiesTF.setBounds(80,30,60,20);
+			nCitiesTF.setBounds(80,30,65,20);
 			tourLabel.setBounds(160,30,80,20);
-			tourTF.setBounds(250,30,80,20);
+			tourTF.setBounds(250,30,140,20);
 			timeLabel.setBounds(20,65,40,20);
 			timeTF.setBounds(65,65,80,20);
 			tradNameLabel.setBounds(170, 65,45,20);
@@ -99,28 +113,44 @@ public class ResultsView extends JPanel{
 				geDataProducedPanel.setBorder(new TitledBorder("Data Produced"));
 				geDataProducedPanel.setLayout(null);
 			crossMetLabel=new JLabel("Crossover Method");
+				crossMetLabel.setFont(BOLD_SEGOE_12);
 			crossMetTF=new JTextField();
-			crossMetTF.setEditable(false);
+				crossMetTF.setFont(ITALIC_SEGOE_12);
+				crossMetTF.setEditable(false);
 			crossProbLabel=new JLabel("Probability");
+				crossProbLabel.setFont(BOLD_SEGOE_12);
 			crossProbTF=new JTextField();
+				crossProbTF.setFont(ITALIC_SEGOE_12);
 			crossProbTF.setEditable(false);
 			mutMetLabel=new JLabel("Metation Method");
+				mutMetLabel.setFont(BOLD_SEGOE_12);
 			mutMetTF=new JTextField();
+				mutMetTF.setFont(ITALIC_SEGOE_12);
 			mutMetTF.setEditable(false);
 			mutProbLabel=new JLabel("Probability");
+				mutProbLabel.setFont(BOLD_SEGOE_12);
 			mutProbTF=new JTextField();
+				mutProbTF.setFont(ITALIC_SEGOE_12);
 			mutProbTF.setEditable(false);
 			generLabel=new JLabel("Generations");
+				generLabel.setFont(BOLD_SEGOE_12);
 			generTF=new JTextField();
+				generTF.setFont(ITALIC_SEGOE_12);
 			generTF.setEditable(false);
 			fitnessLabel=new JLabel("Fitness");
+				fitnessLabel.setFont(BOLD_SEGOE_12);
 			fitnessTF=new JTextField();
+				fitnessTF.setFont(ITALIC_SEGOE_12);
 			fitnessTF.setEditable(false);
 			fromToLabel=new JLabel("Lapse");
+				fromToLabel.setFont(BOLD_SEGOE_12);
 			fromToTF=new JTextField();
+				fromToTF.setFont(ITALIC_SEGOE_12);
 			fromToTF.setEditable(false);
 			maxGenLabel=new JLabel("Max Gen");
+				maxGenLabel.setFont(BOLD_SEGOE_12);
 			maxGenTF=new JTextField();
+				maxGenTF.setFont(ITALIC_SEGOE_12);
 			maxGenTF.setEditable(false);
 			
 			mainGeDetailsPanel.setBounds(10,5,515,110);
@@ -130,25 +160,19 @@ public class ResultsView extends JPanel{
 			fromToTF.setBounds(230,20,80,20);
 			maxGenLabel.setBounds(360,20,60,20);
 			maxGenTF.setBounds(420,20,80,20);
-			crossMetLabel.setBounds(7,45,110,20);
-			crossMetTF.setBounds(120,45,180,20);
-			crossProbLabel.setBounds(315,45,70,20);
-			crossProbTF.setBounds(385,45,40,20);
-			mutMetLabel.setBounds(7,75,110,20);
-			mutMetTF.setBounds(120,75,180,20);
-			mutProbLabel.setBounds(315,75,70,20);
-			mutProbTF.setBounds(385,75,40,20);
+			
+			crossMetLabel.setBounds(7,45,115,20);
+			crossMetTF.setBounds(125,45,180,20);
+			crossProbLabel.setBounds(320,45,70,20);
+			crossProbTF.setBounds(390,45,40,20);
+			mutMetLabel.setBounds(7,75,115,20);
+			mutMetTF.setBounds(125,75,180,20);
+			mutProbLabel.setBounds(320,75,70,20);
+			mutProbTF.setBounds(390,75,40,20);
+			
 			geDataProducedPanel.setBounds(10,120,430,90);
-			//tourLabel.setBounds(10,25,80,20);
-			//tourTF.setBounds(90,25,90,20);
-			//generLabel.setBounds(210,25,80,20);
-			//generTF.setBounds(290,25,80,20);
 			generLabel.setBounds(10,25,80,20);
 			generTF.setBounds(90,25,90,20);
-			//fitnessLabel.setBounds(10,55,60,20);
-			//fitnessTF.setBounds(70,55,50,20);
-			//timeLabel.setBounds(210,55,50,20);
-			//timeTF.setBounds(260,55,80,20);
 			fitnessLabel.setBounds(200,25,60,20);
 			fitnessTF.setBounds(260,25,140,20);
 			timeLabel.setBounds(160,55,50,20);
@@ -170,8 +194,6 @@ public class ResultsView extends JPanel{
 			mainGeDetailsPanel.add(mutProbLabel);
 			mainGeDetailsPanel.add(mutProbTF);
 			mainFrame.add(geDataProducedPanel);
-			//geDataProducedPanel.add(tourLabel);
-			//geDataProducedPanel.add(tourTF);
 			geDataProducedPanel.add(generLabel);
 			geDataProducedPanel.add(generTF);
 			geDataProducedPanel.add(fitnessLabel);
@@ -184,7 +206,10 @@ public class ResultsView extends JPanel{
 	private void setTextBoxes(){
 		if(traGen.equals("tra")){
 			nCitiesTF.setText(""+tradObj.getNumCities());
-			tourTF.setText(""+tradObj.getTourLength());
+			double tourLengthValue = tradObj.getTourLength();
+			//Some times the Tour length is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistant
+	        DecimalFormat fv = new DecimalFormat("#.########");
+			tourTF.setText(""+fv.format(tourLengthValue));
 			long tempTime=tradObj.getExecutionTime();
 			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
 			timeTF.setText(""+timeString);
@@ -201,7 +226,7 @@ public class ResultsView extends JPanel{
 			mutProbTF.setText(""+genObj.getMutationProbability());
 			generTF.setText(""+genObj.getGenerationCount());
 			double fitnessValue = genObj.getFitness();
-			//Some times the fitness value is too long, in this way only 8 decimal places are kept to keep the application consistant
+			//Some times the fitness value is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistant
 	        DecimalFormat fv = new DecimalFormat("#.########");
 	        fitnessTF.setText(""+fv.format(fitnessValue));
 			long tempTime=genObj.getExecutionTime();

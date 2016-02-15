@@ -2,31 +2,37 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="csvImportExport" key="selection"/>
+		<item value="drawingArea" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
-			<item value="§"/>
-			<item value="csvImportExport"/>
-			<item value="getGeneration"/>
-			<item value="Info"/>
-			<item value="sorry, there"/>
-			<item value="Sorry the"/>
-			<item value="Sorry there"/>
-			<item value="InputStreamReader"/>
+			<item value="drawingArea"/>
+			<item value="tradPanel"/>
+			<item value="removeAlg"/>
+			<item value="ExecutionQueueView"/>
+			<item value="ExecutionQueue"/>
+			<item value="DrawingPanel"/>
+			<item value="fitnessTF"/>
+			<item value="textFieldBackground"/>
 		</list>
 		<list key="replacehistory">
-			<item value="csvImportExport"/>
-			<item value="conf"/>
+			<item value="TEXTFIELD_BACKGROUND_COLOUR"/>
+			<item value="BACKGROUND_COLOUR"/>
+			<item value="ITALIC_SEGOE_13"/>
+			<item value="PLAIN_SEGOE_13"/>
+			<item value="PLAIN_SEGOE_12"/>
+			<item value="TRUETRYPE_SEGOE_14"/>
+			<item value="ITALIC_SEGOE_12"/>
+			<item value="BOLD_SEGOE_12"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="265" key="DIALOG_WIDTH"/>
 		<item value="1|.SF NS Text|11.0|0|COCOA|1|.SFNSText-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="399" key="DIALOG_HEIGHT"/>
-		<item value="907" key="DIALOG_X_ORIGIN"/>
-		<item value="289" key="DIALOG_Y_ORIGIN"/>
+		<item value="836" key="DIALOG_X_ORIGIN"/>
+		<item value="177" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

@@ -118,16 +118,12 @@ public class GenResultData {
 		return results;
 	}
 	@SuppressWarnings("unchecked")
-	public void setCities(Vector<Point> data, boolean option){
-		if(option){
-			listOfCities=data;
-		}
-		else{
-			listOfCities=(Vector<Point>) data.clone();
-		}
+	public void setCities(Vector<Point> data){
+		listOfCities=(Vector<Point>) data.clone();
 	}
+	@SuppressWarnings("unchecked")
 	public Vector<Point> getCities(){
-		return listOfCities;
+		return (Vector<Point>) listOfCities.clone();
 	}
 	@SuppressWarnings("unchecked")
 	public void setPathDistances(Vector<Double> distances, boolean option){

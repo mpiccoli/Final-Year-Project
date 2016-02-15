@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -8,7 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class DrawingPanel extends JPanel{
+	
+	//Define the constants of this class
 	private static final long serialVersionUID = 2980221873573882055L;
+	
 	private Vector<Point> vPoints;
 	private JLabel numPoints;
 	private boolean singleAlg;
@@ -44,7 +48,7 @@ public class DrawingPanel extends JPanel{
 			}
 			//Create city links
 			if(singleAlg && links!=null && links.size()>0){
-				g2.setColor(Color.BLUE);
+				g2.setColor(new Color(82, 234, 128));
 				for(int i=0; i<links.size()-1; i++){
 					g2.drawLine((int)links.get(i).getX(), (int)links.get(i).getY(), (int)links.get(i+1).getX(), (int)links.get(i+1).getY());
 				}
@@ -58,7 +62,7 @@ public class DrawingPanel extends JPanel{
 				for(int i=0; i<links.size()-1; i++){
 					g2.fillOval((int)links.elementAt(i).getX()/2,(int)links.elementAt(i).getY()/2, 6, 6);
 				}
-				g2.setColor(Color.BLUE);
+				g2.setColor(new Color(82, 234, 128));
 				for(int i=0; i<links.size()-1; i++){
 					g2.drawLine((int)links.get(i).getX()/2, (int)links.get(i).getY()/2, (int)links.get(i+1).getX()/2, (int)links.get(i+1).getY()/2);
 				}
