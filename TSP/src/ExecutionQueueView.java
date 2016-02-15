@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +28,8 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 	private static final long serialVersionUID = -3926009345985683959L;
 	private static final String[] TABLE_COLUMN_NAMES={"Method","N. Cities","Tour Length","Time","Data"};
 	private static final Object[][] data={{"No Data",0,0,0,0}};
+	private static final Font BOLD_SEGOE_12=new Font("Segoe UI", Font.BOLD, 12);
+	private static final Font ITALIC_SEGOE_12=new Font("Segoe UI", Font.ITALIC, 12);
 	//Global Objects
 	private JFrame mainFrame;
 	private JPanel optionsPanel;
@@ -50,7 +53,6 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 		optionsPanel=new JPanel();
 			optionsPanel.setBorder(new TitledBorder("Options"));
 			optionsPanel.setLayout(null);
-		
 		removeAlg=new JButton("Remove Element");
 		addAlg=new JButton("Add Element");
 		tableModel=new DefaultTableModel(TABLE_COLUMN_NAMES, 1);
@@ -61,6 +63,10 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 			drawPath.setBackground(new Color(125, 158, 183));
 			drawPath.setBorder(BorderFactory.createEtchedBorder());
 		previewLabel=new JLabel("Shortest Path Found");
+		//Change the font of the following objects
+		removeAlg.setFont(BOLD_SEGOE_12);
+		addAlg.setFont(BOLD_SEGOE_12);
+		previewLabel.setFont(ITALIC_SEGOE_12);
 		//Set position for the graphical elements
 		optionsPanel.setBounds(35,10,320,60);
 		removeAlg.setBounds(20,20,130,20);
@@ -83,7 +89,7 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 		//Fill table with data passed from previous view
 		this.putDataIntoTable();
 		this.performRemoveElementCheck();
-		
+		//Make the window visible
 		mainFrame.setVisible(true);
 	}
 	private void performRemoveElementCheck() {
@@ -94,7 +100,7 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 			removeAlg.setEnabled(false);
 		}		
 	}
-	//"Method","N. Cities","Tour Length","Time","Data"
+	
 	private void putDataIntoTable(){
 		tableModel.setColumnIdentifiers(TABLE_COLUMN_NAMES);
 		tableAlg.setModel(tableModel);

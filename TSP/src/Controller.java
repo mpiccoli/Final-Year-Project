@@ -8,7 +8,7 @@ public class Controller {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run(){
-				JFrame frame=new JFrame("TSP");
+				JFrame frame=new JFrame("Travelling Salesman Problem");
 				MainView initApp=new MainView(frame);
 				frame.setJMenuBar(initApp.menuBar);
 				frame.getContentPane().add(initApp.toolBar, BorderLayout.NORTH);

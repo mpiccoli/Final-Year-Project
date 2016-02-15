@@ -58,11 +58,12 @@ import org.jgap.util.CloneException;
 
 import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
+import geneticAlgorithms.Crossover.CycleCrossover;
 import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
 
 public class MainView extends JPanel implements ActionListener, PropertyChangeListener, ChangeListener {
-	
+
 	//Define the Constants used in this application
 	private static final long serialVersionUID = -6661641861407996566L;
 	private static final Font BOLD_SEGOE_12=new Font("Segoe UI", Font.BOLD, 12);
@@ -73,7 +74,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private static final Font PLAIN_SEGOE_13=new Font("Segoe UI", Font.PLAIN, 13);
 	private static final Color BACKGROUND_COLOUR=new Color(78, 129, 162);
 	private static final Color TEXTFIELD_BACKGROUND_COLOUR=new Color(198, 225, 235);
-	
+
 	//Graphical Elements
 	private JFrame mainFrame;
 	JToolBar toolBar;
@@ -149,25 +150,25 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		resetAllPoints=new JButton("Clear Points");
 		numDrawnPoints=new JLabel("Points: "+0);
 		tradGAChooser=new JComboBox<String>();
-			//Add data to the ComboBox 
-			tradGAChooser.addItem("Traditional Algorithms");
-			tradGAChooser.addItem("Genetic Algorithms");
+		//Add data to the ComboBox 
+		tradGAChooser.addItem("Traditional Algorithms");
+		tradGAChooser.addItem("Genetic Algorithms");
 		//Initialize all the JPanel the window contains
 		tradPanel=new JPanel();
-			tradPanel.setBorder(new TitledBorder("Traditional"));
-			tradPanel.setLayout(null);
+		tradPanel.setBorder(new TitledBorder("Traditional"));
+		tradPanel.setLayout(null);
 		genPanel=new JPanel();
-			genPanel.setBorder(new TitledBorder("Genetic"));
-			genPanel.setLayout(null);
+		genPanel.setBorder(new TitledBorder("Genetic"));
+		genPanel.setLayout(null);
 		optionPanel=new JPanel();
-			optionPanel.setBorder(new TitledBorder("Options"));
-			optionPanel.setLayout(null);
+		optionPanel.setBorder(new TitledBorder("Options"));
+		optionPanel.setLayout(null);
 		destinationPanel=new JPanel();
-			destinationPanel.setBorder(new TitledBorder("Locations"));
-			destinationPanel.setLayout(null);
+		destinationPanel.setBorder(new TitledBorder("Locations"));
+		destinationPanel.setLayout(null);
 		executionPanel=new JPanel();
-			executionPanel.setBorder(new TitledBorder("Execution"));
-			executionPanel.setLayout(null);
+		executionPanel.setBorder(new TitledBorder("Execution"));
+		executionPanel.setLayout(null);
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
@@ -179,40 +180,40 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		maxGenTF=new JTextField();
 		crossoverLabel=new JLabel("Crossover Method:");
 		crossoverMethods=new JComboBox<String>();
-			crossoverMethods.addItem("Cycle Crossover");
-			crossoverMethods.addItem("One Point Crossover");
-			crossoverMethods.addItem("Ordered Crossover");
-			crossoverMethods.addItem("Partially Mapped Crossover");
-			crossoverMethods.addItem("Two Point Crossover");
+		crossoverMethods.addItem("Cycle Crossover");
+		crossoverMethods.addItem("One Point Crossover");
+		crossoverMethods.addItem("Ordered Crossover");
+		crossoverMethods.addItem("Partially Mapped Crossover");
+		crossoverMethods.addItem("Two Point Crossover");
 		mutationLabel=new JLabel("Mutation Method:");
 		mutationMethods=new JComboBox<String>();
-			mutationMethods.addItem("Insertion Mutation");
-			mutationMethods.addItem("Reciprocal Exchange Mutation");
+		mutationMethods.addItem("Insertion Mutation");
+		mutationMethods.addItem("Reciprocal Exchange Mutation");
 		crossoverProbLabel=new JLabel("Probability: 0.4");
 		crossProbSlider= new JSlider(JSlider.HORIZONTAL,0,100,40);
 		mutationProbLabel=new JLabel("Probability: 0.20");
 		mutProbSlider=new JSlider(JSlider.HORIZONTAL,0,100,20);
 		randomPointsLabel=new JLabel("Random");
 		randomPointsTF=new JTextField();
-			randomPointsTF.setEnabled(false);
+		randomPointsTF.setEnabled(false);
 		goDrawButton=new JButton("Go");
-			goDrawButton.setEnabled(false);
+		goDrawButton.setEnabled(false);
 		manualPointsLabel=new JLabel("Manual");
 		numRandomPointsCB=new JCheckBox("n. of Points:");
 		manualDrawCB=new JCheckBox("Draw Points");
-			manualDrawCB.setSelected(true);
+		manualDrawCB.setSelected(true);
 		importPointsCB=new JCheckBox("Import CSV");
 		startExecutionButton=new JButton("Start");
 		addToExecution=new JButton("Add");
 		viewResultsButton=new JButton("Edit Queue/View Results");
 		resetAllFieldsButton=new JButton("Reset All");
 		currentRunningTimeTF=new JTextField();
-			currentRunningTimeTF.setEditable(false);
+		currentRunningTimeTF.setEditable(false);
 		currentRunningTimeLabel=new JLabel("Time");
 		currentRunningAlgTF=new JTextField();
-			currentRunningAlgTF.setEditable(false);
+		currentRunningAlgTF.setEditable(false);
 		currentRunningAlgLabel=new JLabel("Details");
-		
+
 		//Add a background colour to the following elements
 		this.setBackground(BACKGROUND_COLOUR);
 		toolBar.setBackground(BACKGROUND_COLOUR);
@@ -227,7 +228,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		randomPointsTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		currentRunningAlgTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		currentRunningTimeTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
-		
+
 		//Change the font of the objects
 		undoPoint.setFont(BOLD_SEGOE_12);
 		resetAllPoints.setFont(BOLD_SEGOE_12);
@@ -263,7 +264,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		currentRunningTimeLabel.setFont(BOLD_SEGOE_12);
 		currentRunningAlgTF.setFont(ITALIC_SEGOE_13);
 		currentRunningAlgLabel.setFont(BOLD_SEGOE_12);
-		
+
 		//Define position of the object on the jFrame
 		undoPoint.setBounds(560,15,70,20);
 		resetAllPoints.setBounds(430,15,120,20);
@@ -372,7 +373,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		optionPanel.add(addToExecution);
 		optionPanel.add(viewResultsButton);
 		optionPanel.add(resetAllFieldsButton);
-		
+
 		//Initialize global objects
 		points=new Vector<Point>();
 		results=new Vector<Point>();
@@ -393,37 +394,37 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		//Progress bar
 		Border border = BorderFactory.createTitledBorder("Loading...");
 		progressBar = new JProgressBar();
-			progressBar.setValue(0);
-			progressBar.setStringPainted(true);
-			progressBar.setBorder(border);
-			progressBar.setBounds(15,140,350,35);
-			progressBar.setVisible(false);
-			progressBar.setOpaque(false);
-			progressBar.setBackground(new Color(73, 157, 98));
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
+		progressBar.setBorder(border);
+		progressBar.setBounds(15,140,350,35);
+		progressBar.setVisible(false);
+		progressBar.setOpaque(false);
+		progressBar.setBackground(new Color(73, 157, 98));
 		executionPanel.add(progressBar);
-		
+
 		csvImportExport=new JFileChooser();
 		csvFilter=new FileNameExtensionFilter(".csv", ".CSV");
 		txtExport=new JFileChooser();
 		txtFilter=new FileNameExtensionFilter(".txt ","Plain Text");
-		
+
 		//Add Drawing area
 		drawingArea=new DrawingPanel(points,numDrawnPoints,results);
-			drawingArea.setBounds(10, 50, 620, 590);
-			drawingArea.setBackground(new Color(125, 158, 183));
-			//Create a border between the drawing area and the main frame
-			drawingArea.setBorder(BorderFactory.createEtchedBorder());
-			drawingArea.addMouseListener(new MouseAdapter(){
-				//Draw when the mouse is clicked and then released inside the area
-				public void mouseReleased(MouseEvent mE){
-					if(manualDrawCB.isSelected()){
-						//Add the new point to the vector and update the view
-						drawingArea.passPoint(new Point(mE.getX(),mE.getY()));
-					}
+		drawingArea.setBounds(10, 50, 620, 590);
+		drawingArea.setBackground(new Color(125, 158, 183));
+		//Create a border between the drawing area and the main frame
+		drawingArea.setBorder(BorderFactory.createEtchedBorder());
+		drawingArea.addMouseListener(new MouseAdapter(){
+			//Draw when the mouse is clicked and then released inside the area
+			public void mouseReleased(MouseEvent mE){
+				if(manualDrawCB.isSelected()){
+					//Add the new point to the vector and update the view
+					drawingArea.passPoint(new Point(mE.getX(),mE.getY()));
 				}
-			});
+			}
+		});
 		mainFrame.add(drawingArea);
-		
+
 		//Enable the Traditional Algorithm view
 		this.tradGenView(tradGAChooser.getSelectedIndex());
 	}
@@ -666,7 +667,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			if(startExecutionButton.getText().equals("Start")){
 				if(algQueueExecution.size()>0){
 					execStopped=false;
+					//Stop the user from adding more data to execute once the application has began operating the algorithms
 					addToExecution.setEnabled(false);
+					//Change view, blocking the user to add more data to the execution queue
+					this.tradGenView(2);
 					index=0;
 					progressBar.setValue(0);
 					progressBar.setVisible(true);
@@ -759,6 +763,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						setup.setKeepPopulationSizeConstant(false);
 						setup.setMinimumPopSizePercent(fromP);
 						setup.setPopulationSize(points.size());
+						//setup.addGeneticOperator(new CycleCrossover(setup));
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
 						Vector<Point> tempSolution=new Vector<Point>();
@@ -826,17 +831,20 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			else{ JOptionPane.showMessageDialog(null, "No Data to display","Warning", JOptionPane.WARNING_MESSAGE);}
 		}
 		//Remove all points and empty the execution queue to start with new data
-		if(actionE.getSource().equals(resetAllFieldsButton)){	
-			drawingArea.clearAllPoints();
-			points.clear();
-			algQueueExecution.clear();
-			numDrawnPoints.setText("Points: 0");
-			randomPointsTF.setText("");
-			currentRunningAlgTF.setText("");
-			currentRunningTimeTF.setText("");
-			addToExecution.setEnabled(true);
-			startExecutionButton.setEnabled(true);
-			JOptionPane.showMessageDialog(null,"All data has been correctly deleted!", "Info", JOptionPane.INFORMATION_MESSAGE);
+		if(actionE.getSource().equals(resetAllFieldsButton)){
+			if(algQueueExecution.size()>0){
+				drawingArea.clearAllPoints();
+				points.clear();
+				algQueueExecution.clear();
+				numDrawnPoints.setText("Points: 0");
+				randomPointsTF.setText("");
+				currentRunningAlgTF.setText("");
+				currentRunningTimeTF.setText("");
+				addToExecution.setEnabled(true);
+				startExecutionButton.setEnabled(true);
+				//Re-enable the operations
+				this.tradGenView(3);
+			}
 		}
 	}
 
@@ -946,7 +954,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			trad3CB.setSelected(false);
 		}
 		//Enable only the Genetic algorithms
-		else{
+		else if(methodSelected==1){
 			tradPanel.setEnabled(false);
 			genPanel.setEnabled(true);
 			Component[] geneticComponents=genPanel.getComponents();
@@ -957,7 +965,39 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			for(Component c:tradComponents){
 				c.setEnabled(false);
 			}
-		}		
+		}
+		//Disable both traditional and genetic fields, including the drawing points panel
+		else if(methodSelected==2){
+			tradPanel.setEnabled(false);
+			genPanel.setEnabled(false);
+			destinationPanel.setEnabled(false);
+			tradGAChooser.setEnabled(false);
+			Component[] geneticComponents=genPanel.getComponents();
+			for(Component c:geneticComponents){
+				c.setEnabled(false);
+			}
+			Component[] tradComponents=tradPanel.getComponents();
+			for(Component c:tradComponents){
+				c.setEnabled(false);
+			}
+			trad1CB.setSelected(false);
+			trad2CB.setSelected(false);
+			trad3CB.setSelected(false);
+			Component[] drawingComponents=destinationPanel.getComponents();
+			for(Component c:drawingComponents){
+				c.setEnabled(false);
+			}
+		}
+		//Re-enable either traditional or genetic panel and the drawing panel
+		else if(methodSelected==3){
+			destinationPanel.setEnabled(true);
+			tradGAChooser.setEnabled(true);
+			Component[] drawingComponents=destinationPanel.getComponents();
+			for(Component c:drawingComponents){
+				c.setEnabled(true);
+			}
+			this.tradGenView(tradGAChooser.getSelectedIndex());
+		}
 	}
 
 	@Override
