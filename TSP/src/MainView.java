@@ -56,10 +56,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jgap.Configuration;
 import org.jgap.GeneticOperator;
+import org.jgap.impl.DefaultConfiguration;
 import org.jgap.util.CloneException;
 
 import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
+import geneticAlgorithms.CrossoverMethods.CycleCrossover;
 import geneticAlgorithms.CrossoverMethods.CycleCrossover;
 import heuristicAlgorithms.ClosestNeighbour;
 import heuristicAlgorithms.GreedyHeuristic;
@@ -211,7 +213,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		resetAllFieldsButton=new JButton("Reset All");
 		currentRunningTimeTF=new JTextField();
 		currentRunningTimeTF.setEditable(false);
-		currentRunningTimeLabel=new JLabel("Time");
+		currentRunningTimeLabel=new JLabel("Total Time");
 		currentRunningAlgTF=new JTextField();
 		currentRunningAlgTF.setEditable(false);
 		currentRunningAlgLabel=new JLabel("Details");
@@ -676,6 +678,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					index=0;
 					progressBar.setValue(0);
 					progressBar.setVisible(true);
+					currentRunningTimeExec=System.currentTimeMillis();
 					this.beginQueueExecution();
 				}
 				else{ JOptionPane.showMessageDialog(null, "No Algorithms have been added to the execution queue!","Warning", JOptionPane.WARNING_MESSAGE);}
@@ -764,8 +767,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						//Setup the configuration for the TSP
 						setup.setKeepPopulationSizeConstant(false);
 						setup.setMinimumPopSizePercent(fromP);
+						//CHANGE POP NUMBER
 						setup.setPopulationSize(points.size());
-						setup.addGeneticOperator(new CycleCrossover());
+						//setup.addGeneticOperator(new CycleCrossover());
+						//Cycle crossover=new Cycle(setup);
+						//setup.addGeneticOperator(new Cycle(setup));
+						//setup.addGeneticOperator(new CycleCrossover());
+						
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
 						Vector<Point> tempSolution=new Vector<Point>();
@@ -820,7 +828,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 									"Confirm", JOptionPane.INFORMATION_MESSAGE);
 							JOptionPane.showMessageDialog(null, "A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!","Warning", JOptionPane.WARNING_MESSAGE);
 						}
-					}catch(Exception e){ JOptionPane.showMessageDialog(null, "Enter valid numbers please!","Error", JOptionPane.ERROR_MESSAGE);}
+					}catch(Exception e){ 
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Enter valid numbers please!","Error", JOptionPane.ERROR_MESSAGE);}
 				}
 			}
 			else{ JOptionPane.showMessageDialog(null, "Add some points to the drawing area first","Error", JOptionPane.ERROR_MESSAGE);}
@@ -843,6 +853,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				currentRunningAlgTF.setText("");
 				currentRunningTimeTF.setText("");
 				addToExecution.setEnabled(true);
+				startExecutionButton.setText("Start");
 				startExecutionButton.setEnabled(true);
 				//Re-enable the operations
 				this.tradGenView(3);
@@ -869,7 +880,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					listenToChanges="cn";
 					closestNeighbourAlg=new ClosestNeighbour(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
 					closestNeighbourAlg.addPropertyChangeListener(this);
-					currentRunningTimeExec=System.currentTimeMillis();
+					//currentRunningTimeExec=System.currentTimeMillis();
 					closestNeighbourAlg.execute();
 				}
 				if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
@@ -877,7 +888,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					listenToChanges="gh";
 					greedyHeuristicAlg=new GreedyHeuristic(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
 					greedyHeuristicAlg.addPropertyChangeListener(this);
-					currentRunningTimeExec=System.currentTimeMillis();
+					//currentRunningTimeExec=System.currentTimeMillis();
 					greedyHeuristicAlg.execute();
 				}
 				if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
@@ -888,10 +899,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Change the value of this variable to address the Genetic algorithms
 				listenToChanges="gas";
 				currentGeneticAlg=(GenResultData)obj;
+				currentGeneticAlg.getConfigurationTSP().reset();
+				Configuration setup=new DefaultConfiguration();
+				setup.reset();
 				//Retrieve all the crossover and mutation methods added to this execution
 				List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
-				currentGeneticAlg.getConfigurationTSP().reset();
-				Configuration setup=new Configuration();
 				int toP=currentGeneticAlg.getPopTo();
 				int maxG=currentGeneticAlg.getMaxGen();
 				setup.setKeepPopulationSizeConstant(false);
@@ -926,7 +938,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				pathDistancesTSP=currentGeneticAlg.getPathDistances();
 				currentRunningAlg="Genetic Algorithm";
 				tspWorker.addPropertyChangeListener(this);
-				currentRunningTimeExec=System.currentTimeMillis();
+				//currentRunningTimeExec=System.currentTimeMillis();
 				startExecutionButton.setEnabled(false);
 				//Start the execution of the algorithm
 				tspWorker.execute();
@@ -938,6 +950,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			currentRunningAlgTF.setForeground(Color.RED);
 			currentRunningAlgTF.setText("COMPLETED!");
 			progressBar.setVisible(false);
+			currentRunningTimeExec=0;
 			//Update the graph one last time
 			drawingArea.repaint();
 		}
@@ -1022,7 +1035,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
 					transferData.setCities(closestNeighbourAlg.getListOfCities());
 					transferData.setResultingPoints(closestNeighbourAlg.getTravellingOrder());
-					currentRunningTimeExec=0;
+					//currentRunningTimeExec=0;
 					//Increment the counter and verify if other algorithms are awaiting to be executed
 					if(!execStopped && index<algQueueExecution.size()){
 						progressBar.setValue(((index+1)*100)/algQueueExecution.size());
@@ -1051,7 +1064,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
 					transferData.setCities(greedyHeuristicAlg.getListOfCities());
 					transferData.setResultingPoints(greedyHeuristicAlg.getTravellingOrder());
-					currentRunningTimeExec=0;
+					//currentRunningTimeExec=0;
 					//Increment the counter and verify if other algorithms are awaiting to be executed
 					if(!execStopped && index<algQueueExecution.size()){
 						progressBar.setValue(((index+1)*100)/algQueueExecution.size());
@@ -1080,7 +1093,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						transferData.setFitness(pathDistancesTSP.elementAt(indexElement));
 						transferData.setExecutionTime(tspWorker.getExecutionTime());
 						transferData.setResultingPoints(resultsDataTSP.elementAt(indexElement), false);
-						currentRunningTimeExec=0;
+						//currentRunningTimeExec=0;
 						//Refresh the drawing area one last time in case of last second changes
 						drawingArea.performLinks(true, ((GenResultData) currentGeneticAlg).getCities(),resultsDataTSP.elementAt(indexElement));
 						startExecutionButton.setText("Start");

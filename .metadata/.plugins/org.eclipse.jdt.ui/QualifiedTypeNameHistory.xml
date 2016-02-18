@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="heuristicAlgorithms.ClosestNeighbour"/>
-<fullyQualifiedTypeName name="java.util.Random"/>
-<fullyQualifiedTypeName name="heuristicAlgorithms.GreedyHeuristic"/>
-<fullyQualifiedTypeName name="java.awt.Graphics2D"/>
-<fullyQualifiedTypeName name="java.awt.BasicStroke"/>
 <fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
 <fullyQualifiedTypeName name="ExecutionView"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TestGA"/>
 <fullyQualifiedTypeName name="org.jgap.impl.StringGene"/>
-<fullyQualifiedTypeName name="org.jgap.impl.DefaultConfiguration"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.MinimazingFitnessFunction"/>
 <fullyQualifiedTypeName name="org.jgap.FitnessFunction"/>
-<fullyQualifiedTypeName name="org.jgap.Gene"/>
-<fullyQualifiedTypeName name="org.jgap.impl.IntegerGene"/>
 <fullyQualifiedTypeName name="org.jgap.Genotype"/>
 <fullyQualifiedTypeName name="org.jgap.impl.GreedyCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
@@ -31,12 +23,10 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.test.ResultsObserver"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="javax.swing.SwingWorker"/>
-<fullyQualifiedTypeName name="org.jgap.IChromosome"/>
 <fullyQualifiedTypeName name="org.jgap.Chromosome"/>
 <fullyQualifiedTypeName name="org.jgap.Configuration"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TSP_GA"/>
 <fullyQualifiedTypeName name="testTSPGA.TSP_GA_Worker"/>
-<fullyQualifiedTypeName name="java.util.Vector"/>
 <fullyQualifiedTypeName name="java.text.DecimalFormat"/>
 <fullyQualifiedTypeName name="java.lang.Thread"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
@@ -58,6 +48,16 @@
 <fullyQualifiedTypeName name="javax.swing.UIManager"/>
 <fullyQualifiedTypeName name="java.awt.Font"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
-<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="org.jgap.impl.DefaultConfiguration"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.CrossoverMethods.CycleCrossover"/>
+<fullyQualifiedTypeName name="org.jgap.impl.CrossoverOperator"/>
+<fullyQualifiedTypeName name="org.jgap.RandomGenerator"/>
+<fullyQualifiedTypeName name="org.jgap.Gene"/>
+<fullyQualifiedTypeName name="org.jgap.ICompositeGene"/>
 <fullyQualifiedTypeName name="org.jgap.GeneticOperator"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.CrossoverMethods.Cycle"/>
+<fullyQualifiedTypeName name="java.util.Vector"/>
+<fullyQualifiedTypeName name="org.jgap.IChromosome"/>
+<fullyQualifiedTypeName name="org.jgap.impl.IntegerGene"/>
 </qualifiedTypeNameHistroy>
