@@ -12,24 +12,25 @@ public class TSP_GA_Adapter {
 	@SuppressWarnings("unused")
 	private IChromosome bestPath;
 	private Vector<Point> points;
-	private Configuration config;
 	private Vector<Vector<Point>> resultsData;
 	private Vector<Double> pathDistances;
 	private int maxGeneration;
+	private String crossoverChosen,mutationChosen;
 
-	public TSP_GA_Adapter(TSP_GA_Worker fw, Vector<Point> cities, Configuration c, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen){
+	public TSP_GA_Adapter(TSP_GA_Worker fw, Vector<Point> cities, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen, String crossover, String mutation){
 		tspWorker=fw;
 		points=cities;
-		config=c;
 		resultsData=results;
 		pathDistances=distances;
 		maxGeneration=maxGen;
+		crossoverChosen=crossover;
+		mutationChosen=mutation;
 	}
 
 	public Object startEvolution(){
-		if(points!=null && config!=null && resultsData!=null){
+		if(points!=null && resultsData!=null){
 			try {
-				tsp= new TSP_GA(points,config,this,resultsData, pathDistances);
+				tsp= new TSP_GA(points,this,resultsData, pathDistances,crossoverChosen,mutationChosen);
 				tsp.setTSP_Adapter(this);
 				tsp.setMaxEvolution(maxGeneration);
 				bestPath = tsp.findOptimalPath(null);

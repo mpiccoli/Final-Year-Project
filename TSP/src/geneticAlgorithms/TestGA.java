@@ -48,8 +48,8 @@ public class TestGA {
 			//Specify the type of Mutation method
 			//conf.addGeneticOperator(a_operatorToAdd);
 			//Initialize the process and Start the evolution
-			tsp= new TSP_GA(cities,conf,null,resultsData, pathDistances);
-			ft=new TSP_GA_Worker(cities,conf,resultsData, pathDistances,600);
+			tsp= new TSP_GA(cities,null,resultsData, pathDistances,"","");
+			ft=new TSP_GA_Worker(cities,resultsData, pathDistances,600,"","");
 			ft.addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {

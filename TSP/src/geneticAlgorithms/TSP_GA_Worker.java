@@ -12,9 +12,12 @@ public class TSP_GA_Worker extends SwingWorker{
 	private TSP_GA_Adapter work;
 	private long executionTime;
 	private boolean processedCancelled;
+	private String crossoverChosen,mutationChosen;
 	
-	public TSP_GA_Worker(Vector<Point> cities, Configuration c, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen) throws InvalidConfigurationException{
-		work=new TSP_GA_Adapter(this, cities,c,results, distances, maxGen);
+	public TSP_GA_Worker(Vector<Point> cities, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen, String crossover, String mutation) throws InvalidConfigurationException{
+		crossoverChosen=crossover;
+		mutationChosen=mutation;
+		work=new TSP_GA_Adapter(this, cities,results, distances, maxGen,crossoverChosen,mutationChosen);
 		processedCancelled=false;
 	}
 	

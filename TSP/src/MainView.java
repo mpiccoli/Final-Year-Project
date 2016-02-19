@@ -17,6 +17,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -476,11 +477,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					//In case the user confirmed the action
 					if(resultSelection==JFileChooser.APPROVE_OPTION){
 						//Create writable object that will write data to a file
-						PrintWriter writer=new PrintWriter(txtExport.getSelectedFile()+".txt");
+						FileWriter writer=new FileWriter(txtExport.getSelectedFile()+".txt");
 						//Write current date and time on file
 						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date = new Date();
-						writer.println("Data exported on: "+dateFormat.format(date)+"\n\n");
+						writer.append("Data exported on: "+dateFormat.format(date)+"\n\n");
 						//Make a string containing all the data to export and add to the writer
 						//Repeat this action for each element of the queue of execution
 						for(int i=0; i<algQueueExecution.size(); i++){
@@ -495,8 +496,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								GenResultData tempGen=(GenResultData)tempElement;
 								data+=tempGen.wrapDataForFileWriter();
 							}
-							writer.println(data);
-							writer.println("------------------------------------------------------");
+							writer.append(data);
+							writer.append("------------------------------------------------------");
 						}
 						//Close the file and release its instance
 						writer.close();
@@ -760,19 +761,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				else{
 					try{
 						int fromP, toP, maxG;
-						Configuration setup=new Configuration();
 						fromP=Integer.parseInt(fromTF.getText());
 						toP=Integer.parseInt(toTF.getText());
 						maxG=Integer.parseInt(maxGenTF.getText());
-						//Setup the configuration for the TSP
-						setup.setKeepPopulationSizeConstant(false);
-						setup.setMinimumPopSizePercent(fromP);
-						//CHANGE POP NUMBER
-						setup.setPopulationSize(points.size());
-						//setup.addGeneticOperator(new CycleCrossover());
-						//Cycle crossover=new Cycle(setup);
-						//setup.addGeneticOperator(new Cycle(setup));
-						//setup.addGeneticOperator(new CycleCrossover());
 						
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
@@ -780,9 +771,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						Vector<Double> tempDistances=new Vector<Double>();
 						@SuppressWarnings("unchecked")
 						Vector<Point> tempCities=(Vector<Point>) points.clone();
-						TSP_GA tsp= new TSP_GA(tempCities,setup,null,tempVecVec,tempDistances);
-						TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,setup,tempVecVec,tempDistances,maxG);
-						GenResultData tempGen=new GenResultData(points.size(),fromP,toP,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,setup,tsp,worker);
+						TSP_GA tsp= new TSP_GA(tempCities,null,tempVecVec,tempDistances,crossoverSelected,mutationSelected);
+						TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,tempVecVec,tempDistances,maxG,crossoverSelected,mutationSelected);
+						GenResultData tempGen=new GenResultData(points.size(),fromP,toP,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,tsp,worker);
 						tempGen.setCities(tempCities);
 						tempGen.setResultsData(tempVecVec,true);
 						tempGen.setPathDistances(tempDistances, true);
@@ -899,20 +890,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Change the value of this variable to address the Genetic algorithms
 				listenToChanges="gas";
 				currentGeneticAlg=(GenResultData)obj;
-				currentGeneticAlg.getConfigurationTSP().reset();
-				Configuration setup=new DefaultConfiguration();
-				setup.reset();
+				//currentGeneticAlg.getConfigurationTSP().reset();
+				//Configuration setup=new DefaultConfiguration();
+				//setup.reset();
 				//Retrieve all the crossover and mutation methods added to this execution
-				List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
+				//List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
 				int toP=currentGeneticAlg.getPopTo();
 				int maxG=currentGeneticAlg.getMaxGen();
-				setup.setKeepPopulationSizeConstant(false);
-				setup.setMinimumPopSizePercent(currentGeneticAlg.getPopFrom());
-				setup.setPopulationSize(currentGeneticAlg.getPopSize());
-				//Add all the crossover and mutation methods to the configuration setting
-				for(GeneticOperator go:geneticOperators){
-					setup.addGeneticOperator(go);
-				}
+				
 				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
 				Vector<Point> tempSolution=currentGeneticAlg.getCities();
 				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();
@@ -922,9 +907,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				tempDistances.clear();
 				@SuppressWarnings("unchecked")
 				Vector<Point> tempCities=(Vector<Point>) currentGeneticAlg.getTSP().getCities().clone();
-				TSP_GA tsp= new TSP_GA(tempCities,setup,null,tempVecVec,tempDistances);
-				TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,setup,tempVecVec,tempDistances,maxG);
-				GenResultData tempGen=new GenResultData(tempCities.size(),currentGeneticAlg.getPopFrom(),toP,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getCrossoverProbability(),currentGeneticAlg.getMutationMethod(),currentGeneticAlg.getMutationProbability(),setup,tsp,worker);
+				TSP_GA tsp= new TSP_GA(tempCities,null,tempVecVec,tempDistances,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
+				TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,tempVecVec,tempDistances,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
+				GenResultData tempGen=new GenResultData(tempCities.size(),currentGeneticAlg.getPopFrom(),toP,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getCrossoverProbability(),currentGeneticAlg.getMutationMethod(),currentGeneticAlg.getMutationProbability(),tsp,worker);
 				tempGen.setCities(tempCities);
 				tempGen.setResultsData(tempVecVec,true);
 				tempGen.setPathDistances(tempDistances, true);
@@ -1085,6 +1070,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				try{
 					if(tspWorker.getProgress()==100 || tspWorker.isDone()){
 						int indexElement=tspAlg.getBestPathIndex();
+						//System.out.println("Index best value: "+indexElement);
 						GenResultData transferData=(GenResultData) algQueueExecution.get(index);
 						transferData.setPathDistances(((GenResultData) currentGeneticAlg).getPathDistances(),true);
 						transferData.setResultsData(((GenResultData) currentGeneticAlg).getResultsData(),true);

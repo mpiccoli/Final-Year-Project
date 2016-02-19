@@ -42,6 +42,8 @@ public class CycleCrossover extends CrossoverOperator{
 			}
 			inserted=false;
 		}
+		
+
 		//Generate two children which are going to contain the chromosome swapped 
 		Vector<Gene> child1=new Vector<Gene>();
 		Vector<Gene> child2=new Vector<Gene>();
@@ -105,14 +107,49 @@ public class CycleCrossover extends CrossoverOperator{
 			}
 		}
 		//Now that we have swapped the elements, let's copy the genes inside the two chromosomes for then pass them back to the execution
-		//for(int i=0; i<child1.size(); i++){
+		//System.out.println("First Mate: "+firstMate.toString());
+		//System.out.println("Second Mate: "+secondMate.toString());
+		//System.out.println("Indexes: "+posElements.toString());
+		//System.out.println("Child1: "+child1.toString());
+		//System.out.println("Child2: "+child2.toString());
 
-		//}
-		System.out.println("First Mate: "+firstMate.toString());
-		System.out.println("Second Mate: "+secondMate.toString());
-		System.out.println("Indexes: "+posElements.toString());
-		System.out.println("Child1: "+child1.toString());
-		System.out.println("Child2: "+child2.toString());
+		
+		/*
+		//Generate two children which are going to contain the chromosome swapped 
+		Vector<Gene> child1=new Vector<Gene>();
+		Vector<Gene> child2=new Vector<Gene>();
+		//child1.setSize(firstMate.size());
+		// First add the elements that are fixed from the parents
+		for (int i=0; i<firstMate.size(); i++) {
+			if (posElements.contains(i)) {
+				child1.add(firstMate.getGene(i));
+				child2.add(secondMate.getGene(i));
+			} else {
+				child1.add(null);
+				child2.add(null);
+			}
+		}
+		// Then, where possible swap the elements from the parents
+		for (int i=0; i<firstMate.size(); i++) {
+			if (child1.elementAt(i) == null) {
+				Gene g1 = secondMate.getGene(i);
+				Gene g2 = firstMate.getGene(i);
+				if (!child1.contains(g1))
+					child1.setElementAt(g1, i);
+				else
+					child1.setElementAt(g2,i);
+				if (!child2.contains(g2))
+					child2.setElementAt(g2, i);
+				else
+					child2.setElementAt(g1, i);
+			}
+		}*/
+
+
+
+
+
+
 
 		//Convert Vector<Gene> to Gene[] for then passing it as a setting to the IChromosome firstMate and secondMate
 		Gene[] child1Array=new Gene[firstMate.size()];

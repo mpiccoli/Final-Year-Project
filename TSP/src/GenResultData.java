@@ -15,13 +15,12 @@ public class GenResultData {
 	private Vector<Point> listOfCities, results;
 	private Vector<Double> pathDistances;
 	private Vector<Vector<Point>> resultsData;
-	private Configuration conf;
 	private TSP_GA tsp;
 	private TSP_GA_Worker tspWorker;
 
 	//Constructor with parameters
 	public GenResultData(int popS, int popF, int popT, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
-			Configuration conf, TSP_GA tsp, TSP_GA_Worker tspWorker){	
+			TSP_GA tsp, TSP_GA_Worker tspWorker){	
 		crossoverProbability=crossP;
 		mutationProbability=mutP;
 		crossoverMethod=crossMet;
@@ -30,7 +29,6 @@ public class GenResultData {
 		popFrom=popF;
 		popTo=popT;
 		maxGen=maxG;
-		this.conf=conf;
 		this.tsp=tsp;
 		this.tspWorker=tspWorker;
 		//Instantiate variables
@@ -137,12 +135,7 @@ public class GenResultData {
 	public Vector<Double> getPathDistances(){
 		return pathDistances;
 	}
-	public void setConfigurationTSP(Configuration c){
-		conf=c;
-	}
-	public Configuration getConfigurationTSP(){
-		return conf;
-	}
+
 	public void setTSP(TSP_GA tsp){
 		this.tsp=tsp;
 	}
