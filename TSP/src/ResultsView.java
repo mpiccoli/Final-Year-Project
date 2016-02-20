@@ -19,8 +19,8 @@ public class ResultsView extends JPanel{
 	//Graphical Elements
 	private JFrame mainFrame;
 	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
-	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel,fromToLabel,maxGenLabel, tradNameLabel;
-	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, fromToTF, maxGenTF, tradNameTF;
+	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel, popSizeLabel, maxGenLabel, tradNameLabel;
+	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, popSizeTF, maxGenTF, tradNameTF;
 	private JTextArea traDetailsTA;
 	private TradResultData tradObj;
 	private GenResultData genObj;
@@ -141,11 +141,11 @@ public class ResultsView extends JPanel{
 			fitnessTF=new JTextField();
 				fitnessTF.setFont(ITALIC_SEGOE_12);
 			fitnessTF.setEditable(false);
-			fromToLabel=new JLabel("Lapse");
-				fromToLabel.setFont(BOLD_SEGOE_12);
-			fromToTF=new JTextField();
-				fromToTF.setFont(ITALIC_SEGOE_12);
-			fromToTF.setEditable(false);
+			popSizeLabel=new JLabel("Pop. Size");
+				popSizeLabel.setFont(BOLD_SEGOE_12);
+			popSizeTF=new JTextField();
+				popSizeTF.setFont(ITALIC_SEGOE_12);
+				popSizeTF.setEditable(false);
 			maxGenLabel=new JLabel("Max Gen");
 				maxGenLabel.setFont(BOLD_SEGOE_12);
 			maxGenTF=new JTextField();
@@ -155,8 +155,8 @@ public class ResultsView extends JPanel{
 			mainGeDetailsPanel.setBounds(10,5,515,110);
 			nCitiesLabel.setBounds(7,20,60,20);
 			nCitiesTF.setBounds(70,20,70,20);
-			fromToLabel.setBounds(190,20,40,20);
-			fromToTF.setBounds(230,20,80,20);
+			popSizeLabel.setBounds(160,20,60,20);
+			popSizeTF.setBounds(220,20,85,20);
 			maxGenLabel.setBounds(360,20,60,20);
 			maxGenTF.setBounds(420,20,80,20);
 			
@@ -180,8 +180,8 @@ public class ResultsView extends JPanel{
 			mainFrame.add(mainGeDetailsPanel);
 			mainGeDetailsPanel.add(nCitiesLabel);
 			mainGeDetailsPanel.add(nCitiesTF);
-			mainGeDetailsPanel.add(fromToLabel);
-			mainGeDetailsPanel.add(fromToTF);
+			mainGeDetailsPanel.add(popSizeLabel);
+			mainGeDetailsPanel.add(popSizeTF);
 			mainGeDetailsPanel.add(maxGenLabel);
 			mainGeDetailsPanel.add(maxGenTF);
 			mainGeDetailsPanel.add(crossMetLabel);
@@ -216,8 +216,8 @@ public class ResultsView extends JPanel{
 			traDetailsTA.setText(tradObj.getDetails());
 		}
 		else{
-			nCitiesTF.setText(""+genObj.getPopSize());
-			fromToTF.setText(""+genObj.getPopFrom()+"-"+genObj.getPopTo());
+			nCitiesTF.setText(""+genObj.getnumCities());
+			popSizeTF.setText(""+genObj.getPopSize());
 			maxGenTF.setText(""+genObj.getMaxGen());
 			crossMetTF.setText(""+genObj.getCrossoverMethod());
 			crossProbTF.setText(""+genObj.getCrossoverProbability()*100+"%");

@@ -32,10 +32,7 @@ public class TSP_GA extends Salesman{
 		cities=this.convertVectorToMatrix(citiesData);
 		pathDistances=distances;
 		populationSize = (1 * (int) ((Math.log(1 - Math.pow(0.99,(1.0 / cities.length)))) / (Math.log(((float) (cities.length - 3) / (float) (cities.length - 1))))));
-		
-		
-		//ADD THE CROSSOVER AND MUTATION METHODS HERE
-		//conf.addGeneticOperator(new CycleCrossover(conf));
+
 	}
 	
 	public void setTSP_Adapter(TSP_GA_Adapter adapter){
@@ -139,6 +136,7 @@ public class TSP_GA extends Salesman{
 		conf.setSampleChromosome(sampleChromosome);
 		//conf.setPopulationSize(getPopulationSize());
 		//Add the crossover and mutation method chosen
+		
 		conf.addGeneticOperator(new CycleCrossover(conf));
 		conf.addGeneticOperator(new SwappingMutationOperator(conf, 20));
 		conf.setPopulationSize(populationSize);

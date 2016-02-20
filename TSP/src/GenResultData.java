@@ -7,7 +7,7 @@ import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
 
 public class GenResultData {
-	private int generationCount, popSize, popFrom, popTo, maxGen;
+	private int generationCount, numCities, popSize, maxGen;
 	private float crossoverProbability, mutationProbability;
 	private String crossoverMethod, mutationMethod;
 	private double fitness;
@@ -19,15 +19,14 @@ public class GenResultData {
 	private TSP_GA_Worker tspWorker;
 
 	//Constructor with parameters
-	public GenResultData(int popS, int popF, int popT, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
+	public GenResultData(int nCities, int popS, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
 			TSP_GA tsp, TSP_GA_Worker tspWorker){	
 		crossoverProbability=crossP;
 		mutationProbability=mutP;
 		crossoverMethod=crossMet;
 		mutationMethod=mutMet;
+		numCities=nCities;
 		popSize=popS;
-		popFrom=popF;
-		popTo=popT;
 		maxGen=maxG;
 		this.tsp=tsp;
 		this.tspWorker=tspWorker;
@@ -79,23 +78,17 @@ public class GenResultData {
 	public long getExecutionTime(){
 		return timeExecution;
 	}
-	public void setPopSize(int p){
-		popSize=p;
+	public void setnumCities(int nC){
+		numCities=nC;
+	}
+	public int getnumCities(){
+		return numCities;
+	}
+	public void setPopSize(int pS){
+		popSize=pS;
 	}
 	public int getPopSize(){
 		return popSize;
-	}
-	public void setPopFrom(int pF){
-		popFrom=pF;
-	}
-	public int getPopFrom(){
-		return popFrom;
-	}
-	public void setPopTo(int pT){
-		popTo=pT;
-	}
-	public int getPopTo(){
-		return popTo;
 	}
 	public void setMaxGen(int mG){
 		maxGen=mG;
@@ -164,8 +157,8 @@ public class GenResultData {
 		String s="";
 		//Add the algorithm information
 		s+="Algorithm Name: Genetic Algorithm\n"
-				+ "Number of Cities: "+popSize+"\n"
-				+ "Chromosomes Range: "+popFrom+"-"+popTo+"\n"
+				+ "Number of Cities: "+numCities+"\n"
+				+ "Population Size During Evolution: "+popSize+"\n"
 				+ "Number of Generations: "+maxGen+"\n"
 				+ "Crossover Method: "+crossoverMethod+"\n"
 				+ "Probability associated to the Crossover: "+(crossoverProbability*100)+"%\n"
@@ -233,8 +226,8 @@ public class GenResultData {
 			return false;
 		}
 		GenResultData temp=(GenResultData)obj;
-		return (this.popSize==temp.popSize && this.popFrom==temp.popFrom && this.popTo==temp.popTo &&
-				this.maxGen==temp.maxGen && this.crossoverMethod.equals(temp.crossoverMethod) && this.crossoverProbability==temp.crossoverProbability &&
-				this.mutationMethod.equals(temp.mutationMethod) && this.mutationProbability==temp.mutationProbability);
+		return (this.numCities==temp.numCities &&this.maxGen==temp.maxGen && this.crossoverMethod.equals(temp.crossoverMethod) && 
+				this.crossoverProbability==temp.crossoverProbability && this.mutationMethod.equals(temp.mutationMethod) && 
+				this.mutationProbability==temp.mutationProbability);
 	}
 }

@@ -91,8 +91,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	//Traditional and Genetic Algorithm variables
 	private JPanel tradPanel, genPanel, optionPanel, destinationPanel, executionPanel;
 	private JCheckBox trad1CB,trad2CB,trad3CB, manualDrawCB, importPointsCB, numRandomPointsCB;
-	private JLabel fromLabel, toLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel, randomPointsLabel, manualPointsLabel, currentRunningTimeLabel, currentRunningAlgLabel, numDrawnPoints;
-	private JTextField fromTF, toTF, maxGenTF, randomPointsTF, currentRunningTimeTF, currentRunningAlgTF;
+	private JLabel popSizeLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel, randomPointsLabel, manualPointsLabel, currentRunningTimeLabel, currentRunningAlgLabel, numDrawnPoints;
+	private JTextField popSizeTF, maxGenTF, randomPointsTF, currentRunningTimeTF, currentRunningAlgTF;
 	private JComboBox<String> crossoverMethods, mutationMethods, tradGAChooser;
 	private JSlider crossProbSlider, mutProbSlider;
 	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton, undoPoint, resetAllPoints;
@@ -177,11 +177,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB=new JCheckBox("Closest Neighbour");
 		trad2CB=new JCheckBox("Greedy Heuristic");
 		trad3CB=new JCheckBox("Insertion Heuristic");
-		fromLabel=new JLabel("From:");
-		toLabel=new JLabel("To:");
+		popSizeLabel=new JLabel("Population Size");
+		popSizeTF=new JTextField();
+			popSizeTF.setEditable(false);
+		//fromLabel=new JLabel("From:");
+		//toLabel=new JLabel("To:");
 		maxGenLabel=new JLabel("Max Gen:");
-		fromTF=new JTextField();
-		toTF=new JTextField();
+		//fromTF=new JTextField();
+		//toTF=new JTextField();
 		maxGenTF=new JTextField();
 		crossoverLabel=new JLabel("Crossover Method:");
 		crossoverMethods=new JComboBox<String>();
@@ -227,9 +230,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		optionPanel.setBackground(BACKGROUND_COLOUR);
 		destinationPanel.setBackground(BACKGROUND_COLOUR);
 		executionPanel.setBackground(BACKGROUND_COLOUR);
-		toTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		//toTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		popSizeTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		maxGenTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
-		fromTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
+		//fromTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		randomPointsTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		currentRunningAlgTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
 		currentRunningTimeTF.setBackground(TEXTFIELD_BACKGROUND_COLOUR);
@@ -242,11 +246,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB.setFont(TRUETRYPE_SEGOE_14);
 		trad2CB.setFont(TRUETRYPE_SEGOE_14);
 		trad3CB.setFont(TRUETRYPE_SEGOE_14);
-		fromLabel.setFont(BOLD_SEGOE_12);
-		toLabel.setFont(BOLD_SEGOE_12);
+		popSizeLabel.setFont(BOLD_SEGOE_12);
+		popSizeTF.setFont(ITALIC_SEGOE_12);
+		//fromLabel.setFont(BOLD_SEGOE_12);
+		//toLabel.setFont(BOLD_SEGOE_12);
 		maxGenLabel.setFont(BOLD_SEGOE_12);
-		fromTF.setFont(ITALIC_SEGOE_12);
-		toTF.setFont(ITALIC_SEGOE_12);
+		//fromTF.setFont(ITALIC_SEGOE_12);
+		//toTF.setFont(ITALIC_SEGOE_12);
 		maxGenTF.setFont(ITALIC_SEGOE_12);
 		crossoverLabel.setFont(BOLD_SEGOE_12);
 		crossoverMethods.setFont(ITALIC_SEGOE_12);
@@ -283,10 +289,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		trad1CB.setBounds(6,20,180,20);
 		trad2CB.setBounds(6,45,180,20);
 		trad3CB.setBounds(6,70,180,20);
-		fromLabel.setBounds(8,30,40,20);
-		fromTF.setBounds(50,30,55,20);
-		toLabel.setBounds(115,30,20,20);
-		toTF.setBounds(145,30,70,20);
+		popSizeLabel.setBounds(8,30,100,20);
+		popSizeTF.setBounds(110,30,60,20);
+		//fromLabel.setBounds(8,30,40,20);
+		//fromTF.setBounds(50,30,55,20);
+		//toLabel.setBounds(115,30,20,20);
+		//toTF.setBounds(145,30,70,20);
 		maxGenLabel.setBounds(8,60,60,20);
 		maxGenTF.setBounds(75,60,100,20);
 		crossoverLabel.setBounds(8,90,120,20);
@@ -348,10 +356,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		tradPanel.add(trad1CB);
 		tradPanel.add(trad2CB);
 		tradPanel.add(trad3CB);
-		genPanel.add(fromLabel);
-		genPanel.add(fromTF);
-		genPanel.add(toLabel);
-		genPanel.add(toTF);
+		genPanel.add(popSizeLabel);
+		genPanel.add(popSizeTF);
+		//genPanel.add(fromLabel);
+		//genPanel.add(fromTF);
+		//genPanel.add(toLabel);
+		//genPanel.add(toTF);
 		genPanel.add(maxGenLabel);
 		genPanel.add(maxGenTF);
 		genPanel.add(crossoverLabel);
@@ -497,7 +507,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								data+=tempGen.wrapDataForFileWriter();
 							}
 							writer.append(data);
-							writer.append("------------------------------------------------------");
+							writer.append("------------------------------------------------------\n");
 						}
 						//Close the file and release its instance
 						writer.close();
@@ -579,6 +589,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							drawingArea.passPoint(new Point(xP, yP));
 						}
 						points=drawingArea.getAllPoints();
+						//Change the value of the population size for the genetic algorithms
+						this.updatePopulationSize(points.size());
 					}
 					else{
 						randomPointsTF.setText("");
@@ -760,10 +772,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				//Only Genetic algorithms are available to user selection
 				else{
 					try{
-						int fromP, toP, maxG;
-						fromP=Integer.parseInt(fromTF.getText());
-						toP=Integer.parseInt(toTF.getText());
-						maxG=Integer.parseInt(maxGenTF.getText());
+						int maxG=Integer.parseInt(maxGenTF.getText());
+						//fromP=Integer.parseInt(fromTF.getText());
+						//toP=Integer.parseInt(toTF.getText());
+						//maxG=
 						
 						Vector<Vector<Point>> tempVecVec=new Vector<Vector<Point>>();
 						@SuppressWarnings("unused")
@@ -771,9 +783,10 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						Vector<Double> tempDistances=new Vector<Double>();
 						@SuppressWarnings("unchecked")
 						Vector<Point> tempCities=(Vector<Point>) points.clone();
+						int populationSize = (1 * (int) ((Math.log(1 - Math.pow(0.99,(1.0 / tempCities.size())))) / (Math.log(((float) (tempCities.size() - 3) / (float) (tempCities.size() - 1))))));
 						TSP_GA tsp= new TSP_GA(tempCities,null,tempVecVec,tempDistances,crossoverSelected,mutationSelected);
 						TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,tempVecVec,tempDistances,maxG,crossoverSelected,mutationSelected);
-						GenResultData tempGen=new GenResultData(points.size(),fromP,toP,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,tsp,worker);
+						GenResultData tempGen=new GenResultData(points.size(),populationSize,maxG,crossoverSelected,crossoverProb,mutationSelected,mutationProb,tsp,worker);
 						tempGen.setCities(tempCities);
 						tempGen.setResultsData(tempVecVec,true);
 						tempGen.setPathDistances(tempDistances, true);
@@ -792,8 +805,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								algQueueExecution.add(tempGen);
 								JOptionPane.showMessageDialog(null, "Element Added!"
 										+ "\nPopulation Size: "+tempGen.getPopSize()
-										+"\nFrom: "+tempGen.getPopFrom()
-										+"\nTo: "+tempGen.getPopTo()
 										+"\nMax Gen: "+tempGen.getMaxGen()
 										+"\nCrossover Method: "+tempGen.getCrossoverMethod()
 										+"\nCrossover Probability: "+tempGen.getCrossoverProbability()
@@ -809,8 +820,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							algQueueExecution.add(tempGen);
 							JOptionPane.showMessageDialog(null, "Element Added!"
 									+ "\nPopulation Size: "+tempGen.getPopSize()
-									+"\nFrom: "+tempGen.getPopFrom()
-									+"\nTo: "+tempGen.getPopTo()
 									+"\nMax Gen: "+tempGen.getMaxGen()
 									+"\nCrossover Method: "+tempGen.getCrossoverMethod()
 									+"\nCrossover Probability: "+tempGen.getCrossoverProbability()
@@ -852,158 +861,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		}
 	}
 
-	@SuppressWarnings("static-access")
-	private void beginQueueExecution(){
-		//Start performing the algorithm
-		//Verify whether the algorithm to perform is Traditional or Genetic
-		startExecutionButton.setText("Stop");
-		currentRunningAlgTF.setForeground(Color.BLACK);
-		try{
-			Object obj=algQueueExecution.get(index);
-			if(obj instanceof TradResultData){
-				results=((TradResultData) obj).getResultingPoints();
-				points=((TradResultData) obj).getCities();
-				currentRunningAlg=((TradResultData) obj).getAlgName();
-				//Clear the vector containing old execution results
-				((TradResultData) obj).resetResultData();
-				if(((TradResultData) obj).getAlgName().equals("Closest Neighbour")){
-					//Listen to changes for this specific class
-					listenToChanges="cn";
-					closestNeighbourAlg=new ClosestNeighbour(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
-					closestNeighbourAlg.addPropertyChangeListener(this);
-					//currentRunningTimeExec=System.currentTimeMillis();
-					closestNeighbourAlg.execute();
-				}
-				if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
-					//Listen to changes for this specific class
-					listenToChanges="gh";
-					greedyHeuristicAlg=new GreedyHeuristic(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
-					greedyHeuristicAlg.addPropertyChangeListener(this);
-					//currentRunningTimeExec=System.currentTimeMillis();
-					greedyHeuristicAlg.execute();
-				}
-				if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
-					//TO IMPLEMENT
-				}
-			}
-			else if(obj instanceof GenResultData){
-				//Change the value of this variable to address the Genetic algorithms
-				listenToChanges="gas";
-				currentGeneticAlg=(GenResultData)obj;
-				//currentGeneticAlg.getConfigurationTSP().reset();
-				//Configuration setup=new DefaultConfiguration();
-				//setup.reset();
-				//Retrieve all the crossover and mutation methods added to this execution
-				//List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
-				int toP=currentGeneticAlg.getPopTo();
-				int maxG=currentGeneticAlg.getMaxGen();
-				
-				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
-				Vector<Point> tempSolution=currentGeneticAlg.getCities();
-				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();
-				//Clear any data contained within these vectors
-				tempVecVec.clear();
-				tempSolution.clear();
-				tempDistances.clear();
-				@SuppressWarnings("unchecked")
-				Vector<Point> tempCities=(Vector<Point>) currentGeneticAlg.getTSP().getCities().clone();
-				TSP_GA tsp= new TSP_GA(tempCities,null,tempVecVec,tempDistances,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
-				TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,tempVecVec,tempDistances,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
-				GenResultData tempGen=new GenResultData(tempCities.size(),currentGeneticAlg.getPopFrom(),toP,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getCrossoverProbability(),currentGeneticAlg.getMutationMethod(),currentGeneticAlg.getMutationProbability(),tsp,worker);
-				tempGen.setCities(tempCities);
-				tempGen.setResultsData(tempVecVec,true);
-				tempGen.setPathDistances(tempDistances, true);
-				currentGeneticAlg=tempGen;
-				//Copy the memory allocations of the following objects
-				tspAlg=currentGeneticAlg.getTSP();
-				tspWorker=currentGeneticAlg.getTSP_Worker();
-				results=currentGeneticAlg.getResultingPoints();
-				points=currentGeneticAlg.getCities();
-				resultsDataTSP=currentGeneticAlg.getResultsData();
-				pathDistancesTSP=currentGeneticAlg.getPathDistances();
-				currentRunningAlg="Genetic Algorithm";
-				tspWorker.addPropertyChangeListener(this);
-				//currentRunningTimeExec=System.currentTimeMillis();
-				startExecutionButton.setEnabled(false);
-				//Start the execution of the algorithm
-				tspWorker.execute();
-			}
-		}
-		//This code is executed when the vector has reached its end and the execution is completed
-		catch(Exception e){
-			startExecutionButton.setText("Start");
-			currentRunningAlgTF.setForeground(Color.RED);
-			currentRunningAlgTF.setText("COMPLETED!");
-			progressBar.setVisible(false);
-			currentRunningTimeExec=0;
-			//Update the graph one last time
-			drawingArea.repaint();
-		}
-	}
-
-	private void tradGenView(int methodSelected) {
-		//Enable only the Tradition algorithms
-		if(methodSelected==0){
-			tradPanel.setEnabled(true);
-			genPanel.setEnabled(false);
-			Component[] geneticComponents=genPanel.getComponents();
-			for(Component c:geneticComponents){
-				c.setEnabled(false);
-			}
-			Component[] tradComponents=tradPanel.getComponents();
-			for(Component c:tradComponents){
-				c.setEnabled(true);
-			}
-			trad1CB.setSelected(false);
-			trad2CB.setSelected(false);
-			trad3CB.setSelected(false);
-		}
-		//Enable only the Genetic algorithms
-		else if(methodSelected==1){
-			tradPanel.setEnabled(false);
-			genPanel.setEnabled(true);
-			Component[] geneticComponents=genPanel.getComponents();
-			for(Component c:geneticComponents){
-				c.setEnabled(true);
-			}
-			Component[] tradComponents=tradPanel.getComponents();
-			for(Component c:tradComponents){
-				c.setEnabled(false);
-			}
-		}
-		//Disable both traditional and genetic fields, including the drawing points panel
-		else if(methodSelected==2){
-			tradPanel.setEnabled(false);
-			genPanel.setEnabled(false);
-			destinationPanel.setEnabled(false);
-			tradGAChooser.setEnabled(false);
-			Component[] geneticComponents=genPanel.getComponents();
-			for(Component c:geneticComponents){
-				c.setEnabled(false);
-			}
-			Component[] tradComponents=tradPanel.getComponents();
-			for(Component c:tradComponents){
-				c.setEnabled(false);
-			}
-			trad1CB.setSelected(false);
-			trad2CB.setSelected(false);
-			trad3CB.setSelected(false);
-			Component[] drawingComponents=destinationPanel.getComponents();
-			for(Component c:drawingComponents){
-				c.setEnabled(false);
-			}
-		}
-		//Re-enable either traditional or genetic panel and the drawing panel
-		else if(methodSelected==3){
-			destinationPanel.setEnabled(true);
-			tradGAChooser.setEnabled(true);
-			Component[] drawingComponents=destinationPanel.getComponents();
-			for(Component c:drawingComponents){
-				c.setEnabled(true);
-			}
-			this.tradGenView(tradGAChooser.getSelectedIndex());
-		}
-	}
+	
 
 	@Override
 	public void propertyChange(PropertyChangeEvent pcEvent) {
@@ -1115,7 +973,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					transferData.setExecutionTime(0);
 					transferData.setResultingPoints(null, true);
 					currentRunningTimeExec=0;
-					JOptionPane.showMessageDialog(null, "Multiple configuration are not acceptable!\nExecution Interrupted and blocked,\n\nPress Reset All to perform another list of algorithms","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Multiple configuration are not accepted!\nExecution Interrupted and blocked,\n\nPress Reset All to perform another list of algorithms","Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -1131,6 +989,168 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 			mutationProb=(float)mutProbSlider.getValue()/100;
 			mutationProbLabel.setText("Probability: "+mutationProb);
 		}
+	}
+	
+	private void beginQueueExecution(){
+		//Start performing the algorithm
+		//Verify whether the algorithm to perform is Traditional or Genetic
+		startExecutionButton.setText("Stop");
+		currentRunningAlgTF.setForeground(Color.BLACK);
+		try{
+			Object obj=algQueueExecution.get(index);
+			if(obj instanceof TradResultData){
+				results=((TradResultData) obj).getResultingPoints();
+				points=((TradResultData) obj).getCities();
+				currentRunningAlg=((TradResultData) obj).getAlgName();
+				//Clear the vector containing old execution results
+				((TradResultData) obj).resetResultData();
+				if(((TradResultData) obj).getAlgName().equals("Closest Neighbour")){
+					//Listen to changes for this specific class
+					listenToChanges="cn";
+					closestNeighbourAlg=new ClosestNeighbour(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
+					closestNeighbourAlg.addPropertyChangeListener(this);
+					//currentRunningTimeExec=System.currentTimeMillis();
+					closestNeighbourAlg.execute();
+				}
+				if(((TradResultData) obj).getAlgName().equals("Greedy Heuristic")){
+					//Listen to changes for this specific class
+					listenToChanges="gh";
+					greedyHeuristicAlg=new GreedyHeuristic(((TradResultData) obj).getCities(), ((TradResultData) obj).getResultingPoints());
+					greedyHeuristicAlg.addPropertyChangeListener(this);
+					//currentRunningTimeExec=System.currentTimeMillis();
+					greedyHeuristicAlg.execute();
+				}
+				if(((TradResultData) obj).getAlgName().equals("Insertion Heuristic")){
+					//TO IMPLEMENT
+				}
+			}
+			else if(obj instanceof GenResultData){
+				//Change the value of this variable to address the Genetic algorithms
+				listenToChanges="gas";
+				currentGeneticAlg=(GenResultData)obj;
+				//currentGeneticAlg.getConfigurationTSP().reset();
+				//Configuration setup=new DefaultConfiguration();
+				//setup.reset();
+				//Retrieve all the crossover and mutation methods added to this execution
+				//List<GeneticOperator> geneticOperators=currentGeneticAlg.getConfigurationTSP().getGeneticOperators();
+				//int toP=currentGeneticAlg.getPopTo();
+				int maxG=currentGeneticAlg.getMaxGen();
+				
+				Vector<Vector<Point>> tempVecVec=currentGeneticAlg.getResultsData();
+				Vector<Point> tempSolution=currentGeneticAlg.getCities();
+				Vector<Double> tempDistances=currentGeneticAlg.getPathDistances();
+				//Clear any data contained within these vectors
+				tempVecVec.clear();
+				tempSolution.clear();
+				tempDistances.clear();
+				@SuppressWarnings("unchecked")
+				Vector<Point> tempCities=(Vector<Point>) currentGeneticAlg.getTSP().getCities().clone();
+				int populationSize = (1 * (int) ((Math.log(1 - Math.pow(0.99,(1.0 / tempCities.size())))) / (Math.log(((float) (tempCities.size() - 3) / (float) (tempCities.size() - 1))))));
+				TSP_GA tsp= new TSP_GA(tempCities,null,tempVecVec,tempDistances,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
+				TSP_GA_Worker worker=new TSP_GA_Worker(tempCities,tempVecVec,tempDistances,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getMutationMethod());
+				GenResultData tempGen=new GenResultData(tempCities.size(),populationSize,maxG,currentGeneticAlg.getCrossoverMethod(),currentGeneticAlg.getCrossoverProbability(),currentGeneticAlg.getMutationMethod(),currentGeneticAlg.getMutationProbability(),tsp,worker);
+				tempGen.setCities(tempCities);
+				tempGen.setResultsData(tempVecVec,true);
+				tempGen.setPathDistances(tempDistances, true);
+				currentGeneticAlg=tempGen;
+				//Copy the memory allocations of the following objects
+				tspAlg=currentGeneticAlg.getTSP();
+				tspWorker=currentGeneticAlg.getTSP_Worker();
+				results=currentGeneticAlg.getResultingPoints();
+				points=currentGeneticAlg.getCities();
+				resultsDataTSP=currentGeneticAlg.getResultsData();
+				pathDistancesTSP=currentGeneticAlg.getPathDistances();
+				currentRunningAlg="Genetic Algorithm";
+				tspWorker.addPropertyChangeListener(this);
+				//currentRunningTimeExec=System.currentTimeMillis();
+				startExecutionButton.setEnabled(false);
+				//Start the execution of the algorithm
+				tspWorker.execute();
+			}
+		}
+		//This code is executed when the vector has reached its end and the execution is completed
+		catch(Exception e){
+			startExecutionButton.setText("Start");
+			currentRunningAlgTF.setForeground(Color.RED);
+			currentRunningAlgTF.setText("COMPLETED!");
+			progressBar.setVisible(false);
+			currentRunningTimeExec=0;
+			//Update the graph one last time
+			drawingArea.repaint();
+		}
+	}
+
+	private void tradGenView(int methodSelected) {
+		//Enable only the Tradition algorithms
+		if(methodSelected==0){
+			tradPanel.setEnabled(true);
+			genPanel.setEnabled(false);
+			Component[] geneticComponents=genPanel.getComponents();
+			for(Component c:geneticComponents){
+				c.setEnabled(false);
+			}
+			popSizeTF.setText("");
+			Component[] tradComponents=tradPanel.getComponents();
+			for(Component c:tradComponents){
+				c.setEnabled(true);
+			}
+			trad1CB.setSelected(false);
+			trad2CB.setSelected(false);
+			trad3CB.setSelected(false);
+		}
+		//Enable only the Genetic algorithms
+		else if(methodSelected==1){
+			tradPanel.setEnabled(false);
+			genPanel.setEnabled(true);
+			Component[] geneticComponents=genPanel.getComponents();
+			for(Component c:geneticComponents){
+				c.setEnabled(true);
+			}
+			Component[] tradComponents=tradPanel.getComponents();
+			for(Component c:tradComponents){
+				c.setEnabled(false);
+			}
+			this.updatePopulationSize(points.size());
+		}
+		//Disable both traditional and genetic fields, including the drawing points panel
+		else if(methodSelected==2){
+			tradPanel.setEnabled(false);
+			genPanel.setEnabled(false);
+			destinationPanel.setEnabled(false);
+			tradGAChooser.setEnabled(false);
+			Component[] geneticComponents=genPanel.getComponents();
+			for(Component c:geneticComponents){
+				c.setEnabled(false);
+			}
+			Component[] tradComponents=tradPanel.getComponents();
+			for(Component c:tradComponents){
+				c.setEnabled(false);
+			}
+			popSizeTF.setText("");
+			maxGenTF.setText("");
+			trad1CB.setSelected(false);
+			trad2CB.setSelected(false);
+			trad3CB.setSelected(false);
+			Component[] drawingComponents=destinationPanel.getComponents();
+			for(Component c:drawingComponents){
+				c.setEnabled(false);
+			}
+		}
+		//Re-enable either traditional or genetic panel and the drawing panel
+		else if(methodSelected==3){
+			destinationPanel.setEnabled(true);
+			tradGAChooser.setEnabled(true);
+			Component[] drawingComponents=destinationPanel.getComponents();
+			for(Component c:drawingComponents){
+				c.setEnabled(true);
+			}
+			this.tradGenView(tradGAChooser.getSelectedIndex());
+		}
+	}
+	
+	private void updatePopulationSize(int size){
+		int populationSize = (1 * (int) ((Math.log(1 - Math.pow(0.99,(1.0 / points.size())))) / (Math.log(((float) (points.size() - 3) / (float) (points.size() - 1))))));
+		popSizeTF.setText(""+populationSize);
 	}
 
 	private void initExitRequest(){

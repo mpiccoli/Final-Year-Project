@@ -2,30 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="drawingArea" key="selection"/>
+		<item value="popSizeLabel" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="popSizeLabel"/>
+			<item value="(1 * (int) ((Math.log(1"/>
+			<item value="popSizeTF"/>
+			<item value="getPopSize"/>
+			<item value="popSize"/>
+			<item value="populationSize"/>
 			<item value="drawingArea"/>
 			<item value="6355.593784093857"/>
-			<item value="6477.341800332069"/>
-			<item value="findOptimalPath"/>
-			<item value="getBestPathIndex"/>
-			<item value=" 6046"/>
-			<item value="parentA"/>
-			<item value="Configuration"/>
 		</list>
 		<list key="replacehistory">
+			<item value="numCities"/>
+			<item value=""/>
 			<item value="parentB"/>
 			<item value="parentA"/>
 			<item value="chromosomes"/>
 			<item value="TEXTFIELD_BACKGROUND_COLOUR"/>
 			<item value="BACKGROUND_COLOUR"/>
 			<item value="ITALIC_SEGOE_13"/>
-			<item value="PLAIN_SEGOE_13"/>
-			<item value="PLAIN_SEGOE_12"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

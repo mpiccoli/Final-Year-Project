@@ -112,7 +112,7 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 				if (temp instanceof GenResultData ){
 					long timeExtraction=((GenResultData)temp).getExecutionTime();
 					String tempTime=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExtraction),TimeUnit.MILLISECONDS.toSeconds(timeExtraction)%60, (timeExtraction%100));
-					tableModel.addRow(new Object[]{"Genetic",((GenResultData) temp).getPopSize(),((GenResultData) temp).getFitness(),tempTime,"Open"});
+					tableModel.addRow(new Object[]{"Genetic",((GenResultData) temp).getnumCities(),((GenResultData) temp).getFitness(),tempTime,"Open"});
 				}
 				else if(temp instanceof TradResultData){
 					long timeExtraction=((TradResultData) temp).getExecutionTime();
