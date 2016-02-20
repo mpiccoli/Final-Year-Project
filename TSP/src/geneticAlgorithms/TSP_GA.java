@@ -8,6 +8,7 @@ import org.jgap.impl.*;
 import org.jgap.impl.salesman.*;
 
 import geneticAlgorithms.CrossoverMethods.CycleCrossover;
+import geneticAlgorithms.CrossoverMethods.OrderedCrossover;
 
 public class TSP_GA extends Salesman{
 	private static final long serialVersionUID = 5489585985877059554L;
@@ -34,7 +35,7 @@ public class TSP_GA extends Salesman{
 		populationSize = (1 * (int) ((Math.log(1 - Math.pow(0.99,(1.0 / cities.length)))) / (Math.log(((float) (cities.length - 3) / (float) (cities.length - 1))))));
 
 	}
-	
+
 	public void setTSP_Adapter(TSP_GA_Adapter adapter){
 		if(adapter!=null){
 			worker=adapter;
@@ -43,25 +44,25 @@ public class TSP_GA extends Salesman{
 			worker=null;
 		}
 	}
-	
+
 	public Configuration createConfiguration(final Object a_initial_data) throws InvalidConfigurationException {
-		    // This is copied from DefaultConfiguration.
-		      // -----------------------------------------
-		      Configuration config = new Configuration();
-		      BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(config, 1.0d);
-		      bestChromsSelector.setDoubletteChromosomesAllowed(false);
-		      config.addNaturalSelector(bestChromsSelector, true);
-		      config.setRandomGenerator(new StockRandomGenerator());
-		      config.setMinimumPopSizePercent(0);
-		      config.setEventManager(new EventManager());
-		      config.setFitnessEvaluator(new DefaultFitnessEvaluator());
-		      config.setChromosomePool(new ChromosomePool());
-		      // These are different:
-		      // --------------------
-		      //config.addGeneticOperator(new GreedyCrossover(config));
-		      //config.addGeneticOperator(new SwappingMutationOperator(config, 20));
-		      return config;
-		  }
+		// This is copied from DefaultConfiguration.
+		// -----------------------------------------
+		Configuration config = new Configuration();
+		BestChromosomesSelector bestChromsSelector = new BestChromosomesSelector(config, 1.0d);
+		bestChromsSelector.setDoubletteChromosomesAllowed(false);
+		config.addNaturalSelector(bestChromsSelector, true);
+		config.setRandomGenerator(new StockRandomGenerator());
+		config.setMinimumPopSizePercent(0);
+		config.setEventManager(new EventManager());
+		config.setFitnessEvaluator(new DefaultFitnessEvaluator());
+		config.setChromosomePool(new ChromosomePool());
+		// These are different:
+		// --------------------
+		//config.addGeneticOperator(new GreedyCrossover(config));
+		//config.addGeneticOperator(new SwappingMutationOperator(config, 20));
+		return config;
+	}
 
 	public Vector<Point> getCities(){
 		return citiesVector;
@@ -134,12 +135,14 @@ public class TSP_GA extends Salesman{
 		//IChromosome sampleChromosome = createSampleChromosome(a_initial_data);
 		IChromosome sampleChromosome = createSampleChromosome(conf);
 		conf.setSampleChromosome(sampleChromosome);
+		conf.setPopulationSize(populationSize);
 		//conf.setPopulationSize(getPopulationSize());
 		//Add the crossover and mutation method chosen
-		
-		conf.addGeneticOperator(new CycleCrossover(conf));
-		conf.addGeneticOperator(new SwappingMutationOperator(conf, 20));
-		conf.setPopulationSize(populationSize);
+		this.addCrossoverAndMutationMethods(conf,crossoverChosen,mutationChosen);
+
+		//conf.addGeneticOperator(new CycleCrossover(conf));
+
+
 		//System.out.println("Configuration setting: "+conf.toString());
 		IChromosome[] chromosomes = new IChromosome[conf.getPopulationSize()];
 		Gene[] samplegenes = sampleChromosome.getGenes();
@@ -156,6 +159,7 @@ public class TSP_GA extends Salesman{
 		IChromosome best = null;
 		IChromosome tempBest = null;
 		double bestFitnessValue=Double.MAX_VALUE;
+		//System.out.println("Cross: "+crossoverChosen+" mut: "+mutationChosen);
 		//System.out.print(conf.toString());
 		//Evolve the population and find the best chromosome which guarantee the shortest path for the TSP
 		Evolution:
@@ -173,7 +177,38 @@ public class TSP_GA extends Salesman{
 		//System.out.println("Best Value: "+bestFitnessValue);
 		return best;
 	}
-	
+
+	private void addCrossoverAndMutationMethods(Configuration c, String crossover, String mutation) {
+		try{
+			//Verify which crossover operator has the user chosen
+			if(crossover.equals("Cycle Crossover")){
+				c.addGeneticOperator(new CycleCrossover(c));
+			}
+			else if(crossover.equals("Ordered Crossover")){
+				c.addGeneticOperator(new OrderedCrossover(c));
+
+			}
+			else if(crossover.equals("Partially Mapped Crossover")){
+
+			}
+			else if(crossover.equals("Modified Sequential Constructive Crossover")){
+
+			}
+			//Verify which mutation operator has the user chosen
+			if(mutation.equals("Insertion Mutation")){
+				c.addGeneticOperator(new SwappingMutationOperator(c, 20));
+			}
+			else if(mutation.equals("Simple Inversion")){
+
+			}
+			else if(mutation.equals("Scramble Mutation")){
+
+			}
+		}catch(InvalidConfigurationException error){
+			error.printStackTrace();
+		}
+	}
+
 	//This method call is executed when a chromosome with a better fitness value is found
 	/*public void updateBestResultSoFar(IChromosome ic){
 		System.out.println(this.convertArrayResultToVectorPoint(ic.getGenes()).toString());
@@ -183,13 +218,13 @@ public class TSP_GA extends Salesman{
 	public void addToResults(IChromosome ic){
 		Vector<Point> temp=this.convertArrayResultToVectorPoint(ic.getGenes());
 		//Add the starting point so when the drawing occurs, the path is completed
-		temp.add(citiesVector.elementAt(0));
+		temp.add(temp.firstElement());
 		results.add(temp);
 		pathDistances.add((Integer.MAX_VALUE/2 - ic.getFitnessValue()));
 		//System.out.println("Size PathDistances: "+pathDistances.size());
 		worker.updateProgress((int)(Math.random()*10));
 	}
-	
+
 	public int getBestPathIndex(){
 		int index=0;
 		if(results.size()>0){

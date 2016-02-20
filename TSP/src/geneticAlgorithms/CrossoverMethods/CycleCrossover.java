@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.jgap.*;
 import org.jgap.impl.CrossoverOperator;
-import org.jgap.impl.IntegerGene;
 
 public class CycleCrossover extends CrossoverOperator{
 	private static final long serialVersionUID = 3110359141901206201L;
@@ -13,14 +12,16 @@ public class CycleCrossover extends CrossoverOperator{
 	public CycleCrossover(Configuration a_configuration) throws InvalidConfigurationException {
 		super(a_configuration);
 	}
-
+	
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
+	@Override
 	protected void doCrossover(IChromosome firstMate, IChromosome secondMate, List a_candidateChromosomes, RandomGenerator generator) {
 		//System.out.println("Crossover ----------------------------");
 		//System.out.println("firstMate: "+firstMate.toString());
 		//System.out.println("secondMate: "+secondMate.toString());
 		//System.out.println("List of candidates: "+a_candidateChromosomes.toString());
-		Gene[] parentA = firstMate.getGenes();
-		Gene[] parentB = secondMate.getGenes();
+		//Gene[] parentA = firstMate.getGenes();
+		//Gene[] parentB = secondMate.getGenes();
 		int sizeChromosome=firstMate.size();
 		int elementsToTake=sizeChromosome/3;
 		Vector<Integer> posElements=new Vector<Integer>();

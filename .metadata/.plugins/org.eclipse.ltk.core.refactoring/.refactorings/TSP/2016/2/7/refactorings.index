@@ -2,3 +2,7 @@
 1455578865894	Rename package 'geneticAlgorithms.Mutation'
 1455646437013	Delete element
 1455646456778	Rename type 'Cycle'
+1455979751198	Delete element
+1455979773883	Rename type 'OrderedCrossover'
+1455979803007	Delete element
+1455979833461	Rename type 'OnePointCrossover'

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
 <fullyQualifiedTypeName name="ExecutionView"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.TestGA"/>
@@ -49,7 +48,6 @@
 <fullyQualifiedTypeName name="geneticAlgorithms.Crossover.CycleCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.DefaultConfiguration"/>
 <fullyQualifiedTypeName name="geneticAlgorithms.CrossoverMethods.CycleCrossover"/>
-<fullyQualifiedTypeName name="org.jgap.impl.CrossoverOperator"/>
 <fullyQualifiedTypeName name="org.jgap.RandomGenerator"/>
 <fullyQualifiedTypeName name="org.jgap.Gene"/>
 <fullyQualifiedTypeName name="org.jgap.ICompositeGene"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="org.jgap.IChromosome"/>
 <fullyQualifiedTypeName name="org.jgap.impl.IntegerGene"/>
 <fullyQualifiedTypeName name="java.io.FileWriter"/>
+<fullyQualifiedTypeName name="org.jgap.impl.CrossoverOperator"/>
+<fullyQualifiedTypeName name="geneticAlgorithms.CrossoverMethods.OrderedCrossover"/>
 </qualifiedTypeNameHistroy>

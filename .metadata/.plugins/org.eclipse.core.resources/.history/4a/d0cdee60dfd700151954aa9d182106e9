@@ -1,0 +1,27 @@
+package geneticAlgorithms.CrossoverMethods;
+
+import java.util.List;
+
+import org.jgap.Configuration;
+import org.jgap.GeneticOperator;
+import org.jgap.IChromosome;
+import org.jgap.InvalidConfigurationException;
+import org.jgap.Population;
+import org.jgap.RandomGenerator;
+import org.jgap.impl.CrossoverOperator;
+
+public class OnePointCrossover extends CrossoverOperator{
+
+	public OnePointCrossover(Configuration a_configuration) throws InvalidConfigurationException {
+		super(a_configuration);
+	}
+
+	private static final long serialVersionUID = -3205548027106797115L;
+
+	@Override
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
+	protected void doCrossover(IChromosome firstMate, IChromosome secondMate, List a_candidateChromosomes, RandomGenerator generator) {
+	
+	
+	}
+}
