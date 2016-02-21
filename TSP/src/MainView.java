@@ -936,6 +936,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						transferData.setFitness(pathDistancesTSP.elementAt(indexElement));
 						transferData.setExecutionTime(tspWorker.getExecutionTime());
 						transferData.setResultingPoints(resultsDataTSP.elementAt(indexElement), false);
+						transferData.setIndexBestResultAtGeneration(indexElement);
 						//currentRunningTimeExec=0;
 						//Refresh the drawing area one last time in case of last second changes
 						drawingArea.performLinks(true, ((GenResultData) currentGeneticAlg).getCities(),resultsDataTSP.elementAt(indexElement));

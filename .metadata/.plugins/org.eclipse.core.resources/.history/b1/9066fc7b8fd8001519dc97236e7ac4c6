@@ -1,0 +1,50 @@
+package geneticAlgorithms.CrossoverMethods;
+
+import java.util.List;
+import java.util.Vector;
+
+import org.jgap.Configuration;
+import org.jgap.Gene;
+import org.jgap.IChromosome;
+import org.jgap.InvalidConfigurationException;
+import org.jgap.RandomGenerator;
+import org.jgap.impl.CrossoverOperator;
+
+public class ModifiedSequentialConstructiveCrossover extends CrossoverOperator{
+
+	private static final long serialVersionUID = -4600861017821822165L;
+
+	public ModifiedSequentialConstructiveCrossover(Configuration a_configuration) throws InvalidConfigurationException {
+		super(a_configuration);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected void doCrossover(IChromosome firstMate, IChromosome secondMate, List a_candidateChromosomes, RandomGenerator generator) {
+
+		Gene[] parentA = firstMate.getGenes();
+		Gene[] parentB = secondMate.getGenes();
+		int sizeChromosome=firstMate.size();
+
+		//Create the two children which are going to contain the new set of chromosomes 
+		//Copy the first value from the parents and set their other values to null for an easier manipulation later on with the developement of this crossover
+		Vector<Gene> child1=new Vector<Gene>();
+		Vector<Gene> child2=new Vector<Gene>();
+		for(int i=0; i<firstMate.size(); i++){
+			if(i==0){
+				child1.add(firstMate.getGene(0));
+				child2.add(secondMate.getGene(0));
+			}
+			else{
+				child1.add(null);
+				child2.add(null);
+			}
+		}
+
+
+		//Add the chromosomes to the candidate list
+		a_candidateChromosomes.add(firstMate);
+		a_candidateChromosomes.add(secondMate);
+	}
+
+}

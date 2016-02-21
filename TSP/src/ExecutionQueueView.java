@@ -93,7 +93,7 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 		mainFrame.setVisible(true);
 	}
 	private void performRemoveElementCheck() {
-		if(dataAlgForTable.size()>0){
+		if(dataAlgForTable.size()>1){
 			removeAlg.setEnabled(true);
 		}
 		else{
@@ -130,15 +130,9 @@ public class ExecutionQueueView extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(removeAlg)){
 			if(tableAlg.getSelectedRow()!=-1){
-				//Allow the user to remove an element from the queue in the only case the queue has more than 2 elements
-				if(dataAlgForTable.size()>1){
-					dataAlgForTable.remove(tableAlg.getSelectedRow());
-					tableModel.removeRow(tableAlg.getSelectedRow());
-					this.performRemoveElementCheck();
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "The table must contain at least 2 elements to allow the removal of one of them","Warning",JOptionPane.WARNING_MESSAGE);
-				}
+				dataAlgForTable.remove(tableAlg.getSelectedRow());
+				tableModel.removeRow(tableAlg.getSelectedRow());
+				this.performRemoveElementCheck();
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Please select an algorithm you would like to remove!","Warning",JOptionPane.WARNING_MESSAGE);
@@ -163,7 +157,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		//Define actions for when an item in the table is selected
 		if (isSelected) {
 			setBackground(table.getSelectionBackground());

@@ -19,8 +19,8 @@ public class ResultsView extends JPanel{
 	//Graphical Elements
 	private JFrame mainFrame;
 	private JPanel mainGeDetailsPanel, geDataProducedPanel, mainTradDetailsPanel, traDetailsPanel;
-	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel, popSizeLabel, maxGenLabel, tradNameLabel;
-	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, popSizeTF, maxGenTF, tradNameTF;
+	private JLabel nCitiesLabel, crossMetLabel, crossProbLabel, mutMetLabel, mutProbLabel, tourLabel, generLabel, fitnessLabel, timeLabel, popSizeLabel, maxGenLabel, tradNameLabel, bestResultAtLabel;
+	private JTextField nCitiesTF, crossMetTF, crossProbTF, mutMetTF, mutProbTF, tourTF, generTF, fitnessTF, timeTF, popSizeTF, maxGenTF, tradNameTF, bestResultAtTF;
 	private JTextArea traDetailsTA;
 	private TradResultData tradObj;
 	private GenResultData genObj;
@@ -151,6 +151,11 @@ public class ResultsView extends JPanel{
 			maxGenTF=new JTextField();
 				maxGenTF.setFont(ITALIC_SEGOE_12);
 			maxGenTF.setEditable(false);
+			bestResultAtLabel=new JLabel("Best Path at Gen");
+				bestResultAtLabel.setFont(BOLD_SEGOE_12);
+			bestResultAtTF=new JTextField();
+				bestResultAtTF.setFont(ITALIC_SEGOE_12);
+				bestResultAtTF.setEditable(false);
 			
 			mainGeDetailsPanel.setBounds(10,5,515,110);
 			nCitiesLabel.setBounds(7,20,60,20);
@@ -174,8 +179,10 @@ public class ResultsView extends JPanel{
 			generTF.setBounds(90,25,90,20);
 			fitnessLabel.setBounds(200,25,60,20);
 			fitnessTF.setBounds(260,25,140,20);
-			timeLabel.setBounds(160,55,50,20);
-			timeTF.setBounds(200,55,80,20);
+			bestResultAtLabel.setBounds(10,55,110,20);
+			bestResultAtTF.setBounds(120,55,60,20);
+			timeLabel.setBounds(200,55,50,20);
+			timeTF.setBounds(250,55,80,20);
 			
 			mainFrame.add(mainGeDetailsPanel);
 			mainGeDetailsPanel.add(nCitiesLabel);
@@ -197,6 +204,8 @@ public class ResultsView extends JPanel{
 			geDataProducedPanel.add(generTF);
 			geDataProducedPanel.add(fitnessLabel);
 			geDataProducedPanel.add(fitnessTF);
+			geDataProducedPanel.add(bestResultAtLabel);
+			geDataProducedPanel.add(bestResultAtTF);
 			geDataProducedPanel.add(timeLabel);
 			geDataProducedPanel.add(timeTF);
 		}
@@ -228,6 +237,7 @@ public class ResultsView extends JPanel{
 			//Some times the fitness value is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistant
 	        DecimalFormat fv = new DecimalFormat("#.########");
 	        fitnessTF.setText(""+fv.format(fitnessValue));
+	        bestResultAtTF.setText(""+genObj.getIndexBestResultAtGeneration());
 			long tempTime=genObj.getExecutionTime();
 			String timeString=String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),TimeUnit.MILLISECONDS.toSeconds(tempTime)%60, (tempTime%100));
 			timeTF.setText(timeString);

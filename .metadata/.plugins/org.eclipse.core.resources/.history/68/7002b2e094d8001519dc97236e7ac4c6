@@ -1,0 +1,97 @@
+package geneticAlgorithms.CrossoverMethods;
+
+import java.awt.Point;
+import java.util.List;
+import java.util.Vector;
+
+import org.jgap.Configuration;
+import org.jgap.Gene;
+import org.jgap.IChromosome;
+import org.jgap.InvalidConfigurationException;
+import org.jgap.RandomGenerator;
+import org.jgap.impl.CrossoverOperator;
+import org.jgap.impl.IntegerGene;
+
+public class ModifiedSequentialConstructiveCrossover extends CrossoverOperator{
+
+	private static final long serialVersionUID = -4600861017821822165L;
+	private Vector<Point> citiesData;
+
+	public ModifiedSequentialConstructiveCrossover(Configuration a_configuration, Vector<Point> cities) throws InvalidConfigurationException {
+		super(a_configuration);
+		citiesData=(Vector<Point>) cities.clone();
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected void doCrossover(IChromosome firstMate, IChromosome secondMate, List a_candidateChromosomes, RandomGenerator generator) {
+
+		Vector<Integer> parentAV=this.convertArrayGeneToVectorGene(firstMate.getGenes());
+		Vector<Integer> parentBV=this.convertArrayGeneToVectorGene(secondMate.getGenes());
+		int sizeChromosome=firstMate.size();
+
+		//Create the two children which are going to contain the new set of chromosomes 
+		//Copy the first value from the parents and set their other values to null for an easier manipulation later on with the developement of this crossover
+		Vector<Gene> child1=new Vector<Gene>();
+		Vector<Gene> child2=new Vector<Gene>();
+		for(int i=0; i<firstMate.size(); i++){
+			if(i==0){
+				child1.add(firstMate.getGene(0));
+				child2.add(secondMate.getGene(0));
+				//Remove 
+			}
+			else{
+				child1.add(null);
+				child2.add(null);
+			}
+		}
+		
+		for(int i=0; i<firstMate.size(); i++){
+			Vector<Double> tempDistances=new Vector<Double>();
+			for(int j=1; j<firstMate.size(); j++){
+				if()
+			}
+		}
+		
+		
+
+
+		//Add the chromosomes to the candidate list
+		a_candidateChromosomes.add(firstMate);
+		a_candidateChromosomes.add(secondMate);
+	}
+	
+	private double distance(Gene a_from, Gene a_to) {
+		IntegerGene geneA = (IntegerGene) a_from;
+		IntegerGene geneB = (IntegerGene) a_to;
+		int a = geneA.intValue();
+		int b = geneB.intValue();
+		double xValue=(citiesData.elementAt(a).getX()-citiesData.elementAt(b).getX())*(citiesData.elementAt(a).getX()-citiesData.elementAt(b).getX());
+		double yValue=(citiesData.elementAt(a).getY()-citiesData.elementAt(b).getY())*(citiesData.elementAt(a).getY()-citiesData.elementAt(b).getY());
+		//double xValue=(cities[a][0]-cities[b][0])*(cities[a][0]-cities[b][0]);
+		//double yValue=(cities[a][1]-cities[b][1])*(cities[a][1]-cities[b][1]);
+		return Math.sqrt(xValue+yValue);
+	}
+	
+	private void findClosestElement(Gene a, Vector<Gene> elementsAlreadyInserted){
+		Vector<Double> tempDistances=new Vector<Double>();
+		for(int i=0; i<citiesData.size(); i++){
+			IntegerGene geneA = (IntegerGene) a;
+			int aIndexInCities = geneA.intValue();
+		}
+	}
+	
+	private Vector<Integer> convertArrayGeneToVectorGene(Gene[] data){
+		//Create some temporary object to store the data
+		Vector<Integer> tempGenes=new Vector<Integer>();
+		tempGenes.setSize(data.length);
+		//This loop inserts the elements in the right position
+		for(int i=0; i<data.length; i++){
+			IntegerGene gene = (IntegerGene) data[i];
+			int index=(int) gene.getAllele();
+			tempGenes.set(i, index);
+		}
+		return tempGenes;
+	}
+	
+}

@@ -8,6 +8,7 @@ import org.jgap.impl.*;
 import org.jgap.impl.salesman.*;
 
 import geneticAlgorithms.CrossoverMethods.CycleCrossover;
+import geneticAlgorithms.CrossoverMethods.ModifiedSequentialConstructiveCrossover;
 import geneticAlgorithms.CrossoverMethods.OrderedCrossover;
 
 public class TSP_GA extends Salesman{
@@ -192,7 +193,7 @@ public class TSP_GA extends Salesman{
 
 			}
 			else if(crossover.equals("Modified Sequential Constructive Crossover")){
-
+				c.addGeneticOperator(new ModifiedSequentialConstructiveCrossover(c,citiesVector));
 			}
 			//Verify which mutation operator has the user chosen
 			if(mutation.equals("Insertion Mutation")){

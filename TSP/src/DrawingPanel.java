@@ -67,9 +67,9 @@ public class DrawingPanel extends JPanel{
 				}
 			}
 			//In case the vector containing the results has not got a memory allocation, repaint a blank screen
-			else{
-				this.repaint();
-			}
+			//else{
+				//this.repaint();
+			//}
 		}
 	}
 	public Vector<Point> getAllPoints(){

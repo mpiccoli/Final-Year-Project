@@ -7,7 +7,7 @@ import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
 
 public class GenResultData {
-	private int generationCount, numCities, popSize, maxGen;
+	private int generationCount, numCities, popSize, maxGen, indexBestResultAtGen;
 	private float crossoverProbability, mutationProbability;
 	private String crossoverMethod, mutationMethod;
 	private double fitness;
@@ -34,6 +34,7 @@ public class GenResultData {
 		fitness=0;
 		generationCount=0;
 		timeExecution=0;
+		indexBestResultAtGen=0;
 		results=new Vector<Point>();
 	}
 	public void setGenerationCount(int genC){
@@ -41,6 +42,12 @@ public class GenResultData {
 	}
 	public int getGenerationCount(){
 		return generationCount;
+	}
+	public void setIndexBestResultAtGeneration(int index){
+		indexBestResultAtGen=index;
+	}
+	public int getIndexBestResultAtGeneration(){
+		return indexBestResultAtGen;
 	}
 	public void setCrossOverProbability(float cP){
 		crossoverProbability=cP;
@@ -165,6 +172,7 @@ public class GenResultData {
 				+ "Mutation Method: "+mutationMethod+"\n"
 				+ "Probability associated to the Mutation: "+(mutationProbability*100)+"%\n\n"
 				+ "Best Fitness Value: "+fitness+"\n"
+				+ "The Best Path has been found within the generation: "+indexBestResultAtGen+"\n"
 				+ "Performance Time: "+String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExecution),TimeUnit.MILLISECONDS.toSeconds(timeExecution)%60, (timeExecution%100))+"\n\n"
 				+ "List of Cities:\n";
 		//Try to add the list of cities
