@@ -168,11 +168,11 @@ public class ResultsView extends JPanel{
 			crossMetLabel.setBounds(7,45,115,20);
 			crossMetTF.setBounds(125,45,180,20);
 			crossProbLabel.setBounds(320,45,70,20);
-			crossProbTF.setBounds(390,45,50,20);
+			crossProbTF.setBounds(390,45,60,20);
 			mutMetLabel.setBounds(7,75,115,20);
 			mutMetTF.setBounds(125,75,180,20);
 			mutProbLabel.setBounds(320,75,70,20);
-			mutProbTF.setBounds(390,75,50,20);
+			mutProbTF.setBounds(390,75,60,20);
 			
 			geDataProducedPanel.setBounds(10,120,430,90);
 			generLabel.setBounds(10,25,80,20);
@@ -229,9 +229,9 @@ public class ResultsView extends JPanel{
 			popSizeTF.setText(""+genObj.getPopSize());
 			maxGenTF.setText(""+genObj.getMaxGen());
 			crossMetTF.setText(""+genObj.getCrossoverMethod());
-			crossProbTF.setText(""+genObj.getCrossoverProbability()*100+"%");
+			crossProbTF.setText(""+genObj.getCrossoverProbability()+"%");
 			mutMetTF.setText(""+genObj.getMutationMethod());
-			mutProbTF.setText(""+genObj.getMutationProbability()*100+"%");
+			mutProbTF.setText(""+genObj.getMutationProbability()+"%");
 			generTF.setText(""+genObj.getGenerationCount());
 			double fitnessValue = genObj.getFitness();
 			//Some times the fitness value is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistant

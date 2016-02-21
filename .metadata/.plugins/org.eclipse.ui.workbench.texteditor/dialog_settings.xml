@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="addToResults" key="selection"/>
+		<item value="mutProbTF" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="addToResults"/>
-			<item value="createConfiguration"/>
-			<item value="popSizeLabel"/>
-			<item value="(1 * (int) ((Math.log(1"/>
-			<item value="popSizeTF"/>
-			<item value="getPopSize"/>
-			<item value="popSize"/>
-			<item value="populationSize"/>
+			<item value="mutProbTF"/>
+			<item value="crossoverProb"/>
+			<item value="generLabel"/>
+			<item value="drawPath"/>
+			<item value="getTableCellRendererComponent"/>
+			<item value="select"/>
+			<item value="removeAlg"/>
+			<item value="distance"/>
 		</list>
 		<list key="replacehistory">
 			<item value="numCities"/>
@@ -32,7 +32,7 @@
 		<item value="265" key="DIALOG_WIDTH"/>
 		<item value="1|.SF NS Text|11.0|0|COCOA|1|.SFNSText-Regular" key="DIALOG_FONT_NAME"/>
 		<item value="399" key="DIALOG_HEIGHT"/>
-		<item value="257" key="DIALOG_X_ORIGIN"/>
-		<item value="274" key="DIALOG_Y_ORIGIN"/>
+		<item value="740" key="DIALOG_X_ORIGIN"/>
+		<item value="331" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

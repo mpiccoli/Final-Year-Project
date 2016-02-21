@@ -14,23 +14,25 @@ public class TSP_GA_Adapter {
 	private Vector<Point> points;
 	private Vector<Vector<Point>> resultsData;
 	private Vector<Double> pathDistances;
-	private int maxGeneration;
+	private int maxGeneration, crossoverProb, mutationProb;
 	private String crossoverChosen,mutationChosen;
 
-	public TSP_GA_Adapter(TSP_GA_Worker fw, Vector<Point> cities, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen, String crossover, String mutation){
+	public TSP_GA_Adapter(TSP_GA_Worker fw, Vector<Point> cities, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen, String crossover, int cProb, String mutation, int mProb){
 		tspWorker=fw;
 		points=cities;
 		resultsData=results;
 		pathDistances=distances;
 		maxGeneration=maxGen;
 		crossoverChosen=crossover;
+		crossoverProb=cProb;
 		mutationChosen=mutation;
+		mutationProb=mProb;
 	}
 
 	public Object startEvolution(){
 		if(points!=null && resultsData!=null){
 			try {
-				tsp= new TSP_GA(points,this,resultsData, pathDistances,crossoverChosen,mutationChosen);
+				tsp= new TSP_GA(points,this,resultsData, pathDistances,crossoverChosen,crossoverProb,mutationChosen,mutationProb);
 				tsp.setTSP_Adapter(this);
 				tsp.setMaxEvolution(maxGeneration);
 				bestPath = tsp.findOptimalPath(null);

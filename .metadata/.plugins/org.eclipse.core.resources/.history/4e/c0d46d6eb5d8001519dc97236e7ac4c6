@@ -1,0 +1,127 @@
+package geneticAlgorithms.MutationMethods;
+
+import java.util.List;
+import org.jgap.*;
+import org.jgap.impl.MutationOperator;
+
+public class InsertionMutation extends MutationOperator {
+	
+	private static final long serialVersionUID = -1160149633708583382L;
+
+	public InsertionMutation(Configuration a_conf) throws InvalidConfigurationException {
+		super(a_conf);
+	}
+	
+	@Override
+	private void mutateGene(final Gene a_gene, final RandomGenerator a_generator) {
+	    for (int k = 0; k < a_gene.size(); k++) {
+	      // Retrieve value between 0 and 1 (not included) from generator.
+	      // Then map this value to range -1 and 1 (-1 included, 1 not).
+	      // -------------------------------------------------------------
+	      double percentage = -1 + a_generator.nextDouble() * 2;
+	      // Mutate atomic element by calculated percentage.
+	      // -----------------------------------------------
+	      a_gene.applyMutation(k, percentage);
+	    }
+	  }
+
+	/*@SuppressWarnings("rawtypes")
+	@Override
+	public void operate(Population a_population, List arg1) {
+		
+		if (a_population == null || a_candidateChromosomes == null) {
+		      return;
+		    }
+		    // Determine the mutation rate. If dynamic rate is enabled, then
+		    // calculate it using the IUniversalRateCalculator instance.
+		    // Otherwise, go with the mutation rate set upon construction.
+		    // -------------------------------------------------------------
+		    boolean mutate = false;
+		    RandomGenerator generator = getConfiguration().getRandomGenerator();
+		    int size = Math.min(getConfiguration().getPopulationSize(), a_population.size());
+		    IGeneticOperatorConstraint constraint = getConfiguration().getJGAPFactory().getGeneticOperatorConstraint();
+		    for (int i = 0; i < size; i++) {
+		      IChromosome chrom = a_population.getChromosome(i);
+		      Gene[] genes1 = chrom.getGenes();
+		      IChromosome copyOfChromosome = null;
+		      Gene[] genes = null;
+		      // For each Chromosome in the population...
+		      // ----------------------------------------
+		      for (int j = 0; j < genes1.length; j++) {
+		        if (this.getConfiguration(). != null) {
+		          // If it's a dynamic mutation rate then let the calculator decide
+		          // whether the current gene should be mutated.
+		          // --------------------------------------------------------------
+		          mutate = m_mutationRateCalc.toBePermutated(chrom, j);
+		        }
+		        else {
+		          // Non-dynamic, so just mutate based on the the current rate.
+		          // In fact we use a rate of 1/m_mutationRate.
+		          // ----------------------------------------------------------
+		          mutate = (generator.nextInt(m_config.m_mutationRate) == 0);
+		        }
+		        if (mutate) {
+		          // Verify that crossover allowed.
+		          // ------------------------------
+		          /**@todo move to base class, refactor*/
+		          /*if (constraint != null) {
+		            List v = new Vector();
+		            v.add(chrom);
+		            if (!constraint.isValid(a_population, v, this)) {
+		              continue;
+		            }
+		          }*/
+		          // Now that we want to actually modify the Chromosome,
+		          // let's make a copy of it (if we haven't already) and
+		          // add it to the candidate chromosomes so that it will
+		          // be considered for natural selection during the next
+		          // phase of evolution. Then we'll set the gene's value
+		          // to a random value as the implementation of our
+		          // "mutation" of the gene.
+		          // ---------------------------------------------------
+		          /*if (copyOfChromosome == null) {
+		            // ...take a copy of it...
+		            // -----------------------
+		            copyOfChromosome = (IChromosome) chrom.clone();
+		            // ...add it to the candidate pool...
+		            // ----------------------------------
+		            a_candidateChromosomes.add(copyOfChromosome);
+		            // ...then mutate all its genes...
+		            // -------------------------------
+		            genes = copyOfChromosome.getGenes();
+		            // In case monitoring is active, support it.
+		            // -----------------------------------------
+		            if (m_monitorActive) {
+		              copyOfChromosome.setUniqueIDTemplate(chrom.getUniqueID(), 1);
+		            }
+		          }
+		          // Process all atomic elements in the gene. For a StringGene this
+		          // would be as many elements as the string is long , for an
+		          // IntegerGene, it is always one element.
+		          // --------------------------------------------------------------
+		          if (genes[j] instanceof ICompositeGene) {
+		            ICompositeGene compositeGene = (ICompositeGene) genes[j];
+		            if (m_monitorActive) {
+		              compositeGene.setUniqueIDTemplate(chrom.getGene(j).getUniqueID(), 1);
+		            }
+		            for (int k = 0; k < compositeGene.size(); k++) {
+		              mutateGene(compositeGene.geneAt(k), generator);
+		              if (m_monitorActive) {
+		                compositeGene.geneAt(k).setUniqueIDTemplate(
+		                    ( (ICompositeGene) chrom.getGene(j)).geneAt(k).getUniqueID(),
+		                    1);
+		              }
+		            }
+		          }
+		          else {
+		            mutateGene(genes[j], generator);
+		            if (m_monitorActive) {
+		              genes[j].setUniqueIDTemplate(chrom.getGene(j).getUniqueID(), 1);
+		            }
+		          }
+		        }
+		      }
+		    }
+		
+	}*/
+}

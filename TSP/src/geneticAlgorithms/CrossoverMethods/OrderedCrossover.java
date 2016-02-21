@@ -2,28 +2,21 @@ package geneticAlgorithms.CrossoverMethods;
 
 import java.util.List;
 import java.util.Vector;
-
-import org.jgap.Configuration;
-import org.jgap.Gene;
-import org.jgap.IChromosome;
-import org.jgap.InvalidConfigurationException;
-import org.jgap.RandomGenerator;
+import org.jgap.*;
 import org.jgap.impl.CrossoverOperator;
 
 public class OrderedCrossover extends CrossoverOperator{
 
 	private static final long serialVersionUID = -3205548027106797115L;
 
-	public OrderedCrossover(Configuration a_configuration) throws InvalidConfigurationException {
-		super(a_configuration);
+	public OrderedCrossover(final Configuration a_configuration, final int a_desiredCrossoverRate) throws InvalidConfigurationException {
+		super(a_configuration, a_desiredCrossoverRate);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void doCrossover(IChromosome firstMate, IChromosome secondMate, List a_candidateChromosomes, RandomGenerator generator) {
 
-		Gene[] parentA = firstMate.getGenes();
-		Gene[] parentB = secondMate.getGenes();
 		int sizeChromosome=firstMate.size();
 		//The fixed elements are 1/3 all the actual chromosome
 		int numberFixedElements=sizeChromosome/3;
@@ -87,7 +80,6 @@ public class OrderedCrossover extends CrossoverOperator{
 		while(!endChromosomeDone){
 			if(!child2.contains(firstMate.getGene(currentPosParent))){
 				child2.setElementAt(firstMate.getGene(currentPosParent), currentIndexInsertionChild);
-				//currentPosParentB++;
 				currentIndexInsertionChild++;
 				elementsInChild++;
 			}
@@ -104,16 +96,9 @@ public class OrderedCrossover extends CrossoverOperator{
 				endChromosomeDone=true;
 			}
 		}
-		//System.out.println(firstMate.toString());
-		//System.out.println(secondMate.toString());
-		//System.out.println(child1.toString());
-		//System.out.println(child2.toString());
-
 		//Convert Vector<Gene> to Gene[] for then passing it as a setting to the IChromosome firstMate and secondMate
 		Gene[] child1Array=new Gene[firstMate.size()];
 		Gene[] child2Array=new Gene[secondMate.size()];
-		//IT DOES NOT REMOVE ALL THE NULL, THEREFORE THE APPLICATION STOPS WORKING
-		//FIND A WAY TO ASSIGN PARENTS' VALUES CORRECTLY (.SET/.SETELEMENTAT.....)-->FIND THE RIGHT ONE
 		for(int i=0; i<child1.size(); i++){
 			if(!child1.get(i).equals(null)){
 				child1Array[i]=child1.get(i);

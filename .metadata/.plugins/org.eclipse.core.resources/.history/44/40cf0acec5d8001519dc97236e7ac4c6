@@ -1,0 +1,21 @@
+package geneticAlgorithms.MutationMethods;
+
+import java.util.List;
+import org.jgap.*;
+import org.jgap.impl.MutationOperator;
+
+public class ReciprocalExchangeMutation extends MutationOperator {
+	
+	private static final long serialVersionUID = 8211685848093207623L;
+
+	public ReciprocalExchangeMutation(Configuration a_conf) throws InvalidConfigurationException {
+		super(a_conf);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void operate(Population arg0, List arg1) {
+		
+	}
+
+}
