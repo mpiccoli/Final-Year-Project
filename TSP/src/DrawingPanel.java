@@ -7,17 +7,34 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see Color, Graphics, Point, Vector, JLabel, JButton, JTextField, JPanel
+ * 
+ * This Class creates a drawable panel that the user can use to draw points and define the location of cities on the screen
+ * 
+ */
 public class DrawingPanel extends JPanel{
 	
 	//Define the constants of this class
 	private static final long serialVersionUID = 2980221873573882055L;
-	
+	//Global Variables
 	private Vector<Point> vPoints;
 	private JLabel numPoints;
 	private boolean singleAlg;
 	private Vector<Point> links;
 	private boolean drawingORDisplaying;
 
+	/*
+	 * @param vec	the vector containing all the coordinates of the cities
+	 * @param nPoints	reference to the JLabel objects that is updated every time a new point is added
+	 * @param res	the vector containing the resulting path to draw on the screen
+	 * 
+	 * Constructor with 3 parameters
+	 * 
+	 */
 	public DrawingPanel(Vector<Point> vec, JLabel nPoints, Vector<Point> res){
 		vPoints=vec;
 		numPoints=nPoints;
@@ -25,17 +42,29 @@ public class DrawingPanel extends JPanel{
 		links=res;
 		drawingORDisplaying=false;
 	}
+	
+	/*
+	 * @param path	reference to the vector containing the resulting path to draw on the screen
+	 * 
+	 * Constructor with 1 parameter
+	 * 
+	 */
 	public DrawingPanel(Vector<Point> path){
 		links=path;
 		drawingORDisplaying=true;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		//This allows to draw points with a thickness of 2
+		//This allows to draw points with a thickness of size 2
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(2));
-		//This view is for the first view of the application
+		//This view displays the cities on the screen
 		if(!drawingORDisplaying){
 			//Update the label containing the number of drawn points
 			if(vPoints.size()>0){
@@ -45,7 +74,7 @@ public class DrawingPanel extends JPanel{
 					g2.fillOval((int)vPoints.elementAt(i).getX(),(int)vPoints.elementAt(i).getY(), 6, 6);
 				}
 			}
-			//Create city links
+			//This view creates a visible path between points
 			if(singleAlg && links!=null && links.size()>0){
 				g2.setColor(new Color(82, 234, 128));
 				for(int i=0; i<links.size()-1; i++){
@@ -66,31 +95,52 @@ public class DrawingPanel extends JPanel{
 					g2.drawLine((int)links.get(i).getX()/2, (int)links.get(i).getY()/2, (int)links.get(i+1).getX()/2, (int)links.get(i+1).getY()/2);
 				}
 			}
-			//In case the vector containing the results has not got a memory allocation, repaint a blank screen
-			//else{
-				//this.repaint();
-			//}
 		}
 	}
+	
+	/*
+	 * @return a vector of type point
+	 * 
+	 * This method returns the list of cities with their coordinates
+	 */
 	public Vector<Point> getAllPoints(){
 		return vPoints;
 	}
-	//Tell the program that only one algorithm is in the queue, therefore, show salesman path
+	
+	/*
+	 * @param performance	This defines the operations the program is required to run in order to display the correct view
+	 * @param vec	This is the vector of cities
+	 * @param res	This is the vector containing the final path
+	 * 
+	 * This method tells the program that only one algorithm is in the queue, therefore, show salesman path
+	 * 
+	 */
 	public void performLinks(boolean performance, Vector<Point> vec, Vector<Point> res){
 		singleAlg=performance;
 		vPoints=vec;
 		links=res;
 		this.repaint();
 	}
+	
+	/*
+	 * @param p 	This is a new Point object containing X,Y coordinates to add to the list of cities
+	 * 
+	 * This method passes a new city coordinates and add it to the vector of cities
+	 */
 	public void passPoint(Point p){
+		//Verify that the point is not already contained in the list of cities
 		if(!vPoints.contains(p)){
 			vPoints.add(p);
 			//Update the label containing the number of drawn points.
 			numPoints.setText("Points: "+vPoints.size());
-			//Repaint the JPanel
+			//Refresh the view
 			this.repaint();
 		}
 	}
+	
+	/*
+	 * This method removes the last inserted point from the list of cities
+	 */
 	public void removeLastPoint(){
 		singleAlg=false;
 		if(vPoints.size()>0){
@@ -99,6 +149,10 @@ public class DrawingPanel extends JPanel{
 			this.repaint();
 		}
 	}
+	
+	/*
+	 * This method erases the vector of cities
+	 */
 	public void clearAllPoints(){
 		singleAlg=false;
 		if(!vPoints.isEmpty()){
@@ -107,6 +161,12 @@ public class DrawingPanel extends JPanel{
 			this.repaint();
 		}
 	}
+	
+	/*
+	 * @param points	reference to the vector containing the final path
+	 * 
+	 * This method refreshes the reference of the final path vector, and the view on the screen
+	 */
 	public void updateLinksAndRefresh(Vector<Point> points){
 		links=points;
 		this.repaint();

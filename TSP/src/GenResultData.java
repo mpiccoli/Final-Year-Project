@@ -1,11 +1,19 @@
 import java.awt.Point;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
-
-import org.jgap.Configuration;
 import geneticAlgorithms.TSP_GA;
 import geneticAlgorithms.TSP_GA_Worker;
 
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see Point, Vector, TSP_GA, TSP_GA_Worker
+ * 
+ * This Class is used to store all the settings and execution data a genetic algorithm produces from when it is added to the queue
+ * until the end of its execution
+ * 
+ */
 public class GenResultData {
 	private int generationCount, numCities, popSize, maxGen, indexBestResultAtGen;
 	private float crossoverProbability, mutationProbability;
@@ -18,9 +26,23 @@ public class GenResultData {
 	private TSP_GA tsp;
 	private TSP_GA_Worker tspWorker;
 
-	//Constructor with parameters
+	/*
+	 * @param nCities	This defines the number of cities
+	 * @param popS	This defines the size of the population
+	 * @param maxG	This defines the maximum number of generations the algorithm will perform
+	 * @param crossMet	This defines the crossover methods the algorithm will use during execution
+	 * @param crossP	This defines the probability of using the crossover operator
+	 * @param mutMet	This defines the mutation methods the algorithm will use during execution
+	 * @param mutP	This defines the probability of using the mutation operator
+	 * @param tsp	Reference to the TSP_GA object
+	 * @param tspWorker	Reference to the TSP_GA_worker object
+	 * 
+	 * Constructor with parameters
+	 * 
+	 */
 	public GenResultData(int nCities, int popS, int maxG, String crossMet, float crossP, String mutMet, float mutP, 
-			TSP_GA tsp, TSP_GA_Worker tspWorker){	
+			TSP_GA tsp, TSP_GA_Worker tspWorker){
+		//Store the references into the global objects of this class
 		crossoverProbability=crossP;
 		mutationProbability=mutP;
 		crossoverMethod=crossMet;
@@ -30,13 +52,14 @@ public class GenResultData {
 		maxGen=maxG;
 		this.tsp=tsp;
 		this.tspWorker=tspWorker;
-		//Instantiate variables
+		//Instantiate global variables
 		fitness=0;
 		generationCount=0;
 		timeExecution=0;
 		indexBestResultAtGen=0;
 		results=new Vector<Point>();
 	}
+	
 	public void setGenerationCount(int genC){
 		generationCount=genC;
 	}
@@ -103,12 +126,18 @@ public class GenResultData {
 	public int getMaxGen(){
 		return maxGen;
 	}
+	
+	/*
+	 * @param data	This is the vector containing all the city information
+	 * @param option	This boolean values defines whether the vector object needs to be copied or just used its reference
+	 */
 	@SuppressWarnings("unchecked")
 	public void setResultingPoints(Vector<Point> data, boolean option){
 		if(option){
 			results=data;
 		}
 		else{
+			//Create an exact copy of the vector
 			results=(Vector<Point>) data.clone(); 
 		}
 	}
@@ -160,9 +189,13 @@ public class GenResultData {
 	public Vector<Vector<Point>> getResultsData(){
 		return resultsData;
 	}
+	
+	/*
+	 * This method creates a string containing all the class information, ready to be exported to a file
+	 */
 	public String wrapDataForFileWriter(){
 		String s="";
-		//Add the algorithm information
+		//Add the algorithm basic information
 		s+="Algorithm Name: Genetic Algorithm\n"
 				+ "Number of Cities: "+numCities+"\n"
 				+ "Population Size During Evolution: "+popSize+"\n"
@@ -228,11 +261,17 @@ public class GenResultData {
 		}
 		return s;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj){
 		if (!(obj instanceof GenResultData )){
 			return false;
 		}
+		//Define when two objects of this class can be considered identical
 		GenResultData temp=(GenResultData)obj;
 		return (this.numCities==temp.numCities &&this.maxGen==temp.maxGen && this.crossoverMethod.equals(temp.crossoverMethod) && 
 				this.crossoverProbability==temp.crossoverProbability && this.mutationMethod.equals(temp.mutationMethod) && 

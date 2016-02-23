@@ -1,0 +1,79 @@
+package geneticAlgorithms;
+
+import java.awt.Point;
+import java.util.Vector;
+import org.jgap.IChromosome;
+
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see IChromosome, Vector, Point, TSP_GA
+ * 
+ * This Class encapsulates a TSP_GA object into a TSP_GA_Worker and runs it, sending updates to the GUI
+ * 
+ */
+public class TSP_GA_Adapter {
+	
+	//Global Variables
+	private TSP_GA tsp;
+	private TSP_GA_Worker tspWorker;
+	@SuppressWarnings("unused")
+	private IChromosome bestPath;
+	private Vector<Point> points;
+	private Vector<Vector<Point>> resultsData;
+	private Vector<Double> pathDistances;
+	private int maxGeneration, crossoverProb, mutationProb;
+	private String crossoverChosen,mutationChosen;
+
+	/*
+	 * @param fw	This is a TSP_GA_Worker reference to allow the data to be updated in real time to the GUI
+	 * @param cities	This Vector contains the list of cities for the TSP
+	 * @param results	This Vector of vector contains all the path the algorithm has tried in order to find the best one
+	 * @param distances	This vector stores the path distance for each path stored in the results vector
+	 * @param maxGen	This value stores the max number of generations the algorithm will evolve
+	 * @param crossover	This contains the name of the crossover method
+	 * @param cProb	This contains the probability related to the crossover method
+	 * @param mutation	This contains the name of the mutation operator
+	 * @param mProb	This contains the probability related to the mutation operator
+	 * 
+	 * Constructor with 9 parameters
+	 */
+	public TSP_GA_Adapter(TSP_GA_Worker fw, Vector<Point> cities, Vector<Vector<Point>> results, Vector<Double> distances, int maxGen, String crossover, int cProb, String mutation, int mProb){
+		tspWorker=fw;
+		points=cities;
+		resultsData=results;
+		pathDistances=distances;
+		maxGeneration=maxGen;
+		crossoverChosen=crossover;
+		crossoverProb=cProb;
+		mutationChosen=mutation;
+		mutationProb=mProb;
+	}
+
+	public Object startEvolution(){
+		if(points!=null && resultsData!=null){
+			try {
+				tsp= new TSP_GA(points,this,resultsData, pathDistances,crossoverChosen,crossoverProb,mutationChosen,mutationProb);
+				tsp.setTSP_Adapter(this);
+				tsp.setMaxEvolution(maxGeneration);
+				bestPath = tsp.findOptimalPath(null);
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		else{ 
+			System.out.println("Error, values are null"); 
+		}
+		updateProgress(100);
+		return null;
+	}
+
+	public void updateProgress(int value){
+		tspWorker.updateProgress(value);
+	}
+	public void stopExecution(){
+		tsp.stopExecution();
+	}
+}

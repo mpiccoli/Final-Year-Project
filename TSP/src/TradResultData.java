@@ -2,14 +2,29 @@ import java.awt.Point;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see Point, Vector
+ * 
+ * This Class is used to store all the settings and execution data a heuristic algorithm produces from when it is added to the queue
+ * until the end of its execution
+ * 
+ */
 public class TradResultData {
+	
+	//Global Variables
 	private int numCities;
 	private double tourLength; 
 	private long timeExecution;
 	private String  details, algName;
 	private Vector<Point> listOfCities;
 	private Vector<Point> results;
-
+	
+	/*
+	 * Empty Constructor
+	 */
 	public TradResultData(){
 		numCities=0;
 		tourLength=0.0;
@@ -18,7 +33,17 @@ public class TradResultData {
 		algName="";
 		results=new Vector<Point>();
 	}
-	//Constructor with parameters
+	
+	/*
+	 * @param nCities	Defines the number of cities the algorithm has associated
+	 * @param length	Defines the path length of the tour
+	 * @param time	Defines the time of execution of the algorithm
+	 * @param det	Defines the algorithm specifications
+	 * @param name	Define the name of the algorithm
+	 * 
+	 * Constructor with 5 parameters
+	 * 
+	 */
 	public TradResultData(int nCities, double length, long time, String det, String name){
 		numCities=nCities;
 		tourLength=length;
@@ -27,6 +52,15 @@ public class TradResultData {
 		algName=name;
 		results=new Vector<Point>();
 	}
+	
+	/*
+	 * @param name	Define the name of the algorithm
+	 * @param cities	DEfiens the number of cities the algorithm has associated
+	 * @param dataPoints	Reference to the city vectors
+	 * 
+	 * Constructor with 3 parameters
+	 * 
+	 */
 	public TradResultData(String name, int cities, Vector<Point> dataPoints){
 		algName=name;
 		numCities=cities;
@@ -76,11 +110,19 @@ public class TradResultData {
 	public Vector<Point> getCities(){
 		return listOfCities;
 	}
+	
+	/*
+	 * This method resets the vector that contains the final path
+	 */
 	public void resetResultData(){
 		results.clear();
 	}
+	
+	/*
+	 * This method creates a string containing all the class information, ready to be exported to a file
+	 */
 	public String wrapDataForFileWriter(){
-		//Add algorithm information
+		//Add algorithm basic information
 		String s="Algorithm Name: "+algName+"\n"
 				+ "Algorithm Details: "+details+"\n"
 				+ "Number of Cities: "+numCities+"\n"
@@ -112,11 +154,17 @@ public class TradResultData {
 		}
 		return s;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj){
 		if (!(obj instanceof TradResultData )){
 			return false;
 		}
+		//Define how to compare two objects of this class
 		TradResultData temp=(TradResultData)obj;
 		return (this.algName.equals(temp.algName) && this.numCities==temp.numCities);
 	}

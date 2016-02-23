@@ -1,14 +1,18 @@
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see JPanel, JFRame, JLabel, JTextField, JTextArea, TradResultData, GenResultData
+ * 
+ * This Class gather the information data from TradResultData and GenResultData object to display it in a user friendly manner
+ * 
+ */
 public class ResultsView extends JPanel{
 	
 	//Define constants for this class
@@ -26,13 +30,18 @@ public class ResultsView extends JPanel{
 	private GenResultData genObj;
 	private String traGen;
 	
+	/*
+	 * @param windoeTitle	Define the title of the window
+	 * @param traGe	Define whether the object passed is a TradResultData or GenResultData instance
+	 * @param obj	The actual data object that this class has to extract information from
+	 */
 	public ResultsView(String windowTitle, String traGe, Object obj){
 		//Create the window
 		mainFrame=new JFrame();
-		mainFrame.setTitle(windowTitle);
-		mainFrame.setResizable(false);
-		mainFrame.setVisible(true);
-		mainFrame.setLayout(null);
+			mainFrame.setTitle(windowTitle);
+			mainFrame.setResizable(false);
+			mainFrame.setVisible(true);
+			mainFrame.setLayout(null);
 		//Initiate shared graphical objects
 		nCitiesLabel=new JLabel("N. Cities");
 			nCitiesLabel.setFont(BOLD_SEGOE_12);
@@ -55,16 +64,22 @@ public class ResultsView extends JPanel{
 		this.setTextBoxes();
 	}
 	
+	/*
+	 * @param s	This says whether the object is a TradResultData or GenResultData instance
+	 * @param objPassed	The actual data object
+	 */
 	private void traGenView(String s, Object objPassed){
+		//In case the string contains "tra" which stands for "traditional", set the view this way
 		if(s.equals("tra")){
 			mainFrame.setSize(450, 250);
 			traGen="tra";
+			//Convert the object to a TradResultData instance
 			tradObj=(TradResultData)objPassed;
+			//Initiate the graphic objects to show to the user
 			tradNameLabel=new JLabel("Name");
 				tradNameLabel.setFont(BOLD_SEGOE_12);
 			tradNameTF=new JTextField();
 			mainTradDetailsPanel=new JPanel();
-				//mainTradDetailsPanel.setBorder(new TitledBorder("Method "+tradObj.getAlgName()+" Details"));
 				mainTradDetailsPanel.setBorder(new TitledBorder("Method Details"));
 				mainTradDetailsPanel.setFont(PLAIN_SEGOE_12);
 				mainTradDetailsPanel.setLayout(null);
@@ -72,10 +87,10 @@ public class ResultsView extends JPanel{
 				traDetailsPanel.setBorder(new TitledBorder("Details"));
 				traDetailsPanel.setLayout(null);
 			traDetailsTA=new JTextArea();
-				//The area is not editable by the user and the its background is translucent
+				//The area is not editable by the user and  its background is translucent
 				traDetailsTA.setOpaque(false);
 				traDetailsTA.setEditable(false);
-			
+			//Define the object locations on the screen
 			mainTradDetailsPanel.setBounds(10,5,430,100);
 			nCitiesLabel.setBounds(20,30,60,20);
 			nCitiesTF.setBounds(80,30,65,20);
@@ -87,7 +102,7 @@ public class ResultsView extends JPanel{
 			tradNameTF.setBounds(215,65,150,20);
 			traDetailsPanel.setBounds(10,110,430,100);
 			traDetailsTA.setBounds(7,20,416,75);
-			
+			//Add the graphic objects to the current panel
 			mainFrame.add(mainTradDetailsPanel);
 			mainTradDetailsPanel.add(nCitiesLabel);
 			mainTradDetailsPanel.add(nCitiesTF);
@@ -104,7 +119,9 @@ public class ResultsView extends JPanel{
 		else{
 			mainFrame.setSize(535, 250);
 			traGen="gen";
+			//Convert the object to a GenResultData instance
 			genObj=(GenResultData)objPassed;
+			//Initiate the graphic objects to show to the user
 			mainGeDetailsPanel=new JPanel();
 				mainGeDetailsPanel.setBorder(new TitledBorder("Method Details"));
 				mainGeDetailsPanel.setLayout(null);
@@ -156,7 +173,7 @@ public class ResultsView extends JPanel{
 			bestResultAtTF=new JTextField();
 				bestResultAtTF.setFont(ITALIC_SEGOE_12);
 				bestResultAtTF.setEditable(false);
-			
+			//Set the object locations
 			mainGeDetailsPanel.setBounds(10,5,515,110);
 			nCitiesLabel.setBounds(7,20,60,20);
 			nCitiesTF.setBounds(70,20,70,20);
@@ -164,7 +181,6 @@ public class ResultsView extends JPanel{
 			popSizeTF.setBounds(220,20,85,20);
 			maxGenLabel.setBounds(360,20,60,20);
 			maxGenTF.setBounds(420,20,80,20);
-			
 			crossMetLabel.setBounds(7,45,115,20);
 			crossMetTF.setBounds(125,45,180,20);
 			crossProbLabel.setBounds(320,45,70,20);
@@ -173,7 +189,6 @@ public class ResultsView extends JPanel{
 			mutMetTF.setBounds(125,75,180,20);
 			mutProbLabel.setBounds(320,75,70,20);
 			mutProbTF.setBounds(390,75,60,20);
-			
 			geDataProducedPanel.setBounds(10,120,430,90);
 			generLabel.setBounds(10,25,80,20);
 			generTF.setBounds(90,25,90,20);
@@ -183,7 +198,7 @@ public class ResultsView extends JPanel{
 			bestResultAtTF.setBounds(120,55,60,20);
 			timeLabel.setBounds(200,55,50,20);
 			timeTF.setBounds(250,55,80,20);
-			
+			//Add the graphic elements to the current panels
 			mainFrame.add(mainGeDetailsPanel);
 			mainGeDetailsPanel.add(nCitiesLabel);
 			mainGeDetailsPanel.add(nCitiesTF);
@@ -211,11 +226,15 @@ public class ResultsView extends JPanel{
 		}
 	}
 	
+	/*
+	 * This methods sets the value to the graphic objects, retrieving data from the object previously passed
+	 */
 	private void setTextBoxes(){
+		//Set the traditional element values on screen
 		if(traGen.equals("tra")){
 			nCitiesTF.setText(""+tradObj.getNumCities());
 			double tourLengthValue = tradObj.getTourLength();
-			//Some times the Tour length is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistant
+			//Some times the Tour length is too long to be displayed, in this way only 8 decimal places are kept to keep the application consistent
 	        DecimalFormat fv = new DecimalFormat("#.########");
 			tourTF.setText(""+fv.format(tourLengthValue));
 			long tempTime=tradObj.getExecutionTime();
@@ -224,6 +243,7 @@ public class ResultsView extends JPanel{
 			tradNameTF.setText(tradObj.getAlgName());
 			traDetailsTA.setText(tradObj.getDetails());
 		}
+		//Set the genetic element values on screen
 		else{
 			nCitiesTF.setText(""+genObj.getnumCities());
 			popSizeTF.setText(""+genObj.getPopSize());
