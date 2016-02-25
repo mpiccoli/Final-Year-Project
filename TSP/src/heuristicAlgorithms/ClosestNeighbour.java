@@ -2,22 +2,36 @@ package heuristicAlgorithms;
 
 import java.awt.Point;
 import java.util.Vector;
-
 import javax.swing.SwingWorker;
 
+/*
+ * @author Michael Piccoli
+ * @since October 2015
+ * @version 1.0
+ * @see Vector, Point, SwingWorker
+ * 
+ * This class finds the path to the given TSP points by finding the closest element to the previous element in the path.
+ * 
+ */
 @SuppressWarnings("rawtypes")
 public class ClosestNeighbour extends SwingWorker{
 	//Global Variables
-	private Vector<Point> cities;
-	private Vector<Point> travellingOrder;
+	private Vector<Point> cities,travellingOrder;
 	private long executionTime;
 	private int tourLength;
 	private double tourDistance;
 	private boolean processedCancelled;
 	
-	public ClosestNeighbour(Vector<Point> points, Vector<Point> solutions){
+	/*
+	 * @param points	Vector containing the list of cities
+	 * @param results	Vector containing the resulting path created with the execution of this class 
+	 * 
+	 * Constructor with 2 parameters
+	 * 
+	 */
+	public ClosestNeighbour(Vector<Point> points, Vector<Point> results){
 		cities=points;
-		travellingOrder=solutions;
+		travellingOrder=results;
 		tourLength=1;
 		tourDistance=0;
 		processedCancelled=false;
@@ -33,17 +47,36 @@ public class ClosestNeighbour extends SwingWorker{
 	}
 	@SuppressWarnings("unchecked")
 	public Vector<Point> getListOfCities(){
+		//Create an exact copy of the vector cities and send it back
 		return (Vector<Point>) cities.clone();
 	}
 	@SuppressWarnings("unchecked")
 	public Vector<Point> getTravellingOrder(){
+		//Create an exact copy of the vector travellingOrder and send it back
 		return (Vector<Point>)travellingOrder.clone();
 	}
+	
+	/*
+	 * @param a	Point A
+	 * @param b	Point B
+	 * 
+	 * @return double	Return the distance value found after the operations
+	 * 
+	 * This method calculates the distance between two points
+	 */
 	private double calculateDistance(Point a, Point b){
 		double xValue=(a.getX()-b.getX())*(a.getX()-b.getX());
 		double yValue=(a.getY()-b.getY())*(a.getY()-b.getY());
 		return Math.sqrt(xValue+yValue);
 	}
+	
+	/*
+	 * @param data	Vector containing the list of distances
+	 * 
+	 * @return int	Return the index of the shortest path found in the vector of distances
+	 * 
+	 * This method finds the shortest path inside a vector of distances and returns its index
+	 */
 	private int findPositionMinDistance(Vector<Double> data){
 		Double minTemp=1000.0;
 		int pos=0;
@@ -57,6 +90,12 @@ public class ClosestNeighbour extends SwingWorker{
 		return pos;
 	}
 	
+	/*
+	 * @param startTime	Initial Time
+	 * @param finishTime	Finish Time
+	 * 
+	 * This method calculates the execution time of this algorithm
+	 */
 	private void calculateExecutionTime(long startTime, long finishTime){
 		//Verify that the Thread has not been stopped
 		if(!processedCancelled){
@@ -67,6 +106,10 @@ public class ClosestNeighbour extends SwingWorker{
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.SwingWorker#doInBackground()
+	 */
 	@Override
 	protected Boolean doInBackground() throws Exception {
 		//Start the time for this process
@@ -106,6 +149,7 @@ public class ClosestNeighbour extends SwingWorker{
 		travellingOrder.add(travellingOrder.get(0));
 		//Calculate the execution time before the thread completes the last action
 		this.calculateExecutionTime(startTime, System.currentTimeMillis());
+		//Set the progress as completed and return nothing
 		this.setProgress(100);
 		return true;
 	}
