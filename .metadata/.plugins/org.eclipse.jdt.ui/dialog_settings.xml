@@ -74,13 +74,27 @@
 			</section>
 		</section>
 	</section>
+	<section name="FatJarPackageWizard">
+		<item value="/Users/michaelpiccoli/Dropbox/Final Year/Project/Final-Year-Project" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
+		<item value="Controller - TSP" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
+		<item value="/Users/michaelpiccoli/Desktop/TSP.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
+		<item value="2" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
+		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="/Users/michaelpiccoli/Desktop/TSP.jar"/>
+		</list>
+		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">
+			<item value="/Users/michaelpiccoli/Dropbox/Final Year/Project/Final-Year-Project.xml"/>
+			<item value=".xml"/>
+		</list>
+	</section>
 	<section name="quick_assist_proposal_size">
 	</section>
 	<section name="NewPackageWizardPage">
 		<item value="false" key="create_package_info_java"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item value="3" key="pageIndex"/>
+		<item value="0" key="pageIndex"/>
 	</section>
 	<section name="JavadocWizardDialog">
 		<item value="600" key="DIALOG_WIDTH"/>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.jgap.FitnessFunction"/>
 <fullyQualifiedTypeName name="org.jgap.Genotype"/>
 <fullyQualifiedTypeName name="org.jgap.impl.GreedyCrossover"/>
 <fullyQualifiedTypeName name="org.jgap.impl.salesman.SalesmanFitnessFunction"/>
@@ -35,7 +34,6 @@
 <fullyQualifiedTypeName name="java.lang.Math"/>
 <fullyQualifiedTypeName name="TradResultData"/>
 <fullyQualifiedTypeName name="GenResultData"/>
-<fullyQualifiedTypeName name="java.awt.Image"/>
 <fullyQualifiedTypeName name="java.awt.Toolkit"/>
 <fullyQualifiedTypeName name="javax.swing.UIManager"/>
 <fullyQualifiedTypeName name="java.awt.Font"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="org.jgap.impl.RangedSwappingMutationOperator"/>
 <fullyQualifiedTypeName name="org.jgap.impl.SwappingMutationOperator"/>
 <fullyQualifiedTypeName name="org.jgap.impl.TwoWayMutationOperator"/>
+<fullyQualifiedTypeName name="java.awt.Image"/>
+<fullyQualifiedTypeName name="javax.imageio.ImageIO"/>
 </qualifiedTypeNameHistroy>
