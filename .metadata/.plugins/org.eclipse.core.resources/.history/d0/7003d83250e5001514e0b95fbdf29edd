@@ -402,7 +402,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		csvImportExport = new JFileChooser();
 		csvFilter = new FileNameExtensionFilter(".csv", "CSV");
 		txtExport = new JFileChooser();
-		txtFilter = new FileNameExtensionFilter(".txt ", "Plain Text");
+		txtFilter = new FileNameExtensionFilter(".txt ", "TXT");
 
 		// Progress bar
 		Border border = BorderFactory.createTitledBorder("Loading...");
@@ -518,7 +518,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							// Write current date and time on file
 							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 							Date date2 = new Date();
-							writer.append("Task Completed on: " + dateFormat2.format(date2));
+							writer.append("Task Completed on: " + dateFormat2.format(date2) );
 						}
 						// Close the file and release its instance
 						writer.close();

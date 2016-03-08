@@ -495,7 +495,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						// Write current date and time on file
 						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date1 = new Date();
-						writer.append("Task Started on: " + dateFormat1.format(date1) + "\n\n");
+						writer.append("Data exported on: " + dateFormat1.format(date1) + "\n\n");
 						// Make a string containing all the data to export and
 						// add to the writer
 						// Repeat this action for each element of the queue of
@@ -518,7 +518,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							// Write current date and time on file
 							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 							Date date2 = new Date();
-							writer.append("Task Completed on: " + dateFormat2.format(date2));
+							writer.append("Data exported on: " + dateFormat2.format(date2) + "\n\n");
 						}
 						// Close the file and release its instance
 						writer.close();

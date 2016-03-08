@@ -400,7 +400,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		mutationProb = 20;
 		listenToChanges = "";
 		csvImportExport = new JFileChooser();
-		csvFilter = new FileNameExtensionFilter(".csv", "CSV");
+		csvFilter = new FileNameExtensionFilter(".csv", ".CSV");
 		txtExport = new JFileChooser();
 		txtFilter = new FileNameExtensionFilter(".txt ", "Plain Text");
 
@@ -493,9 +493,9 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						// Create writable object that will write data to a file
 						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + ".txt");
 						// Write current date and time on file
-						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-						Date date1 = new Date();
-						writer.append("Task Started on: " + dateFormat1.format(date1) + "\n\n");
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+						Date date = new Date();
+						writer.append("Data exported on: " + dateFormat.format(date) + "\n\n");
 						// Make a string containing all the data to export and
 						// add to the writer
 						// Repeat this action for each element of the queue of
@@ -515,10 +515,6 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							}
 							writer.append(data);
 							writer.append("------------------------------------------------------\n");
-							// Write current date and time on file
-							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-							Date date2 = new Date();
-							writer.append("Task Completed on: " + dateFormat2.format(date2));
 						}
 						// Close the file and release its instance
 						writer.close();
