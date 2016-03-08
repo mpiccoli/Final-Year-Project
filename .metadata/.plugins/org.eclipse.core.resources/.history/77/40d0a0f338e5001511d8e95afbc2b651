@@ -30,6 +30,7 @@ public class ExitRequest extends JFrame implements ActionListener {
 	 */
 	public ExitRequest() {
 		// Initiate the global variables
+		//yesButton = new JButton(new ImageIcon("src/images/yes.png"));
 		yesButton = new JButton(new ImageIcon(getClass().getResource("/images/yes.png")));
 		// Round Button Edges
 		yesButton.setOpaque(false);

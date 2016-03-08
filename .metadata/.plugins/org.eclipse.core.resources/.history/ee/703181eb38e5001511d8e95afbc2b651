@@ -1,7 +1,11 @@
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +34,7 @@ public class ExitRequest extends JFrame implements ActionListener {
 	 */
 	public ExitRequest() {
 		// Initiate the global variables
+		//yesButton = new JButton(new ImageIcon("src/images/yes.png"));
 		yesButton = new JButton(new ImageIcon(getClass().getResource("/images/yes.png")));
 		// Round Button Edges
 		yesButton.setOpaque(false);

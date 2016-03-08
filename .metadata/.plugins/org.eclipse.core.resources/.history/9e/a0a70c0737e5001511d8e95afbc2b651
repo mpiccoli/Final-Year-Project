@@ -163,11 +163,9 @@ public class ClosestNeighbour extends SwingWorker {
 				return false;
 			}
 		}
-		//Add the distance between the last point and the first point to complete the cycle
-		tourDistance+=calculateDistance(travellingOrder.lastElement(), travellingOrder.get(0));
 		travellingOrder.add(travellingOrder.get(0));
 		// Calculate the execution time before the thread completes the last
-		// actions
+		// action
 		this.calculateExecutionTime(startTime, System.currentTimeMillis());
 		// Set the progress as completed and return nothing
 		this.setProgress(100);
