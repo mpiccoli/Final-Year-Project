@@ -237,51 +237,6 @@ public class GenResultData {
 	 * This method creates a string containing all the class information, ready
 	 * to be exported to a file
 	 */
-	public String wrapDataForSummativeFileWriter(){
-		String s = "";
-		// Add the algorithm basic information
-		s += "Algorithm Name: Genetic Algorithm\n" + "Number of Cities: " + numCities + "\n"
-				+ "Population Size During Evolution: " + popSize + "\n" + "Number of Generations: " + maxGen + "\n"
-				+ "Crossover Method: " + crossoverMethod + "\n" + "Probability associated to the Crossover: "
-				+ crossoverProbability + "%\n" + "Mutation Method: " + mutationMethod + "\n"
-				+ "Probability associated to the Mutation: " + mutationProbability + "%\n\n" + "Best Fitness Value: "
-				+ fitness + "\n" + "The Best Path has been found within generation: " + indexBestResultAtGen + "\n"
-				+ "Performance Time: "
-				+ String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExecution),
-						TimeUnit.MILLISECONDS.toSeconds(timeExecution) % 60, (timeExecution % 100))
-				+ "\n\n" + "List of Cities:\n";
-		// Try to add the list of cities
-		try {
-			String cities = "";
-			for (int i = 0; i < listOfCities.size(); i++) {
-				Point temp = listOfCities.elementAt(i);
-				cities += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
-			}
-			s += cities + "\n";
-		} catch (Exception e) {
-			s += "   No Data\n\n";
-		}
-		s += "Best Path Found:\n";
-		// Try to add the list of cities for the best solution found
-		try {
-			String path = "";
-			for (int i = 0; i < results.size(); i++) {
-				Point temp = results.elementAt(i);
-				path += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
-			}
-			s += path + "\n";
-		} catch (Exception e) {
-			s += "   No Data\n\n";
-		}
-		return s;
-	}
-
-	/*
-	 * This method creates a string containing all the class information, ready
-	 * to be exported to a file
-	 */
 	public String wrapDataForFileWriter() {
 		String s = "";
 		// Add the algorithm basic information
@@ -290,7 +245,7 @@ public class GenResultData {
 				+ "Crossover Method: " + crossoverMethod + "\n" + "Probability associated to the Crossover: "
 				+ crossoverProbability + "%\n" + "Mutation Method: " + mutationMethod + "\n"
 				+ "Probability associated to the Mutation: " + mutationProbability + "%\n\n" + "Best Fitness Value: "
-				+ fitness + "\n" + "The Best Path has been found within generation: " + indexBestResultAtGen + "\n"
+				+ fitness + "\n" + "The Best Path has been found within the generation: " + indexBestResultAtGen + "\n"
 				+ "Performance Time: "
 				+ String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExecution),
 						TimeUnit.MILLISECONDS.toSeconds(timeExecution) % 60, (timeExecution % 100))
@@ -301,7 +256,7 @@ public class GenResultData {
 			for (int i = 0; i < listOfCities.size(); i++) {
 				Point temp = listOfCities.elementAt(i);
 				cities += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
+						+ ")\n";
 			}
 			s += cities + "\n";
 		} catch (Exception e) {
@@ -314,7 +269,7 @@ public class GenResultData {
 			for (int i = 0; i < results.size(); i++) {
 				Point temp = results.elementAt(i);
 				path += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
+						+ ")\n";
 			}
 			s += path + "\n";
 		} catch (Exception e) {

@@ -90,12 +90,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private JPanel tradPanel, genPanel, optionPanel, destinationPanel, executionPanel;
 	private JCheckBox trad1CB, trad2CB, trad3CB, manualDrawCB, importPointsCB, numRandomPointsCB;
 	private JLabel popSizeLabel, maxGenLabel, crossoverLabel, mutationLabel, crossoverProbLabel, mutationProbLabel,
-	randomPointsLabel, manualPointsLabel, currentRunningTimeLabel, currentRunningAlgLabel, numDrawnPoints;
+			randomPointsLabel, manualPointsLabel, currentRunningTimeLabel, currentRunningAlgLabel, numDrawnPoints;
 	private JTextField popSizeTF, maxGenTF, randomPointsTF, currentRunningTimeTF, currentRunningAlgTF;
 	private JComboBox<String> crossoverMethods, mutationMethods, tradGAChooser;
 	private JSlider crossProbSlider, mutProbSlider;
 	private JButton goDrawButton, startExecutionButton, addToExecution, viewResultsButton, resetAllFieldsButton,
-	undoPoint, resetAllPoints;
+			undoPoint, resetAllPoints;
 	private boolean execStopped;
 	// Drawing area which allows the user to draw points and perform the TSP on
 	// those points
@@ -147,7 +147,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		close = new JMenuItem("Close");
 		info = new JMenuItem("Info");
 		saveFullRes = new JMenuItem("Save Extended Results");
-		savePartialRes = new JMenuItem("Save Summative Results");
+		savePartialRes = new JMenuItem("Save Summary Results");
 		expPoints = new JMenuItem("Export Points");
 		menuBar.add(fileMenu);
 		menuBar.add(impExp);
@@ -324,8 +324,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		// Add control action for each object, thus to provide interactivity
 		info.addActionListener(this);
 		close.addActionListener(this);
-		saveFullRes.addActionListener(this);
-		savePartialRes.addActionListener(this);
+		saveRes.addActionListener(this);
 		expPoints.addActionListener(this);
 		resetAllPoints.addActionListener(this);
 		undoPoint.addActionListener(this);
@@ -480,8 +479,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		if (actionE.getSource().equals(close)) {
 			this.initExitRequest();
 		}
-		// Action to perform when the user wants to export a partial execution summary
-		if(actionE.getSource().equals(savePartialRes)){
+		// Action to perform when the user wants to export the execution data
+		if (actionE.getSource().equals(saveRes)) {
 			// Verify that the vector containing the algorithm to execute,
 			// actually contains some data
 			if (algQueueExecution.size() > 0) {
@@ -489,65 +488,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					// Set the filter to the JFileChooser
 					txtExport.setFileFilter(txtFilter);
 					// Store whether the user has confirmed or rejected the
-					// export request
-					int resultSelection = txtExport.showSaveDialog(this);
-					// In case the user confirmed the action
-					if (resultSelection == JFileChooser.APPROVE_OPTION) {
-						// Create writable object that will write data to a file
-						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "(Partial).txt");
-						// Write current date and time on file
-						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-						Date date1 = new Date();
-						writer.append("Task Started on: " + dateFormat1.format(date1) + "\n\n");
-						// Make a string containing all the data to export and
-						// add to the writer
-						// Repeat this action for each element of the queue of
-						// execution
-						for (int i = 0; i < algQueueExecution.size(); i++) {
-							Object tempElement = algQueueExecution.elementAt(i);
-							String data = "";
-							// Verify what element this is and call the
-							// opportune method to retrieve the algorithm
-							// summary
-							if (tempElement instanceof TradResultData) {
-								TradResultData tempTrad = (TradResultData) tempElement;
-								data += tempTrad.wrapDataForFileWriter();
-							} else if (tempElement instanceof GenResultData) {
-								GenResultData tempGen = (GenResultData) tempElement;
-								data += tempGen.wrapDataForSummativeFileWriter();
-							}
-							writer.append(data);
-							writer.append("------------------------------------------------------\n");
-							// Write current date and time on file
-							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-							Date date2 = new Date();
-							writer.append("Task Completed on: " + dateFormat2.format(date2));
-						}
-						// Close the file and release its instance
-						writer.close();
-						// Show confirmation to the user
-						JOptionPane.showMessageDialog(null, "Result Data exported correctly!", "Information",
-								JOptionPane.INFORMATION_MESSAGE);
-					}
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Irreversible Error!!!, please try again later", "Export Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Sorry, There is no Data to export!", "No Data",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		// Action to perform when the user wants to export the full execution data
-		if (actionE.getSource().equals(saveFullRes)) {
-			// Verify that the vector containing the algorithm to execute,
-			// actually contains some data
-			if (algQueueExecution.size() > 0) {
-				try {
-					// Set the filter to the JFileChooser
-					txtExport.setFileFilter(txtFilter);
-					// Store whether the user has confirmed or rejected the
-					// export request
+					// export message
 					int resultSelection = txtExport.showSaveDialog(this);
 					// In case the user confirmed the action
 					if (resultSelection == JFileChooser.APPROVE_OPTION) {
@@ -907,7 +848,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								algQueueExecution.add(tempTra);
 								JOptionPane.showMessageDialog(null,
 										"Element Added!" + "\nAlgorithm Name: " + tempTra.getAlgName()
-										+ "\nNum. Cities: " + tempTra.getNumCities(),
+												+ "\nNum. Cities: " + tempTra.getNumCities(),
 										"Confirm", JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "This execution is already in the queue",
@@ -919,7 +860,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							algQueueExecution.add(tempTra);
 							JOptionPane.showMessageDialog(
 									null, "Element Added!" + "\nAlgorithm Name: " + tempTra.getAlgName()
-									+ "\nNum. Cities: " + tempTra.getNumCities(),
+											+ "\nNum. Cities: " + tempTra.getNumCities(),
 									"Confirm", JOptionPane.INFORMATION_MESSAGE);
 						}
 					} else {
@@ -976,7 +917,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 												+ tempGen.getCrossoverProbability() + "\nMutation Method: "
 												+ tempGen.getMutationMethod() + "\nMutation Probability: "
 												+ tempGen.getMutationProbability(),
-												"Confirm", JOptionPane.INFORMATION_MESSAGE);
+										"Confirm", JOptionPane.INFORMATION_MESSAGE);
 								JOptionPane.showMessageDialog(null,
 										"A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!",
 										"Warning", JOptionPane.WARNING_MESSAGE);
@@ -995,7 +936,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 											+ tempGen.getCrossoverProbability() + "\nMutation Method: "
 											+ tempGen.getMutationMethod() + "\nMutation Probability: "
 											+ tempGen.getMutationProbability(),
-											"Confirm", JOptionPane.INFORMATION_MESSAGE);
+									"Confirm", JOptionPane.INFORMATION_MESSAGE);
 							JOptionPane.showMessageDialog(null,
 									"A Genetic Algorithm CANNOT be stopped once the execution start,\nmake sure the data inserted is correct before continuing!",
 									"Warning", JOptionPane.WARNING_MESSAGE);
@@ -1088,12 +1029,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				else if (closestNeighbourAlg.getProgress() != 100) {
 					// Update the progress
 					currentRunningAlgTF
-					.setText("(" + (index + 1) + "/" + algQueueExecution.size() + ") - " + currentRunningAlg);
+							.setText("(" + (index + 1) + "/" + algQueueExecution.size() + ") - " + currentRunningAlg);
 					// Update the execution time
 					long tempTime = (System.currentTimeMillis() - currentRunningTimeExec);
 					currentRunningTimeTF
-					.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
-							TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
+							.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
+									TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
 					// Refresh the points on screen
 					drawingArea.performLinks(true, closestNeighbourAlg.getListOfCities(),
 							closestNeighbourAlg.getTravellingOrder());
@@ -1130,12 +1071,12 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 				// updated to show the changes to the user
 				else if (greedyHeuristicAlg.getProgress() != 100) {
 					currentRunningAlgTF
-					.setText("(" + (index + 1) + "/" + algQueueExecution.size() + ") - " + currentRunningAlg);
+							.setText("(" + (index + 1) + "/" + algQueueExecution.size() + ") - " + currentRunningAlg);
 					// Update the execution time
 					long tempTime = (System.currentTimeMillis() - currentRunningTimeExec);
 					currentRunningTimeTF
-					.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
-							TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
+							.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
+									TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
 					// Refresh the points
 					drawingArea.performLinks(true, greedyHeuristicAlg.getListOfCities(),
 							greedyHeuristicAlg.getTravellingOrder());
@@ -1179,8 +1120,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 								"(" + (index + 1) + "/" + algQueueExecution.size() + ") - " + currentRunningAlg);
 						long tempTime = (System.currentTimeMillis() - currentRunningTimeExec);
 						currentRunningTimeTF
-						.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
-								TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
+								.setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(tempTime),
+										TimeUnit.MILLISECONDS.toSeconds(tempTime) % 60, (tempTime % 100)));
 						// Refresh the points
 						drawingArea.performLinks(true, tspAlg.citiesVector, resultsDataTSP.lastElement());
 					}

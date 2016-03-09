@@ -147,7 +147,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		close = new JMenuItem("Close");
 		info = new JMenuItem("Info");
 		saveFullRes = new JMenuItem("Save Extended Results");
-		savePartialRes = new JMenuItem("Save Summative Results");
+		savePartialRes = new JMenuItem("Save Summary Results");
 		expPoints = new JMenuItem("Export Points");
 		menuBar.add(fileMenu);
 		menuBar.add(impExp);

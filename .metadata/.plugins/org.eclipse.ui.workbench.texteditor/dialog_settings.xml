@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="TourDistance" key="selection"/>
+		<item value="Summary" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Summary"/>
+			<item value="saveRes"/>
 			<item value="tourDistance"/>
 			<item value="findPositionMinDistance"/>
 			<item value="traGe"/>
 			<item value="vec"/>
 			<item value="trad1CB"/>
 			<item value="trad3CB"/>
-			<item value="mutProbTF"/>
-			<item value="crossoverProb"/>
 		</list>
 		<list key="replacehistory">
 			<item value="numCities"/>

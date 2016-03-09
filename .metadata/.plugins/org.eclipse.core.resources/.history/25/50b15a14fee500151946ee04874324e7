@@ -250,34 +250,8 @@ public class GenResultData {
 				+ String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(timeExecution),
 						TimeUnit.MILLISECONDS.toSeconds(timeExecution) % 60, (timeExecution % 100))
 				+ "\n\n" + "List of Cities:\n";
-		// Try to add the list of cities
-		try {
-			String cities = "";
-			for (int i = 0; i < listOfCities.size(); i++) {
-				Point temp = listOfCities.elementAt(i);
-				cities += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
-			}
-			s += cities + "\n";
-		} catch (Exception e) {
-			s += "   No Data\n\n";
-		}
-		s += "Best Path Found:\n";
-		// Try to add the list of cities for the best solution found
-		try {
-			String path = "";
-			for (int i = 0; i < results.size(); i++) {
-				Point temp = results.elementAt(i);
-				path += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
-			}
-			s += path + "\n";
-		} catch (Exception e) {
-			s += "   No Data\n\n";
-		}
-		return s;
 	}
-
+	
 	/*
 	 * This method creates a string containing all the class information, ready
 	 * to be exported to a file
@@ -301,7 +275,7 @@ public class GenResultData {
 			for (int i = 0; i < listOfCities.size(); i++) {
 				Point temp = listOfCities.elementAt(i);
 				cities += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
+						+ ")\n";
 			}
 			s += cities + "\n";
 		} catch (Exception e) {
@@ -314,7 +288,7 @@ public class GenResultData {
 			for (int i = 0; i < results.size(); i++) {
 				Point temp = results.elementAt(i);
 				path += "   City n. " + (i + 1) + " --> (" + Math.round(temp.getX()) + "," + Math.round(temp.getY())
-				+ ")\n";
+						+ ")\n";
 			}
 			s += path + "\n";
 		} catch (Exception e) {
