@@ -494,7 +494,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					// In case the user confirmed the action
 					if (resultSelection == JFileChooser.APPROVE_OPTION) {
 						// Create writable object that will write data to a file
-						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "_(Partial).txt");
+						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "(Partial).txt");
 						// Write current date and time on file
 						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date1 = new Date();
@@ -552,7 +552,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					// In case the user confirmed the action
 					if (resultSelection == JFileChooser.APPROVE_OPTION) {
 						// Create writable object that will write data to a file
-						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "_(Complete).txt");
+						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + ".txt");
 						// Write current date and time on file
 						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date1 = new Date();

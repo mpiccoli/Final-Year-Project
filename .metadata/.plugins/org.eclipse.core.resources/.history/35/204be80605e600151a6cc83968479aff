@@ -494,7 +494,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					// In case the user confirmed the action
 					if (resultSelection == JFileChooser.APPROVE_OPTION) {
 						// Create writable object that will write data to a file
-						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "_(Partial).txt");
+						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "(Partial).txt");
 						// Write current date and time on file
 						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date1 = new Date();
@@ -518,11 +518,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							}
 							writer.append(data);
 							writer.append("------------------------------------------------------\n");
+							// Write current date and time on file
+							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+							Date date2 = new Date();
+							writer.append("Task Completed on: " + dateFormat2.format(date2));
 						}
-						// Write current date and time on file
-						DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-						Date date2 = new Date();
-						writer.append("Task Completed on: " + dateFormat2.format(date2));
 						// Close the file and release its instance
 						writer.close();
 						// Show confirmation to the user
@@ -552,7 +552,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					// In case the user confirmed the action
 					if (resultSelection == JFileChooser.APPROVE_OPTION) {
 						// Create writable object that will write data to a file
-						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + "_(Complete).txt");
+						FileWriter writer = new FileWriter(txtExport.getSelectedFile() + ".txt");
 						// Write current date and time on file
 						DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 						Date date1 = new Date();
@@ -576,11 +576,11 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 							}
 							writer.append(data);
 							writer.append("------------------------------------------------------\n");
+							// Write current date and time on file
+							DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+							Date date2 = new Date();
+							writer.append("Task Completed on: " + dateFormat2.format(date2));
 						}
-						// Write current date and time on file
-						DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-						Date date2 = new Date();
-						writer.append("Task Completed on: " + dateFormat2.format(date2));
 						// Close the file and release its instance
 						writer.close();
 						// Show confirmation to the user
