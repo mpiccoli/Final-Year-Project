@@ -1022,7 +1022,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 					}
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Add more points to the drawing area first"+numPoints, "Error",
+				JOptionPane.showMessageDialog(null, "Add some points to the drawing area first", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -1045,7 +1045,7 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		if (actionE.getSource().equals(resetAllFieldsButton)) {
 			if (algQueueExecution.size() > 0) {
 				drawingArea.clearAllPoints();
-				points=drawingArea.getAllPoints();
+				points.clear();
 				algQueueExecution.clear();
 				numDrawnPoints.setText("Points: 0");
 				randomPointsTF.setText("");

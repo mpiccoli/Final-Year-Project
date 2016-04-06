@@ -1045,8 +1045,8 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 		if (actionE.getSource().equals(resetAllFieldsButton)) {
 			if (algQueueExecution.size() > 0) {
 				drawingArea.clearAllPoints();
-				points=drawingArea.getAllPoints();
-				algQueueExecution.clear();
+				points.clear();
+				//algQueueExecution.clear();
 				numDrawnPoints.setText("Points: 0");
 				randomPointsTF.setText("");
 				currentRunningAlgTF.setText("");

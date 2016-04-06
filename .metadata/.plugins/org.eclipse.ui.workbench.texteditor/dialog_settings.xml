@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item value="false" key="isRegEx"/>
-		<item value="traDetailsTA" key="selection"/>
-		<item value="false" key="casesensitive"/>
+		<item value="true" key="isRegEx"/>
+		<item value="reset" key="selection"/>
+		<item value="true" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="traDetailsTA"/>
-			<item value="Details"/>
-			<item value="details"/>
-			<item value="TradResultData"/>
-			<item value="ResultView"/>
-			<item value="traGenView"/>
-			<item value="ResultsView"/>
-			<item value="mainTradDetailsPanel"/>
+			<item value="reset"/>
+			<item value="manualDrawCB"/>
+			<item value="Draw Points"/>
+			<item value="goDrawButton"/>
+			<item value="manual"/>
+			<item value="draw"/>
+			<item value="Add more points"/>
+			<item value="Add some points"/>
 		</list>
 		<list key="replacehistory">
 			<item value="numCities"/>
