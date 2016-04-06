@@ -64,3 +64,5 @@ Caused by: java.net.SocketException: Network is unreachable
 
 2016-03-14 11:46:14,521 [Thread-7] ERROR org.eclipse.jgit.util.FS - fatal: Could not switch to '/Library/Developer/CommandLineTools/usr/etc/': No such file or directory
 
+2016-03-18 16:53:55,234 [Thread-7] ERROR org.eclipse.jgit.util.FS - fatal: Could not switch to '/Library/Developer/CommandLineTools/usr/etc/': No such file or directory
+

@@ -77,6 +77,14 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 	private static final Font PLAIN_SEGOE_13 = new Font("Segoe UI", Font.PLAIN, 13);
 	private static final Color BACKGROUND_COLOUR = new Color(78, 129, 162);
 	private static final Color TEXTFIELD_BACKGROUND_COLOUR = new Color(198, 225, 235);
+	private static final String CLOSEST_NEIGHBOUR_DETAILS=""
+			+ "This algorithm is based on the idea of visit the closest city\n"
+			+ "from the current location until all the nodes have been visited\n"
+			+ "(Matai et al., 2010).";
+	private static final String GREEDY_DETAILS=""
+			+ "This constructs a tour choosing the edge to visit from the closest\n"
+			+ "ones available, however the degree of any node cannot be > 2.\n"
+			+ "(Matai et al., 2010).";
 
 	// Graphical Elements
 	private JFrame mainFrame;
@@ -886,6 +894,13 @@ public class MainView extends JPanel implements ActionListener, PropertyChangeLi
 						@SuppressWarnings("unchecked")
 						TradResultData tempTra = new TradResultData(tradAlgName, numPoints,
 								(Vector<Point>) points.clone());
+						//Add the algorithm description to the object
+						if(tradAlgName.equals("Closest Neighbour")){
+							tempTra.setDetails(CLOSEST_NEIGHBOUR_DETAILS);
+						}
+						else{
+							tempTra.setDetails(GREEDY_DETAILS);
+						}
 						// Do this if the vector is not empty
 						if (algQueueExecution.size() > 0) {
 							boolean isAlgInQueue = false;
